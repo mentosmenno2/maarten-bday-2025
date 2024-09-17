@@ -1,0 +1,9 @@
+parameters:
+	level: 8
+	reportUnmatchedIgnoredErrors: false
+	editorUrl: 'vscode://file/%%file%%:%%line%%'
+	paths:
+		- app
+		- templates
+		- index.php
+		- autoloader.php

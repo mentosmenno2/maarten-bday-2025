@@ -1,0 +1,37 @@
+name: Build & test
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+  pull_request_target:
+    branches:
+      - 'master'
+      - 'main'
+
+jobs:
+  php:
+    name: NPM test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - name: Debugging
+        run: |
+          node -v
+          npm -v
+      - name: NPM Install
+        run: |
+          npm ci
+      - name: test:lint
+        run: |
+          npm run lint --if-present
+      - name: test:build
+        run: |
+          npm run build --if-present

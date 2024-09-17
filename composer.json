@@ -1,0 +1,60 @@
+{
+    "name": "mentosmenno2/maarten-bday-2025",
+    "description": "Quack",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "mentosmenno2"
+        }
+    ],
+    "repositories": [
+        {
+            "url": "https://github.com/mentosmenno2/coding-standards.git",
+            "type": "git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mentosmenno2\\MaartenBday2025\\": "app/"
+        }
+    },
+    "require": {
+        "php": ">=8.3"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "composer dump-autoload"
+        ],
+        "test":[
+            "echo Running tests",
+            "@test:composer",
+            "@test:phpcs",
+            "@test:phpstan"
+        ],
+        "test:composer": [
+            "composer validate"
+        ],
+        "test:phpcs": [
+            "phpcs"
+        ],
+        "test:phpstan": [
+            "phpstan"
+        ],
+        "fix":[
+            "phpcbf"
+        ]
+    },
+    "require-dev": {
+        "mentosmenno2/coding-standards": "^1.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
