@@ -23,7 +23,8 @@ class SongParser implements SongParserInterface
 		}
 
 		$osu_files_data = $this->getOSUFilesData($zip);
-		$first_osu_file = reset($osu_files_data);
+		$first_osu_file_index = array_key_first($osu_files_data);
+		$first_osu_file = $osu_files_data[$first_osu_file_index];
 
 		$zip->close();
 		return new Song(
@@ -66,7 +67,7 @@ class SongParser implements SongParserInterface
 		$sections_data['Editor'] = $this->formatColonnedData($sections_data['Editor']);
 		$sections_data['Metadata'] = $this->formatColonnedData($sections_data['Metadata']);
 		$sections_data['Difficulty'] = $this->formatColonnedData($sections_data['Difficulty']);
-		$sections_data['Events'] = $this->formatEvents($sections_data['Difficulty']);
+		$sections_data['Events'] = $this->formatEvents($sections_data['Events']);
 		return $sections_data;
 	}
 

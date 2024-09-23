@@ -45,7 +45,8 @@ class Song extends AbstractSong
 				continue;
 			}
 
-			return $event[2];
+			$quotes_trimmed = trim($event[2], '"');
+			return $quotes_trimmed;
 		}
 		return '';
 	}

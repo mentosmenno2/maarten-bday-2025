@@ -13,7 +13,7 @@ class App
 	{
 		// $song = ( new BeatSaberSongParser( MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/beat-saber/a909 (Time Lapse - Timeweaver).zip' ) )->parse();
 		$song = ( new OSUSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/osu/987012 TheFatRat - MAYDAY (feat. Laura Brehm).osz') )->parse();
-		var_dump($song);
+		echo json_encode($song);
 	}
 
 	public static function getInstance(): App
