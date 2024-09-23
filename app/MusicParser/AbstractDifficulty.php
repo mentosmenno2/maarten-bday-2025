@@ -7,20 +7,22 @@ use JsonSerializable;
 abstract class AbstractDifficulty implements JsonSerializable
 {
 
-	public abstract function getName(): string;
+	abstract public function getName(): string;
 
-	public abstract function rating(): float;
+	abstract public function rating(): float;
 
-	public abstract function getTargets(): array;
+	abstract public function getTargets(): array;
 
-	public function getData(): array {
+	public function getData(): array
+	{
 		return array(
 			'name' => $this->getTitle(),
 			'rating' => $this->getRating(),
 		);
 	}
 
-	public function jsonSerialize(): mixed {
+	public function jsonSerialize(): mixed
+	{
 		return $this->getData();
 	}
 }

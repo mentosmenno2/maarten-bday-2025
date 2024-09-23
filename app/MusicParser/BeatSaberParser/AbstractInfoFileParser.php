@@ -6,7 +6,8 @@ abstract class AbstractInfoFileParser
 {
 	public function __construct(
 		protected array $file_data
-	) {}
+	) {
+	}
 
 	/**
 	 * @return array{
@@ -17,5 +18,5 @@ abstract class AbstractInfoFileParser
 	 * 	'song_name': string
 	 * }
 	 */
-	public abstract function parse(): array;
+	abstract public function parse(): array;
 }

@@ -6,7 +6,8 @@ use \Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\AbstractInfoFilePa
 
 class InfoFileParser extends AbstractInfoFileParser
 {
-	public function parse(): array {
+	public function parse(): array
+	{
 		return array();
 	}
 }
