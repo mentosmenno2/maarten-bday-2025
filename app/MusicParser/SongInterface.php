@@ -2,7 +2,9 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser;
 
-interface SongInterface
+use JsonSerializable;
+
+interface SongInterface extends JsonSerializable
 {
 	public function getTitle(): string;
 

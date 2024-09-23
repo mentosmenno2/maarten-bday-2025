@@ -5,8 +5,9 @@ namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 use \Exception;
 use \ZipArchive;
 use \Mentosmenno2\MaartenBday2025\MusicParser\SongInterface;
+use \Mentosmenno2\MaartenBday2025\MusicParser\SongParserInterface;
 
-class SongParser
+class SongParser implements SongParserInterface
 {
 	public function __construct(
 		private string $path_to_zip

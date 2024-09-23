@@ -2,9 +2,9 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 
-use \Mentosmenno2\MaartenBday2025\MusicParser\SongInterface;
+use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
 
-class Song implements SongInterface
+class Song extends AbstractSong
 {
 	public function getTitle(): string {
 
