@@ -17,6 +17,9 @@ abstract class AbstractSong implements JsonSerializable
 
 	public abstract function getCoverImageFileName(): string;
 
+	/**
+	 * @return AbstractDifficulty[]
+	 */
 	public abstract function getDifficulties(): array;
 
 	public function getData(): array {
