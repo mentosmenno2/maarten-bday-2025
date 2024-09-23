@@ -1,6 +1,6 @@
 <?php
 
-namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
+namespace Mentosmenno2\MaartenBday2025\MusicParser\OSUParser;
 
 use \Mentosmenno2\MaartenBday2025\MusicParser\SongInterface;
 

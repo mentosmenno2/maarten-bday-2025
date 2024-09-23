@@ -10,8 +10,6 @@ interface SongInterface
 
 	public function getBuilder(): string;
 
-	public function getBPM(): int;
-
 	public function getFileName(): string;
 
 	public function getCoverImageFileName(): string;
