@@ -2,8 +2,22 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser;
 
-abstract class AbstractSong implements SongInterface
+use JsonSerializable;
+
+abstract class AbstractSong implements JsonSerializable
 {
+
+	public abstract function getTitle(): string;
+
+	public abstract function getArtist(): string;
+
+	public abstract function getBuilder(): string;
+
+	public abstract function getFileName(): string;
+
+	public abstract function getCoverImageFileName(): string;
+
+	public abstract function getDifficulties(): array;
 
 	public function getData(): array {
 		return array(

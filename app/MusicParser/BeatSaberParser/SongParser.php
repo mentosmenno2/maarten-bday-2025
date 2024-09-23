@@ -4,7 +4,7 @@ namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 
 use \Exception;
 use \ZipArchive;
-use \Mentosmenno2\MaartenBday2025\MusicParser\SongInterface;
+use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
 use \Mentosmenno2\MaartenBday2025\MusicParser\SongParserInterface;
 
 class SongParser implements SongParserInterface
@@ -13,7 +13,7 @@ class SongParser implements SongParserInterface
 		private string $path_to_zip
 	) {}
 
-	public function parse(): SongInterface {
+	public function parse(): AbstractSong {
 		$zip = new ZipArchive();
 		$opened = $zip->open( $this->path_to_zip );
 		if ( ! $opened ) {
