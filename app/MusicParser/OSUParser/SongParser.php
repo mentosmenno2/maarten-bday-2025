@@ -33,12 +33,15 @@ class SongParser implements SongParserInterface
 		);
 	}
 
+	/**
+	 * @return array<string,mixed>
+	 */
 	private function getOSUFilesData(ZipArchive $zip): array
 	{
 		$files_data = array();
 		for ($i = 0; $i < $zip->numFiles; $i++) {
 			$filename = $zip->getNameIndex($i);
-			if (! str_ends_with($filename, '.osu')) {
+			if (! $filename || ! str_ends_with($filename, '.osu')) {
 				continue;
 			}
 
@@ -53,6 +56,9 @@ class SongParser implements SongParserInterface
 		return $files_data;
 	}
 
+	/**
+	 * @return array<string,mixed>
+	 */
 	private function getOSUFileData(string $file_contents): array
 	{
 		$sections_data = $this->osuFileRawSectionsData($file_contents);
@@ -64,6 +70,9 @@ class SongParser implements SongParserInterface
 		return $sections_data;
 	}
 
+	/**
+	 * @return array<string,mixed>
+	 */
 	private function osuFileRawSectionsData(string $file_contents): array
 	{
 		$sections_data = array();
@@ -87,6 +96,10 @@ class SongParser implements SongParserInterface
 		return $sections_data;
 	}
 
+	/**
+	 * @param string[] $data
+	 * @return array<string,string>
+	 */
 	private function formatColonnedData(array $data): array
 	{
 		$formatted_data = array();
@@ -99,6 +112,10 @@ class SongParser implements SongParserInterface
 		return $formatted_data;
 	}
 
+	/**
+	 * @param string[] $data
+	 * @return array<array<string>>
+	 */
 	private function formatEvents(array $data): array
 	{
 		$formatted_data = array();

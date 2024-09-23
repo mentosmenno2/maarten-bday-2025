@@ -22,6 +22,9 @@ abstract class AbstractSong implements JsonSerializable
 	 */
 	abstract public function getDifficulties(): array;
 
+	/**
+	 * @return array<string,mixed>
+	 */
 	public function getData(): array
 	{
 		return array(

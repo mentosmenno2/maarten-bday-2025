@@ -6,6 +6,11 @@ use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
 
 class Song extends AbstractSong
 {
+	/**
+	 * @param array<string,string> $general
+	 * @param array<string,string> $metadata
+	 * @param array<array<string>> $events
+	 */
 	public function __construct(
 		private array $general,
 		private array $metadata,
@@ -15,27 +20,27 @@ class Song extends AbstractSong
 
 	public function getTitle(): string
 	{
-		$this->metadata['Title'];
+		return $this->metadata['Title'];
 	}
 
 	public function getArtist(): string
 	{
-		$this->metadata['Artist'];
+		return $this->metadata['Artist'];
 	}
 
 	public function getBuilder(): string
 	{
-		$this->metadata['Creator'];
+		return $this->metadata['Creator'];
 	}
 
 	public function getFileName(): string
 	{
-		$this->general['AudioFilename'];
+		return $this->general['AudioFilename'];
 	}
 
 	public function getCoverImageFileName(): string
 	{
-		foreach ($events as $event) {
+		foreach ($this->events as $event) {
 			if ($event[0] !== '0') {
 				continue;
 			}
