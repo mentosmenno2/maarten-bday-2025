@@ -27,10 +27,6 @@ $app = App::getInstance();
 		<link rel="icon" type="image/png" href="assets/images/favicon.png">
 
 		<link rel="stylesheet" href="assets/css/main.css" />
-
-		<?php if ($currentLevel) { ?>
-			<link rel="stylesheet" href="assets/css/<?php echo $currentLevel->getId(); ?>.css" />
-		<?php } ?>
 	</head>
 	<body>
 		<header>
