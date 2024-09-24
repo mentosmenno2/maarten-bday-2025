@@ -7,11 +7,19 @@ use JsonSerializable;
 abstract class AbstractDifficulty implements JsonSerializable
 {
 
+	/**
+	 * Get the ame of the difficulty
+	 */
 	abstract public function getName(): string;
 
+	/**
+	 * Get the rating of the difficulty on a scale of 0-10
+	 */
 	abstract public function getDifficultyRating(): float;
 
 	/**
+	 * Get the list of targets
+	 *
 	 * @return AbstractTarget[]
 	 */
 	abstract public function getTargets(): array;
