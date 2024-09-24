@@ -31,6 +31,7 @@ class SongParser implements SongParserInterface
 			$first_osu_file['General'],
 			$first_osu_file['Metadata'],
 			$first_osu_file['Events'],
+			$osu_files_data,
 		);
 	}
 
@@ -66,7 +67,7 @@ class SongParser implements SongParserInterface
 		$sections_data['General'] = $this->formatColonnedData($sections_data['General']);
 		$sections_data['Editor'] = $this->formatColonnedData($sections_data['Editor']);
 		$sections_data['Metadata'] = $this->formatColonnedData($sections_data['Metadata']);
-		$sections_data['Difficulty'] = $this->formatColonnedData($sections_data['Difficulty']);
+		$sections_data['Difficulty'] = $this->formatDifficulty($sections_data['Difficulty']);
 		$sections_data['Events'] = $this->formatEvents($sections_data['Events']);
 		return $sections_data;
 	}
@@ -124,5 +125,15 @@ class SongParser implements SongParserInterface
 			$formatted_data[] = explode(',', $data_line);
 		}
 		return $formatted_data;
+	}
+
+	/**
+	 * @param string[] $data
+	 * @return array<string,float>
+	 */
+	private function formatDifficulty(array $data): array
+	{
+		$formatted_data = $this->formatColonnedData($data);
+		return array_map('floatval', $formatted_data);
 	}
 }

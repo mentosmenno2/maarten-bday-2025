@@ -47,6 +47,13 @@ class Song extends AbstractSong
 
 	public function getDifficulties(): array
 	{
-		return array();
+		$difficulties = array();
+		$beatmapSets = $this->info_file_data['_difficultyBeatmapSets'];
+		foreach ($beatmapSets as $beatmapSet) {
+			foreach ($beatmapSet['_difficultyBeatmaps'] as $difficultyBeatmap) {
+				$difficulties[] = new Difficulty($beatmapSet['_beatmapCharacteristicName'], $difficultyBeatmap);
+			}
+		}
+		return $difficulties;
 	}
 }

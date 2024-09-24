@@ -10,11 +10,13 @@ class Song extends AbstractSong
 	 * @param array<string,string> $general
 	 * @param array<string,string> $metadata
 	 * @param array<array<string>> $events
+	 * @param array<string,array<string,mixed>> $difficultiesData
 	 */
 	public function __construct(
 		private array $general,
 		private array $metadata,
 		private array $events,
+		private array $difficultiesData,
 	) {
 	}
 
@@ -58,6 +60,10 @@ class Song extends AbstractSong
 
 	public function getDifficulties(): array
 	{
-		return array();
+		$difficulties = array();
+		foreach ($this->difficultiesData as $difficultyData) {
+			$difficulties[] = new Difficulty($difficultyData);
+		}
+		return $difficulties;
 	}
 }

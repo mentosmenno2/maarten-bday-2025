@@ -9,7 +9,7 @@ abstract class AbstractDifficulty implements JsonSerializable
 
 	abstract public function getName(): string;
 
-	abstract public function getRating(): float;
+	abstract public function getDifficultyRating(): float;
 
 	/**
 	 * @return AbstractTarget[]
@@ -23,7 +23,8 @@ abstract class AbstractDifficulty implements JsonSerializable
 	{
 		return array(
 			'name' => $this->getName(),
-			'rating' => $this->getRating(),
+			'difficultyRating' => $this->getDifficultyRating(),
+			'targets' => $this->getTargets(),
 		);
 	}
 

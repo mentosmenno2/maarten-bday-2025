@@ -11,9 +11,12 @@ class App
 
 	final protected function __construct()
 	{
-		$song = ( new BeatSaberSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/beat-saber/a909 (Time Lapse - Timeweaver).zip') )->parse();
-		// $song = ( new OSUSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/osu/987012 TheFatRat - MAYDAY (feat. Laura Brehm).osz') )->parse();
-		echo json_encode($song);
+		// $song = ( new BeatSaberSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/beat-saber/a909 (Time Lapse - Timeweaver).zip') )->parse();
+		$song = ( new OSUSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/osu/987012 TheFatRat - MAYDAY (feat. Laura Brehm).osz') )->parse();
+
+		echo '<pre>';
+		echo json_encode($song, JSON_PRETTY_PRINT);
+		echo '</pre>';
 	}
 
 	public static function getInstance(): App
