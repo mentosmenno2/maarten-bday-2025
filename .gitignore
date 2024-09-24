@@ -1,3 +1,10 @@
+
+# Music files
+/assets/music-files/beat-saber/**/*
+!/assets/music-files/beat-saber/*.zip
+/assets/music-files/osu/**/*
+!/assets/music-files/osu/*.osz
+
 /.idea/
 /vendor/
 
