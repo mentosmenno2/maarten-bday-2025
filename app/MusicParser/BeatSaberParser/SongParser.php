@@ -22,14 +22,13 @@ class SongParser implements SongParserInterface
 			throw new Exception(sprintf('Cannot open file %s', $this->path_to_zip));
 		}
 
-		$info_file_data = $this->getInfoFileData($zip);
-		var_dump($info_file_data);
+		$parsed_song = $this->getSongFromInfoFileData($zip);
 
 		$zip->close();
-		return new Song();
+		return $parsed_song;
 	}
 
-	private function getInfoFileData(ZipArchive $zip): array
+	private function getSongFromInfoFileData(ZipArchive $zip): AbstractSong
 	{
 		$info_file = 'info.dat';
 		$info_file_contents = $zip->getFromName($info_file);

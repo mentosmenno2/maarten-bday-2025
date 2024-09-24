@@ -2,21 +2,17 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 
+use Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
+
 abstract class AbstractInfoFileParser
 {
+	/**
+	 * @param array<string,mixed> $info_file_data
+	 */
 	public function __construct(
-		protected array $file_data
+		protected array $info_file_data
 	) {
 	}
 
-	/**
-	 * @return array{
-	 * 	'song_name': string,
-	 * 	'artist': string,
-	 * 	'bpm': string,
-	 * 	'builder': string,
-	 * 	'song_name': string
-	 * }
-	 */
-	abstract public function parse(): array;
+	abstract public function parse(): AbstractSong;
 }
