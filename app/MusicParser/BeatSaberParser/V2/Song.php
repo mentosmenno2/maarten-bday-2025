@@ -15,6 +15,11 @@ class Song extends AbstractSong
 	) {
 	}
 
+	public function getId(): string
+	{
+		return sprintf('beat-saber-%s', sha1(json_encode($this->info_file_data) ?: ''));
+	}
+
 	public function getTitle(): string
 	{
 		return $this->info_file_data['_songName'];

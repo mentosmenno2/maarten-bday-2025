@@ -6,6 +6,7 @@ use JsonSerializable;
 
 abstract class AbstractSong implements JsonSerializable
 {
+	abstract public function getId(): string;
 
 	abstract public function getTitle(): string;
 
@@ -28,6 +29,7 @@ abstract class AbstractSong implements JsonSerializable
 	public function getData(): array
 	{
 		return array(
+			'id' => $this->getId(),
 			'title' => $this->getTitle(),
 			'artist' => $this->getArtist(),
 			'builder' => $this->getBuilder(),

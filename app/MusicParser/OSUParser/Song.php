@@ -18,6 +18,11 @@ class Song extends AbstractSong
 	) {
 	}
 
+	public function getId(): string
+	{
+		return sprintf('osu-%s', $this->metadata['BeatmapSetID']);
+	}
+
 	public function getTitle(): string
 	{
 		return $this->metadata['Title'];
