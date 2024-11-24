@@ -3,9 +3,13 @@
 namespace Mentosmenno2\MaartenBday2025\MusicParser;
 
 use JsonSerializable;
+use \Mentosmenno2\MaartenBday2025\MusicParser\PositionsEnum;
 
 abstract class AbstractTarget implements JsonSerializable
 {
+
+	public const POSITION_LEFT = 0;
+	public const POSITION_RIGHT = 1;
 
 	/**
 	 * Gets the time of the target in milliseconds from the beginning of the audio
@@ -13,14 +17,9 @@ abstract class AbstractTarget implements JsonSerializable
 	abstract public function getTime(): int;
 
 	/**
-	 * Gets the X position
+	 * Gets the position
 	 */
-	abstract public function getPositionX(): int;
-
-	/**
-	 * Gets the X position
-	 */
-	abstract public function getPositionY(): int;
+	abstract public function getPosition(): PositionsEnum;
 
 	/**
 	 * @return array<string,mixed>
@@ -28,6 +27,8 @@ abstract class AbstractTarget implements JsonSerializable
 	public function getData(): array
 	{
 		return array(
+			'time' => $this->getTime(),
+			'position' => $this->getPosition(),
 		);
 	}
 

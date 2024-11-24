@@ -48,7 +48,7 @@ class Song extends AbstractSong
 	public function getCoverImageFileName(): string
 	{
 		foreach ($this->events as $event) {
-			if ($event[0] !== '0') {
+			if ((int) $event[0] !== 0) {
 				continue;
 			}
 

@@ -68,7 +68,11 @@ class SongParser implements SongParserInterface
 		$sections_data['Editor'] = $this->formatColonnedData($sections_data['Editor']);
 		$sections_data['Metadata'] = $this->formatColonnedData($sections_data['Metadata']);
 		$sections_data['Difficulty'] = $this->formatDifficulty($sections_data['Difficulty']);
-		$sections_data['Events'] = $this->formatEvents($sections_data['Events']);
+		$sections_data['Events'] = $this->formatCommaSeparatedData($sections_data['Events']);
+		$sections_data['HitObjects'] = $this->formatCommaSeparatedData($sections_data['HitObjects']);
+
+		var_dump($sections_data['HitObjects']);
+
 		return $sections_data;
 	}
 
@@ -118,7 +122,7 @@ class SongParser implements SongParserInterface
 	 * @param string[] $data
 	 * @return array<array<string>>
 	 */
-	private function formatEvents(array $data): array
+	private function formatCommaSeparatedData(array $data): array
 	{
 		$formatted_data = array();
 		foreach ($data as $data_line) {
