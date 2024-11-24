@@ -71,8 +71,6 @@ class SongParser implements SongParserInterface
 		$sections_data['Events'] = $this->formatCommaSeparatedData($sections_data['Events']);
 		$sections_data['HitObjects'] = $this->formatCommaSeparatedData($sections_data['HitObjects']);
 
-		var_dump($sections_data['HitObjects']);
-
 		return $sections_data;
 	}
 
