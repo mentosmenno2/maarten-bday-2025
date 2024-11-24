@@ -8,9 +8,6 @@ use \Mentosmenno2\MaartenBday2025\MusicParser\PositionsEnum;
 abstract class AbstractTarget implements JsonSerializable
 {
 
-	public const POSITION_LEFT = 0;
-	public const POSITION_RIGHT = 1;
-
 	/**
 	 * Gets the time of the target in milliseconds from the beginning of the audio
 	 */

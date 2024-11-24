@@ -2,8 +2,8 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser;
 
-enum PositionsEnum
+enum PositionsEnum: string
 {
-	case LEFT;
-	case RIGHT;
+	case LEFT = 'LEFT';
+	case RIGHT = 'RIGHT';
 }

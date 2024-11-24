@@ -21,7 +21,7 @@ class Target extends AbstractTarget
 	 */
 	public function getTime(): int
 	{
-		return (int) $this->hit_object_data[2];
+		return (int) 0;
 	}
 
 	/**

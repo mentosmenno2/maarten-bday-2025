@@ -15,7 +15,7 @@ class App
 		$song = ( new OSUSongParser(MAARTEN_BDAY_2025_ROOT_DIR . '/assets/music-files/osu/987012 TheFatRat - MAYDAY (feat. Laura Brehm).osz') )->parse();
 
 		echo '<pre>';
-		echo json_encode($song, JSON_PRETTY_PRINT);
+		echo json_encode($song, JSON_PRETTY_PRINT) ?: 'ERROR parsing JSON';
 		echo '</pre>';
 	}
 
