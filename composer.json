@@ -42,7 +42,7 @@
             "phpcs"
         ],
         "test:phpstan": [
-            "phpstan"
+            "phpstan --memory-limit=2G"
         ],
         "fix":[
             "phpcbf"
