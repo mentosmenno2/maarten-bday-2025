@@ -8,6 +8,6 @@ class InfoFileParser extends AbstractInfoFileParser
 {
 	public function parse(): Song
 	{
-		return new Song($this->info_file_data);
+		return new Song($this->infoFileData);
 	}
 }

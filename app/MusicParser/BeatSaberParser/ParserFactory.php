@@ -9,17 +9,17 @@ use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V2\InfoFileParser a
 class ParserFactory
 {
 	/**
-	 * @param array<string,mixed> $info_file_data
+	 * @param array<string,mixed> $infoFileData
 	 */
-	public function getInfoFileParser(array $info_file_data): AbstractInfoFileParser
+	public function getInfoFileParser(array $infoFileData): AbstractInfoFileParser
 	{
-		$version = $info_file_data['_version'];
-		$version_parts = explode('.', $version);
-		$parser_version = $version_parts[0];
+		$version = $infoFileData['_version'];
+		$versionParts = explode('.', $version);
+		$parserVersion = $versionParts[0];
 
-		switch ($parser_version) {
+		switch ($parserVersion) {
 			case '2':
-				$parser = new InfoFileParserV2($info_file_data);
+				$parser = new InfoFileParserV2($infoFileData);
 				break;
 			default:
 				$parser = null;

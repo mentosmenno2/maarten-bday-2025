@@ -9,22 +9,22 @@ class Difficulty extends AbstractDifficulty
 {
 
 	/**
-	 * @param array<string,mixed> $difficulty_data
+	 * @param array<string,mixed> $difficultyData
 	 */
 	public function __construct(
 		private string $characteristicName,
-		private array $difficulty_data
+		private array $difficultyData
 	) {
 	}
 
 	public function getName(): string
 	{
-		return sprintf('%s / %s', $this->characteristicName, $this->difficulty_data['_difficulty']);
+		return sprintf('%s / %s', $this->characteristicName, $this->difficultyData['_difficulty']);
 	}
 
 	public function getDifficultyRating(): float
 	{
-		return $this->difficulty_data['_difficultyRank'];
+		return $this->difficultyData['_difficultyRank'];
 	}
 
 	/**

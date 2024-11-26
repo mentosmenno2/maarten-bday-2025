@@ -8,47 +8,47 @@ class Song extends AbstractSong
 {
 
 	/**
-	 * @param array<string,mixed> $info_file_data
+	 * @param array<string,mixed> $infoFileData
 	 */
 	public function __construct(
-		protected array $info_file_data
+		protected array $infoFileData
 	) {
 	}
 
 	public function getId(): string
 	{
-		return sprintf('beat-saber-%s', sha1(json_encode($this->info_file_data) ?: ''));
+		return sprintf('beat-saber-%s', sha1(json_encode($this->infoFileData) ?: ''));
 	}
 
 	public function getTitle(): string
 	{
-		return $this->info_file_data['_songName'];
+		return $this->infoFileData['_songName'];
 	}
 
 	public function getArtist(): string
 	{
-		return $this->info_file_data['_songAuthorName'];
+		return $this->infoFileData['_songAuthorName'];
 	}
 
 	public function getBuilder(): string
 	{
-		return $this->info_file_data['_levelAuthorName'];
+		return $this->infoFileData['_levelAuthorName'];
 	}
 
 	public function getFileName(): string
 	{
-		return $this->info_file_data['_songFilename'];
+		return $this->infoFileData['_songFilename'];
 	}
 
 	public function getCoverImageFileName(): string
 	{
-		return $this->info_file_data['_coverImageFilename'];
+		return $this->infoFileData['_coverImageFilename'];
 	}
 
 	public function getDifficulties(): array
 	{
 		$difficulties = array();
-		$beatmapSets = $this->info_file_data['_difficultyBeatmapSets'];
+		$beatmapSets = $this->infoFileData['_difficultyBeatmapSets'];
 		foreach ($beatmapSets as $beatmapSet) {
 			foreach ($beatmapSet['_difficultyBeatmaps'] as $difficultyBeatmap) {
 				$difficulties[] = new Difficulty($beatmapSet['_beatmapCharacteristicName'], $difficultyBeatmap);

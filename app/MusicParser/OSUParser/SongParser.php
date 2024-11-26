@@ -10,28 +10,28 @@ use \Mentosmenno2\MaartenBday2025\MusicParser\SongParserInterface;
 class SongParser implements SongParserInterface
 {
 	public function __construct(
-		private string $path_to_zip
+		private string $pathToZip
 	) {
 	}
 
 	public function parse(): AbstractSong
 	{
 		$zip = new ZipArchive();
-		$opened = $zip->open($this->path_to_zip);
+		$opened = $zip->open($this->pathToZip);
 		if (! $opened) {
-			throw new Exception(sprintf('Cannot open file %s', $this->path_to_zip));
+			throw new Exception(sprintf('Cannot open file %s', $this->pathToZip));
 		}
 
-		$osu_files_data = $this->getOSUFilesData($zip);
-		$first_osu_file_index = array_key_first($osu_files_data);
-		$first_osu_file = $osu_files_data[$first_osu_file_index];
+		$osuFilesData = $this->getOSUFilesData($zip);
+		$firstOSUFileIndex = array_key_first($osuFilesData);
+		$firstOsuFile = $osuFilesData[$firstOSUFileIndex];
 
 		$zip->close();
 		return new Song(
-			$first_osu_file['General'],
-			$first_osu_file['Metadata'],
-			$first_osu_file['Events'],
-			$osu_files_data,
+			$firstOsuFile['General'],
+			$firstOsuFile['Metadata'],
+			$firstOsuFile['Events'],
+			$osuFilesData,
 		);
 	}
 
@@ -40,64 +40,64 @@ class SongParser implements SongParserInterface
 	 */
 	private function getOSUFilesData(ZipArchive $zip): array
 	{
-		$files_data = array();
+		$filesData = array();
 		for ($i = 0; $i < $zip->numFiles; $i++) {
 			$filename = $zip->getNameIndex($i);
 			if (! $filename || ! str_ends_with($filename, '.osu')) {
 				continue;
 			}
 
-			$file_contents = $zip->getFromName($filename);
-			if (! $file_contents) {
+			$fileContents = $zip->getFromName($filename);
+			if (! $fileContents) {
 				throw new Exception(sprintf('Cannot open file %s', $filename));
 			}
 
-			$files_data[ $filename ] = $this->getOSUFileData($file_contents);
+			$filesData[ $filename ] = $this->getOSUFileData($fileContents);
 		}
 
-		return $files_data;
+		return $filesData;
 	}
 
 	/**
 	 * @return array<string,mixed>
 	 */
-	private function getOSUFileData(string $file_contents): array
+	private function getOSUFileData(string $fileContents): array
 	{
-		$sections_data = $this->osuFileRawSectionsData($file_contents);
-		$sections_data['General'] = $this->formatColonnedData($sections_data['General']);
-		$sections_data['Editor'] = $this->formatColonnedData($sections_data['Editor']);
-		$sections_data['Metadata'] = $this->formatColonnedData($sections_data['Metadata']);
-		$sections_data['Difficulty'] = $this->formatDifficulty($sections_data['Difficulty']);
-		$sections_data['Events'] = $this->formatCommaSeparatedData($sections_data['Events']);
-		$sections_data['HitObjects'] = $this->formatCommaSeparatedData($sections_data['HitObjects']);
+		$sectionsData = $this->osuFileRawSectionsData($fileContents);
+		$sectionsData['General'] = $this->formatColonnedData($sectionsData['General']);
+		$sectionsData['Editor'] = $this->formatColonnedData($sectionsData['Editor']);
+		$sectionsData['Metadata'] = $this->formatColonnedData($sectionsData['Metadata']);
+		$sectionsData['Difficulty'] = $this->formatDifficulty($sectionsData['Difficulty']);
+		$sectionsData['Events'] = $this->formatCommaSeparatedData($sectionsData['Events']);
+		$sectionsData['HitObjects'] = $this->formatCommaSeparatedData($sectionsData['HitObjects']);
 
-		return $sections_data;
+		return $sectionsData;
 	}
 
 	/**
 	 * @return array<string,mixed>
 	 */
-	private function osuFileRawSectionsData(string $file_contents): array
+	private function osuFileRawSectionsData(string $fileContents): array
 	{
-		$sections_data = array();
+		$sectionsData = array();
 
-		$lines = explode(PHP_EOL, $file_contents);
+		$lines = explode(PHP_EOL, $fileContents);
 
-		$current_section = 'osu file format';
-		foreach ($lines as $line_index => $line) {
+		$currentSection = 'osu file format';
+		foreach ($lines as $line) {
 			$line = trim($line);
 			if (empty($line) || str_starts_with($line, '//')) {
 				continue;
 			}
 
 			if (str_starts_with($line, '[') && str_ends_with($line, ']')) {
-				$current_section = substr($line, 1, strlen($line) - 2);
+				$currentSection = substr($line, 1, strlen($line) - 2);
 				continue;
 			}
 
-			$sections_data[$current_section][] = $line;
+			$sectionsData[$currentSection][] = $line;
 		}
-		return $sections_data;
+		return $sectionsData;
 	}
 
 	/**
@@ -106,14 +106,14 @@ class SongParser implements SongParserInterface
 	 */
 	private function formatColonnedData(array $data): array
 	{
-		$formatted_data = array();
-		foreach ($data as $data_line) {
-			$data_line_parts = explode(':', $data_line);
-			$key = trim($data_line_parts[0]);
-			$value = trim($data_line_parts[1]);
-			$formatted_data[$key] = $value;
+		$formattedData = array();
+		foreach ($data as $dataLine) {
+			$dataLineParts = explode(':', $dataLine);
+			$key = trim($dataLineParts[0]);
+			$value = trim($dataLineParts[1]);
+			$formattedData[$key] = $value;
 		}
-		return $formatted_data;
+		return $formattedData;
 	}
 
 	/**
@@ -122,11 +122,11 @@ class SongParser implements SongParserInterface
 	 */
 	private function formatCommaSeparatedData(array $data): array
 	{
-		$formatted_data = array();
-		foreach ($data as $data_line) {
-			$formatted_data[] = explode(',', $data_line);
+		$formattedData = array();
+		foreach ($data as $dataLine) {
+			$formattedData[] = explode(',', $dataLine);
 		}
-		return $formatted_data;
+		return $formattedData;
 	}
 
 	/**
@@ -135,7 +135,7 @@ class SongParser implements SongParserInterface
 	 */
 	private function formatDifficulty(array $data): array
 	{
-		$formatted_data = $this->formatColonnedData($data);
-		return array_map('floatval', $formatted_data);
+		$formattedData = $this->formatColonnedData($data);
+		return array_map('floatval', $formattedData);
 	}
 }

@@ -9,10 +9,10 @@ class Target extends AbstractTarget
 {
 
 	/**
-	 * @param array<int,string> $hit_object_data
+	 * @param array<int,string> $hitObjectData
 	 */
 	public function __construct(
-		private array $hit_object_data
+		private array $hitObjectData
 	) {
 	}
 
@@ -21,7 +21,7 @@ class Target extends AbstractTarget
 	 */
 	public function getTime(): int
 	{
-		return (int) $this->hit_object_data[2];
+		return (int) $this->hitObjectData[2];
 	}
 
 	/**
@@ -31,7 +31,7 @@ class Target extends AbstractTarget
 	 */
 	public function getPosition(): PositionsEnum
 	{
-		$osu_pixel_x = (int) $this->hit_object_data[0];
-		return $osu_pixel_x < 256 ? PositionsEnum::LEFT : PositionsEnum::RIGHT;
+		$osuPixelX = (int) $this->hitObjectData[0];
+		return $osuPixelX < 256 ? PositionsEnum::LEFT : PositionsEnum::RIGHT;
 	}
 }

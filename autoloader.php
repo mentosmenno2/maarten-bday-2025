@@ -1,8 +1,8 @@
 <?php
 
-$autoload_file = MAARTEN_BDAY_2025_ROOT_DIR . '/vendor/autoload.php';
-if (file_exists($autoload_file)) {
-	require_once $autoload_file;
+$autoloadFile = MAARTEN_BDAY_2025_ROOT_DIR . '/vendor/autoload.php';
+if (file_exists($autoloadFile)) {
+	require_once $autoloadFile;
 } else {
 	/**
 	 * Autoload using spl_autoload_register
@@ -10,12 +10,12 @@ if (file_exists($autoload_file)) {
 	 */
 	function maartenBday2025AutoLoad(string $class): bool
 	{
-		$no_plugin_ns_class = str_replace(MAARTEN_BDAY_2025_NAMESPACE, '', $class);
-		if ($no_plugin_ns_class === $class) {
+		$noPluginNSClass = str_replace(MAARTEN_BDAY_2025_NAMESPACE, '', $class);
+		if ($noPluginNSClass === $class) {
 			return false; // Class not in plugin namespace, skip autoloading
 		}
 
-		$file = str_replace('\\', DIRECTORY_SEPARATOR, $no_plugin_ns_class) . '.php';
+		$file = str_replace('\\', DIRECTORY_SEPARATOR, $noPluginNSClass) . '.php';
 		$file = MAARTEN_BDAY_2025_ROOT_DIR . '/app' . DIRECTORY_SEPARATOR . $file;
 		if (file_exists($file)) {
 			require_once $file;

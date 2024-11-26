@@ -9,21 +9,21 @@ class Difficulty extends AbstractDifficulty
 {
 
 	/**
-	 * @param array<string,mixed> $difficulty_file_data
+	 * @param array<string,mixed> $difficultyFileData
 	 */
 	public function __construct(
-		private array $difficulty_file_data
+		private array $difficultyFileData
 	) {
 	}
 
 	public function getName(): string
 	{
-		return $this->difficulty_file_data['Metadata']['Version'];
+		return $this->difficultyFileData['Metadata']['Version'];
 	}
 
 	public function getDifficultyRating(): float
 	{
-		return $this->difficulty_file_data['Difficulty']['OverallDifficulty'];
+		return $this->difficultyFileData['Difficulty']['OverallDifficulty'];
 	}
 
 	/**
@@ -33,6 +33,6 @@ class Difficulty extends AbstractDifficulty
 	{
 		return array_map(function (array $hitObjectData): AbstractTarget {
 			return new Target($hitObjectData);
-		}, $this->difficulty_file_data['HitObjects']);
+		}, $this->difficultyFileData['HitObjects']);
 	}
 }
