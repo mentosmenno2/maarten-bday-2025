@@ -3,7 +3,6 @@
 	<description>Mentosmenno2 MaartenBday2025 ruleset</description>
 	<config name="testVersion" value="8.3-"/>
 	<file>./app</file>
-	<file>./templates</file>
 	<file>./index.php</file>
 	<file>./autoloader.php</file>
 
