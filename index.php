@@ -3,7 +3,6 @@
 // Define constants
 
 use Mentosmenno2\MaartenBday2025\App;
-use Mentosmenno2\MaartenBday2025\Templates;
 
 define('MAARTEN_BDAY_2025_NAMESPACE', 'Mentosmenno2\\MaartenBday2025\\');
 define('MAARTEN_BDAY_2025_ROOT_DIR', __DIR__);
@@ -33,21 +32,8 @@ $app = App::getInstance();
 			<h1>Maarten Bday 2025</h1>
 		</header>
 		<main>
+			<canvas id="app"></canvas>
 		</main>
-		<footer>
-			<div class="volume-settings">
-				<div>
-					<label for="volume-music">Music volume: <span class="volume-value volume-audio-music-value"></span>%</label>
-					<input type="range" min="0" max="100" value="0" class="slider slider-volume" id="volume-audio-music">
-				</div>
-				<div>
-					<label for="volume-audio-effect">Effects volume: <span class="volume-value volume-audio-effect-value"></span>%</label>
-					<input type="range" min="0" max="100" value="0" class="slider slider-volume" id="volume-audio-effect">
-				</div>
-			</div>
-			<p class="copyright">&#169; Menno van den Ende - 2025</p>
-		</footer>
-
 		<script src="assets/js/main.js"></script>
 	</body>
 </html>
