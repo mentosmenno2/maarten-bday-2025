@@ -25,7 +25,7 @@ class Target extends AbstractTarget
 	}
 
 	/**
-	 * Set position based on the osu pixel position of the hit object on the playfield screen
+	 * Set position based on the horizontal osu pixel position of the hit object on the playfield screen
 	 *
 	 * @see https://osu.ppy.sh/wiki/en/Client/Playfield
 	 */

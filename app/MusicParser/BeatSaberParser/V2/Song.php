@@ -51,7 +51,10 @@ class Song extends AbstractSong
 		$beatmapSets = $this->infoFileData['_difficultyBeatmapSets'];
 		foreach ($beatmapSets as $beatmapSet) {
 			foreach ($beatmapSet['_difficultyBeatmaps'] as $difficultyBeatmap) {
-				$difficulties[] = new Difficulty($beatmapSet['_beatmapCharacteristicName'], $difficultyBeatmap);
+				$difficulties[] = new Difficulty(
+					$beatmapSet['_beatmapCharacteristicName'],
+					$difficultyBeatmap,
+				);
 			}
 		}
 		return $difficulties;

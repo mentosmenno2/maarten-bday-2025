@@ -5,6 +5,7 @@ namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 use \Exception;
 use \ZipArchive;
 use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
+use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V2\Song;
 use \Mentosmenno2\MaartenBday2025\MusicParser\SongParserInterface;
 
 class SongParser implements SongParserInterface
@@ -37,7 +38,12 @@ class SongParser implements SongParserInterface
 		}
 
 		$infoFileJSON = json_decode($infoFileContents, true, 512, JSON_THROW_ON_ERROR);
-		$infoFileParser = ( new ParserFactory() )->getInfoFileParser($infoFileJSON);
-		return $infoFileParser->parse();
+		if (! is_array($infoFileJSON)) {
+			throw new Exception(sprintf('Info file %s contains invalid content', $infoFile));
+		}
+
+		$infoFileParser = ( new ParserFactory() )->getInfoFileParser($zip, $infoFileJSON);
+		$infoFileData = $infoFileParser->parse();
+		return new Song($infoFileData);
 	}
 }

@@ -2,17 +2,15 @@
 
 namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser;
 
-use Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
-use ZipArchive;
-
-abstract class AbstractInfoFileParser
+abstract class AbstractDifficultyFileParser
 {
 	/**
 	 * @param array<string,mixed> $infoFileData
+	 * @param array<string,mixed> $dataFileData
 	 */
 	public function __construct(
-		protected ZipArchive $zip,
-		protected array $infoFileData
+		protected array $infoFileData,
+		protected array $dataFileData
 	) {
 	}
 

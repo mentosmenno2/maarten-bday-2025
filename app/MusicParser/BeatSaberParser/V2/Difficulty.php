@@ -32,6 +32,8 @@ class Difficulty extends AbstractDifficulty
 	 */
 	public function getTargets(): array
 	{
-		return array();
+		return array_map(function (array $hitObjectData): AbstractTarget {
+			return new Target($hitObjectData);
+		}, $this->difficultyData['beatmapFileData']['_notes']);
 	}
 }
