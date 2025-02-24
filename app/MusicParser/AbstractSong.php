@@ -32,9 +32,9 @@ abstract class AbstractSong implements JsonSerializable
 	abstract public function getFileName(): string;
 
 	/**
-	 * Get the file name of the cover image file
+	 * Get the base64 cover image file
 	 */
-	abstract public function getCoverImageFileName(): string;
+	abstract public function getCoverImageBase64(): ?string;
 
 	/**
 	 * Get a list of available difficulties
@@ -54,7 +54,7 @@ abstract class AbstractSong implements JsonSerializable
 			'artist' => $this->getArtist(),
 			'builder' => $this->getBuilder(),
 			'fileName' => $this->getFileName(),
-			'coverImageFilename' => $this->getCoverImageFileName(),
+			'coverImageBase64' => $this->getCoverImageBase64(),
 			'difficulties' => $this->getDifficulties(),
 		);
 	}

@@ -40,9 +40,9 @@ class Song extends AbstractSong
 		return $this->infoFileData['_songFilename'];
 	}
 
-	public function getCoverImageFileName(): string
+	public function getCoverImageBase64(): string
 	{
-		return $this->infoFileData['_coverImageFilename'];
+		return $this->infoFileData['coverImageBase64'];
 	}
 
 	public function getDifficulties(): array

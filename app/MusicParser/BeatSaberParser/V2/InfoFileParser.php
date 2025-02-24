@@ -5,6 +5,7 @@ namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V2;
 use Exception;
 use \Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\AbstractInfoFileParser;
 use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\ParserFactory;
+use Mentosmenno2\MaartenBday2025\Tools\Toolbox;
 
 class InfoFileParser extends AbstractInfoFileParser
 {
@@ -25,6 +26,10 @@ class InfoFileParser extends AbstractInfoFileParser
 			}
 		}
 
+		// Load cover image
+		$coverImageFilename = $this->infoFileData['_coverImageFilename'];
+		$coverImageResource = $coverImageFilename ? $this->zip->getStream($coverImageFilename) : null;
+		$data['coverImageBase64'] = $coverImageResource ? ( new Toolbox() )->fileToBase64($coverImageResource) : null;
 		return $data;
 	}
 

@@ -6,6 +6,7 @@ use \Exception;
 use \ZipArchive;
 use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
 use \Mentosmenno2\MaartenBday2025\MusicParser\SongParserInterface;
+use Mentosmenno2\MaartenBday2025\Tools\Toolbox;
 
 class SongParser implements SongParserInterface
 {
@@ -26,11 +27,13 @@ class SongParser implements SongParserInterface
 		$firstOSUFileIndex = array_key_first($osuFilesData);
 		$firstOsuFile = $osuFilesData[$firstOSUFileIndex];
 
+		$albumArtBase64 = $this->coverImageBase64($zip, $firstOsuFile['General']['AudioFilename'], $firstOsuFile['Events']);
+
 		$zip->close();
 		return new Song(
 			$firstOsuFile['General'],
 			$firstOsuFile['Metadata'],
-			$firstOsuFile['Events'],
+			$albumArtBase64,
 			$osuFilesData,
 		);
 	}
@@ -52,7 +55,7 @@ class SongParser implements SongParserInterface
 				throw new Exception(sprintf('Cannot open file %s', $filename));
 			}
 
-			$filesData[ $filename ] = $this->getOSUFileData($fileContents);
+			$filesData[ $filename ] = $this->getOSUFileData($zip, $fileContents);
 		}
 
 		return $filesData;
@@ -61,7 +64,7 @@ class SongParser implements SongParserInterface
 	/**
 	 * @return array<string,mixed>
 	 */
-	private function getOSUFileData(string $fileContents): array
+	private function getOSUFileData(ZipArchive $zip, string $fileContents): array
 	{
 		$sectionsData = $this->osuFileRawSectionsData($fileContents);
 		$sectionsData['General'] = $this->formatColonnedData($sectionsData['General']);
@@ -98,6 +101,43 @@ class SongParser implements SongParserInterface
 			$sectionsData[$currentSection][] = $line;
 		}
 		return $sectionsData;
+	}
+
+	/**
+	 * @param array<array<string>> $events
+	 */
+	private function coverImageBase64(ZipArchive $zip, string $songFile, array $events): ?string
+	{
+		// Use ID3 if able
+		$songFile = $zip->getStream($songFile);
+		if ($songFile) {
+			$coverImageBase64 = ( new Toolbox() )->getImageBase64FromAudio($songFile);
+			fclose($songFile);
+
+			if ($coverImageBase64) {
+				return $coverImageBase64;
+			}
+		}
+
+		// Use background images if able
+		$backgroundFileResource = null;
+		foreach ($events as $event) {
+			if ((int) $event[0] !== 0) {
+				continue;
+			}
+
+			$quotesTrimmed = trim($event[2], '"');
+			$backgroundFileName = $quotesTrimmed;
+			$backgroundFileResource = $backgroundFileName ? $zip->getStream($backgroundFileName) : null;
+			if ($backgroundFileResource) {
+				break;
+			}
+		}
+		if ($backgroundFileResource) {
+			return ( new Toolbox() )->fileToBase64($backgroundFileResource);
+		}
+
+		return null;
 	}
 
 	/**

@@ -9,13 +9,12 @@ class Song extends AbstractSong
 	/**
 	 * @param array<string,string> $general
 	 * @param array<string,string> $metadata
-	 * @param array<array<string>> $events
 	 * @param array<string,array<string,mixed>> $difficultiesData
 	 */
 	public function __construct(
 		private array $general,
 		private array $metadata,
-		private array $events,
+		private ?string $coverImageBase64,
 		private array $difficultiesData,
 	) {
 	}
@@ -45,17 +44,9 @@ class Song extends AbstractSong
 		return $this->general['AudioFilename'];
 	}
 
-	public function getCoverImageFileName(): string
+	public function getCoverImageBase64(): ?string
 	{
-		foreach ($this->events as $event) {
-			if ((int) $event[0] !== 0) {
-				continue;
-			}
-
-			$quotesTrimmed = trim($event[2], '"');
-			return $quotesTrimmed;
-		}
-		return '';
+		return $this->coverImageBase64;
 	}
 
 	public function getDifficulties(): array
