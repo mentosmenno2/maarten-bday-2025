@@ -134,7 +134,9 @@ class SongParser implements SongParserInterface
 			}
 		}
 		if ($backgroundFileResource) {
-			return ( new Toolbox() )->fileToBase64($backgroundFileResource);
+			$coverImageBase64 = ( new Toolbox() )->fileToBase64($backgroundFileResource);
+			fclose($backgroundFileResource);
+			return $coverImageBase64;
 		}
 
 		return null;

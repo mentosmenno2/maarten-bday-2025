@@ -30,6 +30,9 @@ class InfoFileParser extends AbstractInfoFileParser
 		$coverImageFilename = $this->infoFileData['_coverImageFilename'];
 		$coverImageResource = $coverImageFilename ? $this->zip->getStream($coverImageFilename) : null;
 		$data['coverImageBase64'] = $coverImageResource ? ( new Toolbox() )->fileToBase64($coverImageResource) : null;
+		if ($coverImageResource) {
+			fclose($coverImageResource);
+		}
 		return $data;
 	}
 
