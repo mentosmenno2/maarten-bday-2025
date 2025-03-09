@@ -16,11 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-test-command: [
-          test:composer,
-          test:phpcs,
-          test:phpstan
-        ]
+        php-test-command:
+          - test:composer
+          - test:phpcs
+          - test:phpstan
     steps:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
