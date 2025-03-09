@@ -14,15 +14,15 @@ require_once __DIR__ . '/bootstrap.php';
 
 		<link rel="icon" type="image/png" href="assets/images/favicon.png">
 
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="dist/styles/main.css" />
 	</head>
 	<body>
 		<header>
 			<h1>Maarten Bday 2025</h1>
 		</header>
 		<main>
-			<canvas id="app"></canvas>
+			<canvas id="game"></canvas>
 		</main>
-		<script src="assets/js/main.js"></script>
+		<script type="module" src="dist/scripts/main.js"></script>
 	</body>
 </html>
