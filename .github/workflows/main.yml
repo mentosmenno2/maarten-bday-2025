@@ -20,9 +20,6 @@ jobs:
           - test:composer
           - test:phpcs
           - test:phpstan
-        npm-test-command:
-          - lint
-          - build
     steps:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -50,6 +47,11 @@ jobs:
   npm:
     name: NPM test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        npm-test-command:
+          - lint
+          - build
     steps:
       - uses: actions/checkout@v4
         with:
