@@ -23,7 +23,7 @@ jobs:
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'maarten-bday-2025/.nvmrc'
       - name: Debugging
         run: |
           php --version

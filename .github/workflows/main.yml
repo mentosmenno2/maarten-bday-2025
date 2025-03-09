@@ -57,21 +57,25 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
         with:
+          path: maarten-bday-2025/
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'maarten-bday-2025/.nvmrc'
       - name: Debugging
         run: |
           node -v
           npm -v
       - name: NPM Install
         run: |
+          cd maarten-bday-2025/
           npm ci
       - name: ${{ matrix.npm-test-command }}
         run: |
+          cd maarten-bday-2025/
           npm run ${{ matrix.npm-test-command }} --if-present
       - name: ${{ matrix.npm-test-command }}
         run: |
+          cd maarten-bday-2025/
           npm run ${{ matrix.npm-test-command }} --if-present
