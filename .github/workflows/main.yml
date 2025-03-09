@@ -18,7 +18,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: 8.4
           extensions: mbstring, dom, simplexml
       - uses: actions/checkout@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           php -m
           composer --version
           ls -lsah
-      - name: Composer build
+      - name: Composer install
         run: |
           cd maarten-bday-2025/
           composer install --prefer-dist
@@ -46,3 +46,27 @@ jobs:
         run: |
           cd maarten-bday-2025/
           composer run test:phpstan
+  npm:
+    name: NPM test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - name: Debugging
+        run: |
+          node -v
+          npm -v
+      - name: NPM Install
+        run: |
+          npm ci
+      - name: test:lint
+        run: |
+          npm run lint --if-present
+      - name: test:build
+        run: |
+          npm run build --if-present

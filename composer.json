@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "james-heinrich/getid3": "^1.9"
     },
     "scripts": {
@@ -51,7 +51,7 @@
     },
     "require-dev": {
         "mentosmenno2/coding-standards": "^1.0",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^2.1"
     },
     "config": {
         "allow-plugins": {

@@ -6,3 +6,4 @@ parameters:
 		- app
 		- index.php
 		- autoloader.php
+		- bootstrap.php
