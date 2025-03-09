@@ -20,6 +20,9 @@ jobs:
           - test:composer
           - test:phpcs
           - test:phpstan
+        npm-test-command:
+          - lint
+          - build
     steps:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -62,9 +65,9 @@ jobs:
       - name: NPM Install
         run: |
           npm ci
-      - name: test:lint
+      - name: ${{ matrix.npm-test-command }}
         run: |
-          npm run lint --if-present
-      - name: test:build
+          npm run ${{ matrix.npm-test-command }} --if-present
+      - name: ${{ matrix.npm-test-command }}
         run: |
-          npm run build --if-present
+          npm run ${{ matrix.npm-test-command }} --if-present
