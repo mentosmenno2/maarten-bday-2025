@@ -25,14 +25,18 @@ export class Game {
 		return this.instance;
 	}
 
-	private setup(): void {}
+	private setup(): void {
+		this.canvas.updateSize();
+	}
 
 	private loop(timestampMillis: number): void {
+		// Calculate deltaTime
 		const deltaTimeMillis = this.lastLoopTimestampMillis
 			? timestampMillis - this.lastLoopTimestampMillis
 			: 0;
 		this.lastLoopTimestampMillis = timestampMillis;
 
+		// Process and draw
 		this.process(deltaTimeMillis);
 		this.draw();
 
@@ -40,6 +44,7 @@ export class Game {
 	}
 
 	private process(deltaTimeMillis: number): void {
+		this.canvas.updateSize();
 		this.fpsCounter.process(deltaTimeMillis);
 	}
 
