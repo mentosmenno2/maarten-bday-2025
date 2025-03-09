@@ -1,0 +1,71 @@
+name: Build release
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+  pull_request_target:
+    branches:
+      - 'master'
+      - 'main'
+
+jobs:
+  build-release:
+    name: PHP test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: maarten-bday-2025/
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, dom, simplexml
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - name: Debugging
+        run: |
+          php --version
+          php -m
+          composer --version
+          node -v
+          npm -v
+          ls -lsah
+      - name: Composer install
+        run: |
+          cd maarten-bday-2025/
+          composer install --prefer-dist --no-dev --optimize-autoloader
+      - name: NPM install
+        run: |
+          cd maarten-bday-2025/
+          npm ci
+      - name: NPM build
+        run: |
+          cd maarten-bday-2025/
+          npm run build:release
+      - name: Remove build and source files
+        run: |
+          cd maarten-bday-2025/
+          rm -rf node_modules
+          rm -rf music-files
+          rm -rf src
+      - name: Commit all changes
+        run: |
+          cd maarten-bday-2025/
+          git config --global user.email "github-build-release-bot@users.noreply.github.com"
+          git config --global user.name "[BOT] Build Release"
+          git add -A --force dist/
+          git add -A --force vendor/
+          git commit -m "Asset build" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          directory: cd maarten-bday-2025/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master-build
+          force: true
