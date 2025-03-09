@@ -11,8 +11,8 @@ on:
       - 'main'
 
 jobs:
-  php:
-    name: PHP test
+  setup-php-test-environment:
+    name: PHP Setup
     runs-on: ubuntu-latest
     steps:
       - name: Install PHP
@@ -24,25 +24,37 @@ jobs:
         with:
           path: maarten-bday-2025/
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Debugging
-        run: |
-          php --version
-          php -m
-          composer --version
-          ls -lsah
       - name: Composer install
         run: |
           cd maarten-bday-2025/
           composer install --prefer-dist
-      - name: test:composer
+  test-composer:
+    name: Test Composer
+    runs-on: ubuntu-latest
+    needs: php
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test:composer
         run: |
           cd maarten-bday-2025/
           composer run test:composer
-      - name: test:phpcs
+  test-phpcs:
+    name: Test PHPCS
+    runs-on: ubuntu-latest
+    needs: php
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test:phpcs
         run: |
           cd maarten-bday-2025/
           composer run test:phpcs
-      - name: test:phpstan
+  test-phpstan:
+    name: Test PHPStan
+    runs-on: ubuntu-latest
+    needs: php
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test:phpstan
         run: |
           cd maarten-bday-2025/
           composer run test:phpstan
