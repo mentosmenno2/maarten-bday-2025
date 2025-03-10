@@ -62,7 +62,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
-          directory: cd maarten-bday-2025/
+          directory: maarten-bday-2025/
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master-build
           force: true
