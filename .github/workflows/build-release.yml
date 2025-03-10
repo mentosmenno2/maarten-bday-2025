@@ -51,7 +51,7 @@ jobs:
           rm -rf node_modules
           rm -rf music-files
           rm -rf src
-- name: Commit all changes
+      - name: Commit all changes
         run: |
           cd maarten-bday-2025/
           git config --global user.email "github-build-release-bot@users.noreply.github.com"
