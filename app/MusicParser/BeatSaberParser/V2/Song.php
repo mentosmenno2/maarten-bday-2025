@@ -45,6 +45,11 @@ class Song extends AbstractSong
 		return $this->infoFileData['coverImageBase64'];
 	}
 
+	public function getbackgroundImageBase64(): ?string
+	{
+		return null; // No support for backgorund images
+	}
+
 	public function getDifficulties(): array
 	{
 		$difficulties = array();

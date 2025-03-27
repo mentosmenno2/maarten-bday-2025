@@ -15,6 +15,7 @@ class Song extends AbstractSong
 		private array $general,
 		private array $metadata,
 		private ?string $coverImageBase64,
+		private ?string $backgroundImageBase64,
 		private array $difficultiesData,
 	) {
 	}
@@ -47,6 +48,11 @@ class Song extends AbstractSong
 	public function getCoverImageBase64(): ?string
 	{
 		return $this->coverImageBase64;
+	}
+
+	public function getbackgroundImageBase64(): ?string
+	{
+		return $this->backgroundImageBase64;
 	}
 
 	public function getDifficulties(): array

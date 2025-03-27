@@ -27,13 +27,15 @@ class SongParser implements SongParserInterface
 		$firstOSUFileIndex = array_key_first($osuFilesData);
 		$firstOsuFile = $osuFilesData[$firstOSUFileIndex];
 
-		$albumArtBase64 = $this->coverImageBase64($zip, $firstOsuFile['General']['AudioFilename'], $firstOsuFile['Events']);
+		$albumArtBase64 = $this->coverImageBase64($zip, $firstOsuFile['General']['AudioFilename']);
+		$backgroundBase64 = $this->backgroundImageBase64($zip, $firstOsuFile['Events']);
 
 		$zip->close();
 		return new Song(
 			$firstOsuFile['General'],
 			$firstOsuFile['Metadata'],
 			$albumArtBase64,
+			$backgroundBase64,
 			$osuFilesData,
 		);
 	}
@@ -103,10 +105,7 @@ class SongParser implements SongParserInterface
 		return $sectionsData;
 	}
 
-	/**
-	 * @param array<array<string>> $events
-	 */
-	private function coverImageBase64(ZipArchive $zip, string $songFile, array $events): ?string
+	private function coverImageBase64(ZipArchive $zip, string $songFile): ?string
 	{
 		// Use ID3 if able
 		$songFile = $zip->getStream($songFile);
@@ -119,7 +118,14 @@ class SongParser implements SongParserInterface
 			}
 		}
 
-		// Use background images if able
+		return null;
+	}
+
+	/**
+	 * @param array<array<string>> $events
+	 */
+	private function backgroundImageBase64(ZipArchive $zip, array $events): ?string
+	{
 		$backgroundFileResource = null;
 		foreach ($events as $event) {
 			if ((int) $event[0] !== 0) {
@@ -134,9 +140,9 @@ class SongParser implements SongParserInterface
 			}
 		}
 		if ($backgroundFileResource) {
-			$coverImageBase64 = ( new Toolbox() )->fileToBase64($backgroundFileResource);
+			$backgroundImageBase64 = ( new Toolbox() )->fileToBase64($backgroundFileResource);
 			fclose($backgroundFileResource);
-			return $coverImageBase64;
+			return $backgroundImageBase64;
 		}
 
 		return null;
