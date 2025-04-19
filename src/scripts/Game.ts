@@ -43,6 +43,7 @@ export class Game {
 		const deltaTimeMillis = timestampMillis - this.lastLoopTimestampMillis;
 		this.lastLoopTimestampMillis = timestampMillis;
 
+		// Skip loop iteration if running faster than max FPS
 		this.loopTimeAccumulator += deltaTimeMillis;
 		const maxFPS = Number.MAX_SAFE_INTEGER;
 		const minDeltaTimeMillis = 1000 / maxFPS;
