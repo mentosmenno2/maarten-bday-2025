@@ -6,7 +6,7 @@ Console.log(
 );
 
 try {
-	Game.getInstance();
+	Game.getInstance().start();
 } catch (error) {
 	const exceptionAlertLines = [
 		'------------------------------------',

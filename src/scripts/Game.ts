@@ -1,7 +1,9 @@
 import { Canvas } from './Canvas.js';
 import { FPSCounter } from './FPSCounter.js';
+import { GlobalEventHandler } from './GlobalEventHandler.js';
+import { Position } from './Position.js';
 import { AbstractScene } from './Scenes/AbstractScene.js';
-import { MenuScene } from './Scenes/MenuScene.js';
+import { StartScene } from './Scenes/StartScene.js';
 
 export class Game {
 	private static instance: Game | null;
@@ -10,14 +12,14 @@ export class Game {
 	private canvas: Canvas;
 	private fpsCounter: FPSCounter;
 	private currentScene: AbstractScene;
+	private globalEventHandler: GlobalEventHandler;
 
 	private constructor() {
 		this.lastLoopTimestampMillis = new Date().getTime();
 		this.canvas = new Canvas();
 		this.fpsCounter = new FPSCounter();
-		this.currentScene = new MenuScene(this);
-
-		this.start();
+		this.currentScene = new StartScene(this);
+		this.globalEventHandler = new GlobalEventHandler(this);
 	}
 
 	public static getInstance(): Game {
@@ -27,8 +29,9 @@ export class Game {
 		return this.instance;
 	}
 
-	private start(): void {
+	public start(): void {
 		this.canvas.updateSize();
+		this.globalEventHandler.addEventListeners();
 
 		window.requestAnimationFrame(this.loop.bind(this));
 	}
@@ -47,8 +50,6 @@ export class Game {
 	}
 
 	private update(deltaTimeMillis: number): void {
-		this.canvas.updateSize();
-
 		this.currentScene.update(deltaTimeMillis);
 		this.fpsCounter.update(deltaTimeMillis);
 	}
@@ -68,5 +69,17 @@ export class Game {
 
 	public setCurrentScene(scene: AbstractScene): void {
 		this.currentScene = scene;
+	}
+
+	public handleClick(position: Position): void {
+		if (this.currentScene.handleClick) {
+			this.currentScene.handleClick(position);
+		}
+	}
+
+	public handleMouseMove(position: Position): void {
+		if (this.currentScene.handleMouseMove) {
+			this.currentScene.handleMouseMove(position);
+		}
 	}
 }
