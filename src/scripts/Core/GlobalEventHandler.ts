@@ -1,5 +1,5 @@
-import { Game } from './Game.js';
-import { Position } from './Position.js';
+import { Game } from './../Game.js';
+import { Position } from './Position/Position.js';
 
 export class GlobalEventHandler {
 	private game: Game;

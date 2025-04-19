@@ -1,7 +1,7 @@
-import { Canvas } from './Canvas.js';
-import { FPSCounter } from './FPSCounter.js';
-import { GlobalEventHandler } from './GlobalEventHandler.js';
-import { Position } from './Position.js';
+import { Canvas } from './Core/Canvas.js';
+import { FPSCounter } from './Core/Debug/FPSCounter.js';
+import { GlobalEventHandler } from './Core/GlobalEventHandler.js';
+import { Position } from './Core/Position/Position.js';
 import { AbstractScene } from './Scenes/AbstractScene.js';
 import { StartScene } from './Scenes/StartScene.js';
 

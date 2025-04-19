@@ -1,5 +1,5 @@
 import { Game } from '../Game.js';
-import { Position } from '../Position.js';
+import { Position } from '../Core/Position/Position.js';
 
 export abstract class AbstractScene {
 	protected game: Game;

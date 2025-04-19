@@ -1,5 +1,5 @@
 import { Game } from './Game.js';
-import { Console } from './Console.js';
+import { Console } from './Core/Console.js';
 
 Console.log(
 	"🔒 Trying to bypass the authentication by hacking your way around in the code? No no no, we don't allow that at this time!",

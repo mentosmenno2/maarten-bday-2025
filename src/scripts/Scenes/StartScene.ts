@@ -1,5 +1,5 @@
-import { ColorEnum } from '../ColorEnum.js';
-import { ColorUtils } from '../ColorUtils.js';
+import { ColorEnum } from '../Core/Style/ColorEnum.js';
+import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { AbstractScene } from './AbstractScene.js';
 import { SongSelectScene } from './SongSelectScene.js';
 
