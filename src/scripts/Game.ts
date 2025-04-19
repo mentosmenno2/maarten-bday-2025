@@ -1,5 +1,7 @@
 import { Canvas } from './Canvas.js';
 import { FPSCounter } from './FPSCounter.js';
+import { AbstractScene } from './Scenes/AbstractScene.js';
+import { MenuScene } from './Scenes/MenuScene.js';
 
 export class Game {
 	private static instance: Game | null;
@@ -7,15 +9,15 @@ export class Game {
 	private lastLoopTimestampMillis: number;
 	private canvas: Canvas;
 	private fpsCounter: FPSCounter;
+	private currentScene: AbstractScene;
 
 	private constructor() {
 		this.lastLoopTimestampMillis = new Date().getTime();
 		this.canvas = new Canvas();
 		this.fpsCounter = new FPSCounter();
+		this.currentScene = new MenuScene(this);
 
-		this.setup();
-
-		window.requestAnimationFrame(this.loop.bind(this));
+		this.start();
 	}
 
 	public static getInstance(): Game {
@@ -25,34 +27,46 @@ export class Game {
 		return this.instance;
 	}
 
-	private setup(): void {
+	private start(): void {
 		this.canvas.updateSize();
-	}
-
-	private loop(timestampMillis: number): void {
-		// Calculate deltaTime
-		const deltaTimeMillis = this.lastLoopTimestampMillis
-			? timestampMillis - this.lastLoopTimestampMillis
-			: 0;
-		this.lastLoopTimestampMillis = timestampMillis;
-
-		// Process and draw
-		this.process(deltaTimeMillis);
-		this.draw();
 
 		window.requestAnimationFrame(this.loop.bind(this));
 	}
 
-	private process(deltaTimeMillis: number): void {
-		this.canvas.updateSize();
-		this.fpsCounter.process(deltaTimeMillis);
+	private loop(timestampMillis: number): void {
+		// Calculate deltaTime
+		const deltaTimeMillis = timestampMillis - this.lastLoopTimestampMillis;
+		this.lastLoopTimestampMillis = timestampMillis;
+
+		// Process and draw
+		this.update(deltaTimeMillis);
+		this.render(this.canvas.getContext());
+
+		// New loop
+		window.requestAnimationFrame(this.loop.bind(this));
 	}
 
-	private draw(): void {
-		this.fpsCounter.draw();
+	private update(deltaTimeMillis: number): void {
+		this.canvas.updateSize();
+
+		this.currentScene.update(deltaTimeMillis);
+		this.fpsCounter.update(deltaTimeMillis);
+	}
+
+	private render(ctx: CanvasRenderingContext2D): void {
+		this.currentScene.render(ctx);
+		this.fpsCounter.render(ctx);
 	}
 
 	public getCanvas(): Canvas {
 		return this.canvas;
+	}
+
+	public getCurrentScene(): AbstractScene {
+		return this.currentScene;
+	}
+
+	public setCurrentScene(scene: AbstractScene): void {
+		this.currentScene = scene;
 	}
 }

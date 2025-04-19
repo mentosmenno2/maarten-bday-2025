@@ -7,6 +7,10 @@ export class Canvas {
 		this.context = <CanvasRenderingContext2D>this.element.getContext('2d');
 	}
 
+	public getElement(): HTMLCanvasElement {
+		return this.element;
+	}
+
 	public getContext(): CanvasRenderingContext2D {
 		return this.context;
 	}
