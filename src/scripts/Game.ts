@@ -9,13 +9,15 @@ export class Game {
 	private static instance: Game | null;
 
 	private lastLoopTimestampMillis: number;
+	private loopTimeAccumulator: number;
 	private canvas: Canvas;
 	private fpsCounter: FPSCounter;
 	private currentScene: AbstractScene;
 	private globalEventHandler: GlobalEventHandler;
 
 	private constructor() {
-		this.lastLoopTimestampMillis = new Date().getTime();
+		this.lastLoopTimestampMillis = 0;
+		this.loopTimeAccumulator = 0;
 		this.canvas = new Canvas();
 		this.fpsCounter = new FPSCounter();
 		this.currentScene = new StartScene(this);
@@ -41,9 +43,19 @@ export class Game {
 		const deltaTimeMillis = timestampMillis - this.lastLoopTimestampMillis;
 		this.lastLoopTimestampMillis = timestampMillis;
 
+		this.loopTimeAccumulator += deltaTimeMillis;
+		const maxFPS = Number.MAX_SAFE_INTEGER;
+		const minDeltaTimeMillis = 1000 / maxFPS;
+		if (this.loopTimeAccumulator < minDeltaTimeMillis) {
+			// New loop
+			window.requestAnimationFrame(this.loop.bind(this));
+			return;
+		}
+
 		// Process and draw
-		this.update(deltaTimeMillis);
+		this.update(Math.max(deltaTimeMillis, minDeltaTimeMillis));
 		this.render(this.canvas.getContext());
+		this.loopTimeAccumulator = 0;
 
 		// New loop
 		window.requestAnimationFrame(this.loop.bind(this));
