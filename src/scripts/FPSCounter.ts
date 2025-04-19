@@ -9,7 +9,7 @@ export class FPSCounter {
 	public render(ctx: CanvasRenderingContext2D): void {
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
-		ctx.font = '25px Arial';
+		ctx.font = '14px Arial';
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = 'white';
 		ctx.strokeText(`FPS: ${this.fps}`, 10, 10);
