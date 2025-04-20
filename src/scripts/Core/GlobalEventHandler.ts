@@ -1,5 +1,5 @@
 import { Game } from './../Game.js';
-import { Position } from './Position/Position.js';
+import { ActualVector2 } from './Position/ActualVector2.js';
 
 export class GlobalEventHandler {
 	private game: Game;
@@ -23,7 +23,7 @@ export class GlobalEventHandler {
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
 
-		this.game.handleClick(new Position(x, y));
+		this.game.handleClick(new ActualVector2(x, y));
 	}
 
 	private onMouseMove(e: PointerEvent): void {
@@ -31,6 +31,6 @@ export class GlobalEventHandler {
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
 
-		this.game.handleMouseMove(new Position(x, y));
+		this.game.handleMouseMove(new ActualVector2(x, y));
 	}
 }

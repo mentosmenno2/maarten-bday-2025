@@ -1,5 +1,5 @@
+import { ActualVector2 } from '../Core/Position/ActualVector2.js';
 import { Game } from '../Game.js';
-import { Position } from '../Core/Position/Position.js';
 
 export abstract class AbstractScene {
 	protected game: Game;
@@ -15,7 +15,7 @@ export abstract class AbstractScene {
 
 	public abstract render(ctx: CanvasRenderingContext2D): void;
 
-	public handleClick?(position: Position): void;
+	public handleClick?(vector2: ActualVector2): void;
 
-	public handleMouseMove?(position: Position): void;
+	public handleMouseMove?(vector2: ActualVector2): void;
 }

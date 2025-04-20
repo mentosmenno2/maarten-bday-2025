@@ -1,7 +1,7 @@
 import { Canvas } from './Core/Canvas.js';
 import { FPSCounter } from './Core/Debug/FPSCounter.js';
 import { GlobalEventHandler } from './Core/GlobalEventHandler.js';
-import { Position } from './Core/Position/Position.js';
+import { ActualVector2 } from './Core/Position/ActualVector2.js';
 import { AbstractScene } from './Scenes/AbstractScene.js';
 import { StartScene } from './Scenes/StartScene.js';
 
@@ -84,15 +84,15 @@ export class Game {
 		this.currentScene = scene;
 	}
 
-	public handleClick(position: Position): void {
+	public handleClick(vector2: ActualVector2): void {
 		if (this.currentScene.handleClick) {
-			this.currentScene.handleClick(position);
+			this.currentScene.handleClick(vector2);
 		}
 	}
 
-	public handleMouseMove(position: Position): void {
+	public handleMouseMove(vector2: ActualVector2): void {
 		if (this.currentScene.handleMouseMove) {
-			this.currentScene.handleMouseMove(position);
+			this.currentScene.handleMouseMove(vector2);
 		}
 	}
 }

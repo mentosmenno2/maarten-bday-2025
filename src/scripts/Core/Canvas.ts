@@ -15,6 +15,22 @@ export class Canvas {
 		return this.context;
 	}
 
+	public getWidth(): number {
+		return this.element.width;
+	}
+
+	public getHeight(): number {
+		return this.element.height;
+	}
+
+	public getScaledWidth(): number {
+		return 100;
+	}
+
+	public getScaledHeight(): number {
+		return 100;
+	}
+
 	public updateSize(): void {
 		const width = this.element.width;
 		const height = this.element.height;
