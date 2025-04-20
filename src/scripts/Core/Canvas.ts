@@ -4,7 +4,9 @@ export class Canvas {
 
 	public constructor() {
 		this.element = <HTMLCanvasElement>document.getElementById('game');
-		this.context = <CanvasRenderingContext2D>this.element.getContext('2d');
+		this.context = <CanvasRenderingContext2D>this.element.getContext('2d', {
+			desynchronized: true,
+		});
 	}
 
 	public getElement(): HTMLCanvasElement {
