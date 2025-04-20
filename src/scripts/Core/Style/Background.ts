@@ -94,10 +94,6 @@ export class Background {
 		const time = performance.now() / 1000;
 		ctx.shadowBlur = 15 + Math.sin(time * 3) * 10;
 
-		ctx.fillText('Klik om te starten', width / 2, height / 2);
-		ctx.shadowBlur = 0;
-		ctx.shadowColor = 'transparent';
-
 		ctx.restore();
 	}
 

@@ -1,20 +1,27 @@
 import { ActualVector2 } from '../Core/Position/ActualVector2.js';
 import { SettingsInterface } from '../Core/Settings/SettingsInterface.js';
 import { SettingsService } from '../Core/Settings/SettingsService.js';
+import { Background } from '../Core/Style/Background.js';
 import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
 
 export class SettingsScene extends AbstractScene {
+	private background: Background;
 	private settings: SettingsInterface;
 
 	constructor(game: Game) {
 		super(game);
+		this.background = new Background(this.game);
 		this.settings = SettingsService.get();
 	}
 
-	public update(): void {}
+	public update(): void {
+		this.background.update();
+	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
+		this.background.render(ctx);
+
 		ctx.textAlign = 'left';
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'white';
