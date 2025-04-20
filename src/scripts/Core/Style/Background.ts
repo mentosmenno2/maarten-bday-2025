@@ -16,6 +16,8 @@ export class Background {
 	public update(): void {}
 
 	public render(ctx: CanvasRenderingContext2D): void {
+		ctx.save();
+
 		const { width, height } = ctx.canvas;
 		const horizonY = height * 0.75;
 
@@ -95,6 +97,8 @@ export class Background {
 		ctx.fillText('Klik om te starten', width / 2, height / 2);
 		ctx.shadowBlur = 0;
 		ctx.shadowColor = 'transparent';
+
+		ctx.restore();
 	}
 
 	private generateStars(): void {

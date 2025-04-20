@@ -39,7 +39,7 @@ export class StartScene extends AbstractScene {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleClick(): void {
 		this.game.getCanvas().getElement().requestFullscreen();
-		this.game.setCurrentScene(new SongSelectScene(this.game));
+		this.game.getSceneManager().push(new SongSelectScene(this.game));
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

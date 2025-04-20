@@ -19,6 +19,7 @@ export class FPSCounter {
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
+		ctx.save();
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
 		ctx.font = '14px Arial';
@@ -28,5 +29,6 @@ export class FPSCounter {
 		ctx.shadowBlur = 0;
 		ctx.fillStyle = 'black';
 		ctx.fillText(`FPS: ${this.fps}`, 10, 10);
+		ctx.restore();
 	}
 }

@@ -2,7 +2,7 @@ import { Canvas } from './Core/Canvas.js';
 import { FPSCounter } from './Core/Debug/FPSCounter.js';
 import { GlobalEventHandler } from './Core/GlobalEventHandler.js';
 import { ActualVector2 } from './Core/Position/ActualVector2.js';
-import { AbstractScene } from './Scenes/AbstractScene.js';
+import { SceneManager } from './SceneManager.js';
 import { StartScene } from './Scenes/StartScene.js';
 
 export class Game {
@@ -12,7 +12,7 @@ export class Game {
 	private loopTimeAccumulator: number;
 	private canvas: Canvas;
 	private fpsCounter: FPSCounter;
-	private currentScene: AbstractScene;
+	private sceneManager: SceneManager;
 	private globalEventHandler: GlobalEventHandler;
 
 	private constructor() {
@@ -21,7 +21,7 @@ export class Game {
 		this.canvas = new Canvas();
 		this.canvas.updateSize();
 		this.fpsCounter = new FPSCounter();
-		this.currentScene = new StartScene(this);
+		this.sceneManager = new SceneManager(new StartScene(this));
 		this.globalEventHandler = new GlobalEventHandler(this);
 	}
 
@@ -63,36 +63,33 @@ export class Game {
 	}
 
 	private update(deltaTimeMillis: number): void {
-		this.currentScene.update(deltaTimeMillis);
+		this.sceneManager.update(deltaTimeMillis);
 		this.fpsCounter.update(deltaTimeMillis);
 	}
 
 	private render(ctx: CanvasRenderingContext2D): void {
-		this.currentScene.render(ctx);
+		// Reset
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+		// Render
+		this.sceneManager.render(ctx);
 		this.fpsCounter.render(ctx);
+	}
+
+	public getSceneManager(): SceneManager {
+		return this.sceneManager;
 	}
 
 	public getCanvas(): Canvas {
 		return this.canvas;
 	}
 
-	public getCurrentScene(): AbstractScene {
-		return this.currentScene;
-	}
-
-	public setCurrentScene(scene: AbstractScene): void {
-		this.currentScene = scene;
-	}
-
 	public handleClick(vector2: ActualVector2): void {
-		if (this.currentScene.handleClick) {
-			this.currentScene.handleClick(vector2);
-		}
+		this.sceneManager.handleClick(vector2);
 	}
 
 	public handleMouseMove(vector2: ActualVector2): void {
-		if (this.currentScene.handleMouseMove) {
-			this.currentScene.handleMouseMove(vector2);
-		}
+		this.sceneManager.handleMouseMove(vector2);
 	}
 }
