@@ -19,6 +19,7 @@ export class Game {
 		this.lastLoopTimestampMillis = 0;
 		this.loopTimeAccumulator = 0;
 		this.canvas = new Canvas();
+		this.canvas.updateSize();
 		this.fpsCounter = new FPSCounter();
 		this.currentScene = new StartScene(this);
 		this.globalEventHandler = new GlobalEventHandler(this);
@@ -32,7 +33,6 @@ export class Game {
 	}
 
 	public start(): void {
-		this.canvas.updateSize();
 		this.globalEventHandler.addEventListeners();
 
 		window.requestAnimationFrame(this.loop.bind(this));

@@ -1,35 +1,44 @@
+import { Background } from '../Core/Style/Background.js';
 import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
+import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
 import { SongSelectScene } from './SongSelectScene.js';
 
 export class StartScene extends AbstractScene {
-	public update(): void {}
+	private background: Background;
+
+	constructor(game: Game) {
+		super(game);
+		this.background = new Background(this.game);
+	}
+
+	public update(): void {
+		this.background.update();
+	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
-		ctx.fillStyle = '#0f0f1f';
-		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		this.background.render(ctx);
 
-		ctx.fillStyle = ColorUtils.getRgb(ColorEnum.Purple);
+		const { width, height } = ctx.canvas;
+
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
 		ctx.font = '48px sans-serif';
 		ctx.textAlign = 'center';
-		ctx.fillText(
-			'SynthWave Rhythm Game',
-			ctx.canvas.width / 2,
-			ctx.canvas.height / 2 - 50,
-		);
+		ctx.textBaseline = 'middle';
 
-		ctx.fillStyle = ColorUtils.getRgb(ColorEnum.LightBlue);
-		ctx.font = '24px sans-serif';
-		ctx.fillText(
-			'Klik om te starten',
-			ctx.canvas.width / 2,
-			ctx.canvas.height / 2 + 20,
-		);
+		ctx.shadowColor = ColorUtils.getHex(ColorEnum.White);
+		const time = performance.now() / 1000;
+		ctx.shadowBlur = 15 + Math.sin(time * 3) * 10;
+
+		ctx.fillText('Klik om te starten', width / 2, height / 2);
+		ctx.shadowBlur = 0;
+		ctx.shadowColor = 'transparent';
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleClick(): void {
+		this.game.getCanvas().getElement().requestFullscreen();
 		this.game.setCurrentScene(new SongSelectScene(this.game));
 	}
 
