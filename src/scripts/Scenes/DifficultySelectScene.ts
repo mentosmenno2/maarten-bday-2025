@@ -58,10 +58,6 @@ export class DifficultySelectScene extends AbstractScene {
 	public update(): void {
 		this.updateStartButton();
 		this.handleStartButtonClick();
-
-		if ( this.previewAudio && this.previewAudio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.previewAudio.paused ) {
-			this.previewAudio.play();
-		}
 	}
 
 	private updateStartButton(): void {
@@ -83,11 +79,11 @@ export class DifficultySelectScene extends AbstractScene {
 			return;
 		}
 
-		this.game.getInputManager().reset();
-		this.game.getSceneManager().push(new LevelScene(this.game, this.song, 0));
 		if ( this.previewAudio && ! this.previewAudio.paused ) {
 			this.previewAudio.pause();
 		}
+		this.game.getInputManager().reset();
+		this.game.getSceneManager().push(new LevelScene(this.game, this.song, 0));
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
