@@ -3,6 +3,7 @@ import { AbstractScene } from './AbstractScene.js';
 import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
+import { ApiClient } from '../API/ApiClient.js';
 
 export class SongSelectScene extends AbstractScene {
 
@@ -94,29 +95,21 @@ export class SongSelectScene extends AbstractScene {
 			return;
 		}
 
+		this.fileInput.value = '';
+		this.fileInput.files = null;
 		this.uploadSongFile(file);
 	}
 
-	private uploadSongFile(file: File): Promise<void> {
-		const formData = new FormData();
-		formData.append('file', file);
+	private async uploadSongFile(file: File): Promise<void> {
+		const apiClient = new ApiClient();
+		let response = null;
+		try {
+			response = await apiClient.parseSong(file);
+		} catch (error) {
+			window.alert(`Error uploading file: ${error}`);
+			return;
+		}
 
-		return fetch(`${window.location.href}api/parse-song`, {
-			method: 'POST',
-			body: formData
-		})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error('Upload failed');
-				}
-				return response.json();
-			})
-			.then(data => {
-				// Do something with the parsed song data
-				console.log('Upload response:', data);
-			})
-			.catch(err => {
-				console.error('Error uploading file:', err);
-			});
+		console.log('Song parsed successfully:', response.song);
 	}
 }

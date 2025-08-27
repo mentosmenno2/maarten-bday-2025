@@ -19,15 +19,17 @@ class SongParser implements SongParserInterface
 	{
 		$zip = new ZipArchive();
 		$opened = $zip->open($this->pathToZip);
-		if (! $opened) {
+		if ($opened !== true) {
 			return false;
 		}
 
 		$hasInfoFile = $zip->locateName('info.dat') !== false;
 		if (! $hasInfoFile) {
+			$zip->close();
 			return false;
 		}
 
+		$zip->close();
 		return true;
 	}
 

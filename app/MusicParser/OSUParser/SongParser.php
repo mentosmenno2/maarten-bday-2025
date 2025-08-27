@@ -19,7 +19,7 @@ class SongParser implements SongParserInterface
 	{
 		$zip = new ZipArchive();
 		$opened = $zip->open($this->pathToZip);
-		if (! $opened) {
+		if ($opened !== true) {
 			return false;
 		}
 
@@ -29,9 +29,11 @@ class SongParser implements SongParserInterface
 				continue;
 			}
 
+			$zip->close();
 			return true;
 		}
 
+		$zip->close();
 		return false;
 	}
 
