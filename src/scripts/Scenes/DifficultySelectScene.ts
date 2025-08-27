@@ -1,6 +1,8 @@
 import { SongInterface } from '../API/SongInterface.js';
 import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
+import { ColorEnum } from '../Core/Style/ColorEnum.js';
+import { ColorUtils } from '../Core/Style/ColorUtils.js';
 
 export class DifficultySelectScene extends AbstractScene {
 
@@ -47,10 +49,10 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
 			ctx.filter = 'none';
 			ctx.globalAlpha = 0.7;
-			ctx.fillStyle = '#000';
+			ctx.fillStyle = ColorUtils.getHex(ColorEnum.Black);
 			ctx.fillRect(0, 0, width, height);
 		} else {
-			ctx.fillStyle = '#222';
+			ctx.fillStyle = ColorUtils.getHex(ColorEnum.Black);
 			ctx.fillRect(0, 0, width, height);
 		}
 		ctx.restore();
@@ -87,7 +89,7 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.font = `${titleFontSize}px Arial`;
 			titleWidth = ctx.measureText(this.song.title).width;
 		}
-		ctx.fillStyle = '#fff';
+	ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
 		ctx.fillText(this.song.title, width/2, height*0.42);
@@ -106,7 +108,7 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.font = `${artistFontSize}px Arial`;
 			artistWidth = ctx.measureText(this.song.artist).width;
 		}
-		ctx.fillStyle = '#fff';
+	ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
 		ctx.fillText(this.song.artist, width/2, height*0.50);
@@ -119,7 +121,7 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.save();
 		if (this.song.builder) {
 			ctx.font = `${Math.round(height*0.025)}px Arial`;
-			ctx.fillStyle = '#ccc';
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'top';
 			ctx.fillText(`Mapper: ${this.song.builder}`, width/2, height*0.55);
@@ -136,15 +138,15 @@ export class DifficultySelectScene extends AbstractScene {
 		const btnY = Math.round(height * 0.7);
 
 		ctx.save();
-		ctx.fillStyle = '#fff3';
-		ctx.strokeStyle = '#fff';
+		ctx.fillStyle = ColorUtils.getRgba(ColorEnum.Black, 0.8);
+		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.lineWidth = 2;
 		ctx.beginPath();
 		ctx.roundRect(btnX, btnY, btnW, btnH, btnH*0.3);
 		ctx.fill();
 		ctx.stroke();
 		ctx.font = `${Math.round(btnH*0.45)}px Arial`;
-		ctx.fillStyle = '#fff';
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.fillText('Start', btnX + btnW/2, btnY + btnH/2);
