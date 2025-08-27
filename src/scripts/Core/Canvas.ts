@@ -36,8 +36,8 @@ export class Canvas {
 	public updateSize(): void {
 		const width = this.element.width;
 		const height = this.element.height;
-		const displayWidth = this.element.offsetWidth;
-		const displayHeight = this.element.offsetHeight;
+		const displayWidth = this.element.offsetWidth * window.devicePixelRatio;
+		const displayHeight = this.element.offsetHeight * window.devicePixelRatio;
 
 		if (width !== displayWidth) {
 			this.element.width = displayWidth;
