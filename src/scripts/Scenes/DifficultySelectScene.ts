@@ -3,14 +3,29 @@ import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
 import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
+import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
+import { LevelScene } from './LevelScene.js';
 
 export class DifficultySelectScene extends AbstractScene {
 
 	private backgroundImage: HTMLImageElement|null;
 	private coverImage: HTMLImageElement|null;
+	private startButton: {
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+	};
 
 	constructor(game: Game, private song: SongInterface) {
 		super(game);
+
+		this.startButton = {
+			x: 0,
+			y: 0,
+			w: 0,
+			h: 0,
+		};
 
 		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		this.backgroundImage = null;
@@ -27,7 +42,31 @@ export class DifficultySelectScene extends AbstractScene {
 	}
 
 	public update(): void {
-		// Update the level
+		this.updateStartButton();
+		this.handleStartButtonClick();
+	}
+
+	private updateStartButton(): void {
+		const { width, height } = this.game.getCanvas().getElement();
+
+		this.startButton = {
+			x: Math.round((width - this.startButton.w) / 2),
+			y: Math.round(height * 0.7),
+			w: Math.round(width * 0.28),
+			h: Math.round(height * 0.08),
+		};
+	}
+
+	private handleStartButtonClick(): void {
+		const inputManager = this.game.getInputManager();
+		const clicked = inputManager.isMouseOrFingerJustPressed();
+		const clickpos = inputManager.getMouseOrFingerPosition();
+		if ( ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.startButton, clickpos) ) {
+			return;
+		}
+
+		this.game.getInputManager().reset();
+		this.game.getSceneManager().push(new LevelScene(this.game, this.song, 0));
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
@@ -130,26 +169,19 @@ export class DifficultySelectScene extends AbstractScene {
 	}
 
 	private renderStartButton(ctx: CanvasRenderingContext2D): void {
-		const { width, height } = ctx.canvas;
-
-		const btnW = Math.round(width * 0.28);
-		const btnH = Math.round(height * 0.08);
-		const btnX = Math.round((width - btnW) / 2);
-		const btnY = Math.round(height * 0.7);
-
 		ctx.save();
 		ctx.fillStyle = ColorUtils.getRgba(ColorEnum.Black, 0.8);
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.lineWidth = 2;
 		ctx.beginPath();
-		ctx.roundRect(btnX, btnY, btnW, btnH, btnH*0.3);
+		ctx.roundRect(this.startButton.x, this.startButton.y, this.startButton.w, this.startButton.h, this.startButton.h * 0.3);
 		ctx.fill();
 		ctx.stroke();
-		ctx.font = `${Math.round(btnH*0.45)}px Arial`;
+		ctx.font = `${Math.round(this.startButton.h * 0.45)}px Arial`;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
-		ctx.fillText('Start', btnX + btnW/2, btnY + btnH/2);
+		ctx.fillText('Start', this.startButton.x + this.startButton.w / 2, this.startButton.y + this.startButton.h / 2);
 		ctx.restore();
 	}
 }
