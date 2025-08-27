@@ -15,6 +15,26 @@ class SongParser implements SongParserInterface
 	) {
 	}
 
+	public function canParse(): bool
+	{
+		$zip = new ZipArchive();
+		$opened = $zip->open($this->pathToZip);
+		if (! $opened) {
+			return false;
+		}
+
+		for ($i = 0; $i < $zip->numFiles; $i++) {
+			$filename = $zip->getNameIndex($i);
+			if (! $filename || ! str_ends_with($filename, '.osu')) {
+				continue;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 	public function parse(): AbstractSong
 	{
 		$zip = new ZipArchive();

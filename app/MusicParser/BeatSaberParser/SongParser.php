@@ -15,6 +15,22 @@ class SongParser implements SongParserInterface
 	) {
 	}
 
+	public function canParse(): bool
+	{
+		$zip = new ZipArchive();
+		$opened = $zip->open($this->pathToZip);
+		if (! $opened) {
+			return false;
+		}
+
+		$hasInfoFile = $zip->locateName('info.dat') !== false;
+		if (! $hasInfoFile) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public function parse(): AbstractSong
 	{
 		$zip = new ZipArchive();
