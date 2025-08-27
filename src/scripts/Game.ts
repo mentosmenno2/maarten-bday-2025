@@ -1,7 +1,7 @@
 import { Canvas } from './Core/Canvas.js';
 import { FPSCounter } from './Core/Debug/FPSCounter.js';
 import { GlobalEventHandler } from './Core/GlobalEventHandler.js';
-import { ActualVector2 } from './Core/Position/ActualVector2.js';
+import { InputManager } from './Core/InputManager.js';
 import { SceneManager } from './SceneManager.js';
 import { StartScene } from './Scenes/StartScene.js';
 
@@ -14,6 +14,7 @@ export class Game {
 	private fpsCounter: FPSCounter;
 	private sceneManager: SceneManager;
 	private globalEventHandler: GlobalEventHandler;
+	private inputManager: InputManager;
 
 	private constructor() {
 		this.lastLoopTimestampMillis = 0;
@@ -23,6 +24,7 @@ export class Game {
 		this.fpsCounter = new FPSCounter();
 		this.sceneManager = new SceneManager(new StartScene(this));
 		this.globalEventHandler = new GlobalEventHandler(this);
+		this.inputManager = new InputManager(this);
 	}
 
 	public static getInstance(): Game {
@@ -34,6 +36,7 @@ export class Game {
 
 	public start(): void {
 		this.globalEventHandler.addEventListeners();
+		this.inputManager.addEventListeners();
 
 		window.requestAnimationFrame(this.loop.bind(this));
 	}
@@ -58,6 +61,9 @@ export class Game {
 		this.render(this.canvas.getContext());
 		this.loopTimeAccumulator = 0;
 
+		// Reset just pressed
+		this.inputManager.resetJustPressed();
+
 		// New loop
 		window.requestAnimationFrame(this.loop.bind(this));
 	}
@@ -81,15 +87,11 @@ export class Game {
 		return this.sceneManager;
 	}
 
+	public getInputManager(): InputManager {
+		return this.inputManager;
+	}
+
 	public getCanvas(): Canvas {
 		return this.canvas;
-	}
-
-	public handleClick(vector2: ActualVector2): void {
-		this.sceneManager.handleClick(vector2);
-	}
-
-	public handleMouseMove(vector2: ActualVector2): void {
-		this.sceneManager.handleMouseMove(vector2);
 	}
 }

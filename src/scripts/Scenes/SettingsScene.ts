@@ -1,4 +1,3 @@
-import { ActualVector2 } from '../Core/Position/ActualVector2.js';
 import { SettingsInterface } from '../Core/Settings/SettingsInterface.js';
 import { SettingsService } from '../Core/Settings/SettingsService.js';
 import { Background } from '../Core/Style/Background.js';
@@ -46,25 +45,5 @@ export class SettingsScene extends AbstractScene {
 
 		ctx.fillStyle = '#0ff'; // slider kleur
 		ctx.fillRect(x, y, value * 200, 20);
-	}
-
-	public handleClick(vector2: ActualVector2): void {
-		if (
-			vector2.getY() >= 100 &&
-			vector2.getY() <= 120 &&
-			vector2.getX() >= 300 &&
-			vector2.getX() <= 500
-		) {
-			this.settings.musicVolume = (vector2.getX() - 300) / 200;
-		}
-		if (
-			vector2.getY() >= 160 &&
-			vector2.getY() <= 180 &&
-			vector2.getX() >= 300 &&
-			vector2.getX() <= 500
-		) {
-			this.settings.effectsVolume = (vector2.getX() - 300) / 200;
-		}
-		SettingsService.update(this.settings);
 	}
 }

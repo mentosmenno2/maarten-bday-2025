@@ -15,35 +15,28 @@ export class StartScene extends AbstractScene {
 
 	public update(): void {
 		this.background.update();
+
+		if ( this.game.getInputManager().isAnyInput() ) {
+			this.game.getSceneManager().push(new SongSelectScene(this.game));
+
+			// Go to fullscreen
+			// this.game.getCanvas().getElement().requestFullscreen();
+		}
+
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
 		this.background.render(ctx);
 
-		const { width, height } = ctx.canvas;
-
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
-		ctx.font = '48px sans-serif';
+		ctx.font = `${ctx.canvas.height * 0.08}px sans-serif`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
-
 		ctx.shadowColor = ColorUtils.getHex(ColorEnum.White);
 		const time = performance.now() / 1000;
 		ctx.shadowBlur = 15 + Math.sin(time * 3) * 10;
-
-		ctx.fillText('Klik om te starten', width / 2, height / 2);
+		ctx.fillText('Klik om te starten', ctx.canvas.width / 2, ctx.canvas.height / 2);
 		ctx.shadowBlur = 0;
 		ctx.shadowColor = 'transparent';
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public handleClick(): void {
-		this.game.getCanvas().getElement().requestFullscreen();
-		this.game.getSceneManager().push(new SongSelectScene(this.game));
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public handleMouseMove(): void {
-		this.game.getCanvas().getElement().style.cursor = 'pointer';
 	}
 }

@@ -1,4 +1,3 @@
-import { ActualVector2 } from './Core/Position/ActualVector2.js';
 import { AbstractScene } from './Scenes/AbstractScene.js';
 
 export class SceneManager {
@@ -38,15 +37,5 @@ export class SceneManager {
 	public render(ctx: CanvasRenderingContext2D): void {
 		const current = this.getCurrent();
 		if (current) current.render(ctx);
-	}
-
-	public handleClick(vector2: ActualVector2): void {
-		const current = this.getCurrent();
-		if (current && current.handleClick) current.handleClick(vector2);
-	}
-
-	public handleMouseMove(vector2: ActualVector2): void {
-		const current = this.getCurrent();
-		if (current && current.handleMouseMove) current.handleMouseMove(vector2);
 	}
 }
