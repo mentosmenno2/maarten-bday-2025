@@ -19,6 +19,14 @@ export class SongSelectScene extends AbstractScene {
 		padding: number;
 	};
 
+	private statusText: {
+		x: number;
+		y: number;
+		fontSize: number;
+		fontFamily: string;
+		text: string;
+	};
+
 	private fileInput: HTMLInputElement;
 
 	constructor(game: Game) {
@@ -34,6 +42,14 @@ export class SongSelectScene extends AbstractScene {
 			padding: 10
 		};
 
+		this.statusText = {
+			x: 0,
+			y: 0,
+			fontSize: 0,
+			fontFamily: 'Arial',
+			text: "Selecteer een OSU bestand"
+		};
+
 		this.fileInput = document.createElement('input');
 		this.fileInput.type = 'file';
 		this.fileInput.onchange = this.handleFileInputChange.bind(this);
@@ -42,6 +58,7 @@ export class SongSelectScene extends AbstractScene {
 
 	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
 		this.updateSongSelectButton(ctx);
+		this.updateStatusText(ctx);
 		this.handleSongSelectButtonClick();
 	}
 
@@ -54,6 +71,16 @@ export class SongSelectScene extends AbstractScene {
 		this.selectSongButton.h = this.selectSongButton.fontSize + this.selectSongButton.padding * 2;
 		this.selectSongButton.x = (ctx.canvas.width - this.selectSongButton.w) / 2;
 		this.selectSongButton.y = (ctx.canvas.height - this.selectSongButton.h) / 2;
+		ctx.restore();
+	}
+
+	private updateStatusText(ctx: CanvasRenderingContext2D): void {
+		ctx.save();
+		this.statusText.fontSize = ctx.canvas.height * 0.03;
+		ctx.font = `${this.statusText.fontSize}px ${this.statusText.fontFamily}`;
+		const textMetrics = ctx.measureText(this.statusText.text);
+		this.statusText.x = (ctx.canvas.width - textMetrics.width) / 2;
+		this.statusText.y = (ctx.canvas.height * 0.5 - this.statusText.fontSize) / 2;
 		ctx.restore();
 	}
 
@@ -71,6 +98,7 @@ export class SongSelectScene extends AbstractScene {
 
 	public render(ctx: CanvasRenderingContext2D): void {
 		this.renderSongSelectButton(ctx);
+		this.renderStatusText(ctx);
 	}
 
 	private renderSongSelectButton(ctx: CanvasRenderingContext2D): void {
@@ -82,6 +110,16 @@ export class SongSelectScene extends AbstractScene {
 		ctx.textBaseline = 'middle';
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.fillText(this.selectSongButton.text, this.selectSongButton.x + this.selectSongButton.w / 2, this.selectSongButton.y + this.selectSongButton.h / 2);
+		ctx.restore();
+	}
+
+	private renderStatusText(ctx: CanvasRenderingContext2D): void {
+		ctx.save();
+		ctx.font = `${this.statusText.fontSize}px ${this.statusText.fontFamily}`;
+		ctx.textAlign = 'left';
+		ctx.textBaseline = 'top';
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+		ctx.fillText(this.statusText.text, this.statusText.x, this.statusText.y);
 		ctx.restore();
 	}
 
@@ -110,8 +148,6 @@ export class SongSelectScene extends AbstractScene {
 			window.alert(`Error uploading file: ${error}`);
 			return;
 		}
-
-		console.log('Song parsed successfully:', response.song);
 
 		this.game.getInputManager().reset();
 		this.game.getSceneManager().push(new DifficultySelectScene(this.game, response.song));
