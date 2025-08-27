@@ -85,7 +85,17 @@ export class DifficultySelectScene extends AbstractScene {
 		if (this.backgroundImage) {
 			ctx.filter = 'blur(10px)';
 			ctx.globalAlpha = 1;
-			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
+			const imageAspectRatio = this.backgroundImage.width / this.backgroundImage.height;
+			const canvasAspectRatio = width / height;
+			if (imageAspectRatio > canvasAspectRatio) {
+				const scaledHeight = height;
+				const scaledWidth = scaledHeight * imageAspectRatio;
+				ctx.drawImage(this.backgroundImage, (width - scaledWidth) / 2, 0, scaledWidth, scaledHeight);
+			} else {
+				const scaledWidth = width;
+				const scaledHeight = scaledWidth / imageAspectRatio;
+				ctx.drawImage(this.backgroundImage, 0, (height - scaledHeight) / 2, scaledWidth, scaledHeight);
+			}
 			ctx.filter = 'none';
 			ctx.globalAlpha = 0.7;
 			ctx.fillStyle = ColorUtils.getHex(ColorEnum.Black);
@@ -112,7 +122,18 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.arc(width/2, artY + artSize/2, artSize/2, 0, Math.PI*2);
 		ctx.closePath();
 		ctx.clip();
-		ctx.drawImage(this.coverImage, artX, artY, artSize, artSize);
+
+		const imageAspectRatio = this.coverImage.width / this.coverImage.height;
+		const artAspectRatio = artSize / artSize;
+		if (imageAspectRatio > artAspectRatio) {
+			const scaledHeight = artSize;
+			const scaledWidth = scaledHeight * imageAspectRatio;
+			ctx.drawImage(this.coverImage, artX + (artSize - scaledWidth) / 2, artY, scaledWidth, scaledHeight);
+		} else {
+			const scaledWidth = artSize;
+			const scaledHeight = scaledWidth / imageAspectRatio;
+			ctx.drawImage(this.coverImage, artX, artY + (artSize - scaledHeight) / 2, scaledWidth, scaledHeight);
+		}
 		ctx.restore();
 	}
 
