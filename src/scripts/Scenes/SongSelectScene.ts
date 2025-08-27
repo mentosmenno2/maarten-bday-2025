@@ -4,6 +4,7 @@ import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 import { ApiClient } from '../API/ApiClient.js';
+import { DifficultySelectScene } from './DifficultySelectScene.js';
 
 export class SongSelectScene extends AbstractScene {
 
@@ -111,5 +112,8 @@ export class SongSelectScene extends AbstractScene {
 		}
 
 		console.log('Song parsed successfully:', response.song);
+
+		this.game.getInputManager().reset();
+		this.game.getSceneManager().push(new DifficultySelectScene(this.game, response.song));
 	}
 }
