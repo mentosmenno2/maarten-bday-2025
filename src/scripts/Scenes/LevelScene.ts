@@ -1,6 +1,7 @@
 import { SongInterface } from '../API/SongInterface.js';
 import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
+import { StartScene } from './StartScene.js';
 
 export class LevelScene extends AbstractScene {
 
@@ -25,6 +26,12 @@ export class LevelScene extends AbstractScene {
 		// Play audio when ready
 		if ( this.audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.audio.paused ) {
 			this.audio.play();
+		}
+
+		// End when audio finished
+		if ( this.audio.ended ) {
+			this.game.getInputManager().reset();
+			this.game.getSceneManager().replace( new StartScene(this.game) );
 		}
 	}
 
