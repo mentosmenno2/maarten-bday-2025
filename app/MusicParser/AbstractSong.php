@@ -32,6 +32,11 @@ abstract class AbstractSong implements JsonSerializable
 	abstract public function getFileName(): string;
 
 	/**
+	 * Get the base64 audio file
+	 */
+	abstract public function getAudioBase64(): ?string;
+
+	/**
 	 * Get the base64 cover image file
 	 */
 	abstract public function getCoverImageBase64(): ?string;
@@ -59,6 +64,7 @@ abstract class AbstractSong implements JsonSerializable
 			'artist' => $this->getArtist(),
 			'builder' => $this->getBuilder(),
 			'fileName' => $this->getFileName(),
+			'audioBase64' => $this->getAudioBase64(),
 			'coverImageBase64' => $this->getCoverImageBase64(),
 			'backgroundImageBase64' => $this->getBackgroundImageBase64(),
 			'difficulties' => $this->getDifficulties(),

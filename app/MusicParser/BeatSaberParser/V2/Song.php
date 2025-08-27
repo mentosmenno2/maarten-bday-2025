@@ -40,6 +40,11 @@ class Song extends AbstractSong
 		return $this->infoFileData['_songFilename'];
 	}
 
+	public function getAudioBase64(): ?string
+	{
+		return $this->infoFileData['audioBase64'] ?? null;
+	}
+
 	public function getCoverImageBase64(): string
 	{
 		return $this->infoFileData['coverImageBase64'];

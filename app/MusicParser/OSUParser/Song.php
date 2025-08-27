@@ -14,6 +14,7 @@ class Song extends AbstractSong
 	public function __construct(
 		private array $general,
 		private array $metadata,
+		private ?string $audioBase64,
 		private ?string $coverImageBase64,
 		private ?string $backgroundImageBase64,
 		private array $difficultiesData,
@@ -43,6 +44,11 @@ class Song extends AbstractSong
 	public function getFileName(): string
 	{
 		return $this->general['AudioFilename'];
+	}
+
+	public function getAudioBase64(): ?string
+	{
+		return $this->audioBase64;
 	}
 
 	public function getCoverImageBase64(): ?string

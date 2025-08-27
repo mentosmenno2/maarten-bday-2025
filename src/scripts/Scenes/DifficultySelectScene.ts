@@ -17,6 +17,8 @@ export class DifficultySelectScene extends AbstractScene {
 		h: number;
 	};
 
+	private previewAudio: HTMLAudioElement;
+
 	constructor(game: Game, private song: SongInterface) {
 		super(game);
 
@@ -30,20 +32,36 @@ export class DifficultySelectScene extends AbstractScene {
 		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		this.backgroundImage = null;
 		if (backgroundImageBase64) {
-			this.backgroundImage = new window.Image();
+			this.backgroundImage = new Image();
 			this.backgroundImage.src = backgroundImageBase64;
 		}
 
 		const coverImageBase64 = this.song.coverImageBase64 || this.song.backgroundImageBase64;
 		if (coverImageBase64) {
-			this.coverImage = new window.Image();
+			this.coverImage = new Image();
 			this.coverImage.src = coverImageBase64;
+		}
+
+		if (this.song.audioBase64) {
+			const srcElement = document.createElement('source');
+			srcElement.src = this.song.audioBase64;
+			this.previewAudio = document.createElement('audio');
+			this.previewAudio.appendChild(srcElement);
+			this.previewAudio.loop = true;
+			this.previewAudio.volume = 0.1;
+			this.previewAudio.load();
+			this.previewAudio.preload = 'auto';
+			this.previewAudio.autoplay = true;
 		}
 	}
 
 	public update(): void {
 		this.updateStartButton();
 		this.handleStartButtonClick();
+
+		if ( this.previewAudio && this.previewAudio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.previewAudio.paused ) {
+			this.previewAudio.play();
+		}
 	}
 
 	private updateStartButton(): void {
@@ -67,6 +85,9 @@ export class DifficultySelectScene extends AbstractScene {
 
 		this.game.getInputManager().reset();
 		this.game.getSceneManager().push(new LevelScene(this.game, this.song, 0));
+		if ( this.previewAudio && ! this.previewAudio.paused ) {
+			this.previewAudio.pause();
+		}
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {

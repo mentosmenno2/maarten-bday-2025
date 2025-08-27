@@ -7,6 +7,7 @@ export interface SongInterface {
 	coverImageBase64: string|null;
 	difficulties: DifficultyInterface[];
 	fileName: string;
+	audioBase64: string|null;
 	id: string;
 	title: string;
 }

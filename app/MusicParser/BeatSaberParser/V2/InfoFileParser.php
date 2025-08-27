@@ -26,6 +26,11 @@ class InfoFileParser extends AbstractInfoFileParser
 			}
 		}
 
+		// Load audio
+		$audioFilename = $this->infoFileData['_songFilename'];
+		$audioResource = $audioFilename ? $this->zip->getStream($audioFilename) : null;
+		$data['audioBase64'] = $audioResource ? ( new Toolbox() )->fileToBase64($audioResource) : null;
+
 		// Load cover image
 		$coverImageFilename = $this->infoFileData['_coverImageFilename'];
 		$coverImageResource = $coverImageFilename ? $this->zip->getStream($coverImageFilename) : null;

@@ -49,6 +49,7 @@ class SongParser implements SongParserInterface
 		$firstOSUFileIndex = array_key_first($osuFilesData);
 		$firstOsuFile = $osuFilesData[$firstOSUFileIndex];
 
+		$audioBase64 = $this->audioBase64($zip, $firstOsuFile['General']['AudioFilename']);
 		$albumArtBase64 = $this->coverImageBase64($zip, $firstOsuFile['General']['AudioFilename']);
 		$backgroundBase64 = $this->backgroundImageBase64($zip, $firstOsuFile['Events']);
 
@@ -56,6 +57,7 @@ class SongParser implements SongParserInterface
 		return new Song(
 			$firstOsuFile['General'],
 			$firstOsuFile['Metadata'],
+			$audioBase64,
 			$albumArtBase64,
 			$backgroundBase64,
 			$osuFilesData,
@@ -125,6 +127,21 @@ class SongParser implements SongParserInterface
 			$sectionsData[$currentSection][] = $line;
 		}
 		return $sectionsData;
+	}
+
+	private function audioBase64(ZipArchive $zip, string $songFile): ?string
+	{
+		$songFile = $zip->getStream($songFile);
+		if ($songFile) {
+			$audioBase64 = ( new Toolbox() )->fileToBase64($songFile);
+			fclose($songFile);
+
+			if ($audioBase64) {
+				return $audioBase64;
+			}
+		}
+
+		return null;
 	}
 
 	private function coverImageBase64(ZipArchive $zip, string $songFile): ?string
