@@ -1,9 +1,8 @@
+import { Game } from "../Game.js";
 
-import { Game } from '../Game.js';
-import { ActualVector2 } from './Position/ActualVector2.js';
 
 export class InputManager {
-	private game: Game;
+    private game: Game;
 
     private keysDown: Set<string> = new Set();
     private keysJustPressed: Set<string> = new Set();
@@ -11,8 +10,8 @@ export class InputManager {
     private mouseJustPressed: boolean = false;
     private touchActive: boolean = false;
     private touchJustPressed: boolean = false;
-    private lastMousePos: ActualVector2 | null = null;
-    private lastTouchPos: ActualVector2 | null = null;
+    private lastMousePos: { x: number, y: number } | null = null;
+    private lastTouchPos: { x: number, y: number } | null = null;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -31,18 +30,18 @@ export class InputManager {
         });
 
         // Mouse
-       this.game.getCanvas().getElement().addEventListener('mousedown', (e: MouseEvent) => {
+        this.game.getCanvas().getElement().addEventListener('mousedown', (e: MouseEvent) => {
             if (!this.mouseDown) {
                 this.mouseJustPressed = true;
             }
             this.mouseDown = true;
-            this.lastMousePos = new ActualVector2(e.clientX, e.clientY);
+            this.lastMousePos = { x: e.clientX, y: e.clientY };
         });
         this.game.getCanvas().getElement().addEventListener('mouseup', () => {
             this.mouseDown = false;
         });
         this.game.getCanvas().getElement().addEventListener('mousemove', (e: MouseEvent) => {
-            this.lastMousePos = new ActualVector2(e.clientX, e.clientY);
+            this.lastMousePos = { x: e.clientX, y: e.clientY };
         });
 
         // Touch
@@ -52,10 +51,10 @@ export class InputManager {
             }
             this.touchActive = true;
             if (e.touches.length > 0) {
-                this.lastTouchPos = new ActualVector2(
-                    e.touches[0].clientX,
-                    e.touches[0].clientY
-                );
+                this.lastTouchPos = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
             }
         });
         this.game.getCanvas().getElement().addEventListener('touchend', () => {
@@ -63,10 +62,10 @@ export class InputManager {
         });
         this.game.getCanvas().getElement().addEventListener('touchmove', (e: TouchEvent) => {
             if (e.touches.length > 0) {
-                this.lastTouchPos = new ActualVector2(
-                    e.touches[0].clientX,
-                    e.touches[0].clientY
-                );
+                this.lastTouchPos = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
             }
         });
     }
@@ -103,15 +102,15 @@ export class InputManager {
         return this.mouseJustPressed || this.touchJustPressed;
     }
 
-    getMousePosition(): ActualVector2 | null {
+    getMousePosition(): { x: number, y: number } | null {
         return this.lastMousePos;
     }
 
-    getTouchPosition(): ActualVector2 | null {
+    getTouchPosition(): { x: number, y: number } | null {
         return this.lastTouchPos;
     }
 
-	getMouseOrFingerPosition(): ActualVector2 | null {
+    getMouseOrFingerPosition(): { x: number, y: number } | null {
         return this.lastMousePos || this.lastTouchPos;
     }
 
