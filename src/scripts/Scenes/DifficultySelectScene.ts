@@ -39,7 +39,7 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.globalAlpha = 1;
 			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
 			ctx.filter = 'none';
-			ctx.globalAlpha = 0.5;
+			ctx.globalAlpha = 0.7;
 			ctx.fillStyle = '#000';
 			ctx.fillRect(0, 0, width, height);
 		} else {
