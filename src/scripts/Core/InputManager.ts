@@ -35,13 +35,19 @@ export class InputManager {
                 this.mouseJustPressed = true;
             }
             this.mouseDown = true;
-            this.lastMousePos = { x: e.clientX, y: e.clientY };
+            this.lastMousePos = {
+				x: e.clientX * window.devicePixelRatio,
+				y: e.clientY * window.devicePixelRatio
+			};
         });
         this.game.getCanvas().getElement().addEventListener('mouseup', () => {
             this.mouseDown = false;
         });
         this.game.getCanvas().getElement().addEventListener('mousemove', (e: MouseEvent) => {
-            this.lastMousePos = { x: e.clientX, y: e.clientY };
+           this.lastMousePos = {
+				x: e.clientX * window.devicePixelRatio,
+				y: e.clientY * window.devicePixelRatio
+			};
         });
 
         // Touch
@@ -52,8 +58,8 @@ export class InputManager {
             this.touchActive = true;
             if (e.touches.length > 0) {
                 this.lastTouchPos = {
-                    x: e.touches[0].clientX,
-                    y: e.touches[0].clientY
+                    x: e.touches[0].clientX * window.devicePixelRatio,
+                    y: e.touches[0].clientY * window.devicePixelRatio
                 };
             }
         });
@@ -63,8 +69,8 @@ export class InputManager {
         this.game.getCanvas().getElement().addEventListener('touchmove', (e: TouchEvent) => {
             if (e.touches.length > 0) {
                 this.lastTouchPos = {
-                    x: e.touches[0].clientX,
-                    y: e.touches[0].clientY
+                    x: e.touches[0].clientX * window.devicePixelRatio,
+                    y: e.touches[0].clientY * window.devicePixelRatio
                 };
             }
         });
