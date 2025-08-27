@@ -17,6 +17,7 @@ export class StartScene extends AbstractScene {
 		this.background.update();
 
 		if ( this.game.getInputManager().isAnyInput() ) {
+			this.game.getInputManager().reset();
 			this.game.getSceneManager().push(new SongSelectScene(this.game));
 
 			// Go to fullscreen
