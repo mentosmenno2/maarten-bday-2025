@@ -1,9 +1,10 @@
+import { SongInterface } from '../API/SongInterface.js';
 import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
 
-export class LevelScene extends AbstractScene {
+export class DifficultySelectScene extends AbstractScene {
 
-	constructor(game: Game) {
+	constructor(game: Game, private song: SongInterface) {
 		super(game);
 	}
 
