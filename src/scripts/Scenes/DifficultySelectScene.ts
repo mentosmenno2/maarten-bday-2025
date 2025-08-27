@@ -31,22 +31,7 @@ export class DifficultySelectScene extends AbstractScene {
 	public render(ctx: CanvasRenderingContext2D): void {
 		const { width, height } = ctx.canvas;
 
-		// 1. Background image (blurred, 70% darker overlay)
-		ctx.save();
-		if (this.backgroundImage) {
-			ctx.save();
-			ctx.filter = 'blur(10px)';
-			ctx.globalAlpha = 1;
-			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
-			ctx.filter = 'none';
-			ctx.globalAlpha = 0.7;
-			ctx.fillStyle = '#000';
-			ctx.fillRect(0, 0, width, height);
-		} else {
-			ctx.fillStyle = '#222';
-			ctx.fillRect(0, 0, width, height);
-		}
-		ctx.restore();
+		this.renderBackgroundImage(ctx);
 
 		// 2. Albumart (cover)
 		ctx.save();
@@ -124,6 +109,25 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.fillText('Start', btnX + btnW/2, btnY + btnH/2);
+		ctx.restore();
+	}
+
+	private renderBackgroundImage(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
+
+		ctx.save();
+		if (this.backgroundImage) {
+			ctx.filter = 'blur(10px)';
+			ctx.globalAlpha = 1;
+			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
+			ctx.filter = 'none';
+			ctx.globalAlpha = 0.7;
+			ctx.fillStyle = '#000';
+			ctx.fillRect(0, 0, width, height);
+		} else {
+			ctx.fillStyle = '#222';
+			ctx.fillRect(0, 0, width, height);
+		}
 		ctx.restore();
 	}
 }
