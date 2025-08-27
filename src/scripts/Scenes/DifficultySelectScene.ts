@@ -42,17 +42,17 @@ export class DifficultySelectScene extends AbstractScene {
 			this.coverImage.src = coverImageBase64;
 		}
 
+		this.previewAudio = document.createElement('audio');
 		if (this.song.audioBase64) {
 			const srcElement = document.createElement('source');
 			srcElement.src = this.song.audioBase64;
-			this.previewAudio = document.createElement('audio');
 			this.previewAudio.appendChild(srcElement);
-			this.previewAudio.loop = true;
-			this.previewAudio.volume = 0.1;
-			this.previewAudio.load();
-			this.previewAudio.preload = 'auto';
-			this.previewAudio.autoplay = true;
 		}
+		this.previewAudio.loop = true;
+		this.previewAudio.volume = 0.1;
+		this.previewAudio.preload = 'auto';
+		this.previewAudio.autoplay = true;
+		this.previewAudio.load();
 	}
 
 	public update(): void {
@@ -79,7 +79,7 @@ export class DifficultySelectScene extends AbstractScene {
 			return;
 		}
 
-		if ( this.previewAudio && ! this.previewAudio.paused ) {
+		if ( ! this.previewAudio.paused ) {
 			this.previewAudio.pause();
 		}
 		this.game.getInputManager().reset();
