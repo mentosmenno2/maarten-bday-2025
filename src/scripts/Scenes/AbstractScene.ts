@@ -10,7 +10,7 @@ export abstract class AbstractScene {
 		this.game.getCanvas().getElement().style.cursor = 'default';
 	}
 
-	public abstract update(deltaTime: number): void;
+	public abstract update(deltaTime: number, ctx: CanvasRenderingContext2D): void;
 
 	public abstract render(ctx: CanvasRenderingContext2D): void;
 }

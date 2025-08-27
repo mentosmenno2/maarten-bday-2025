@@ -29,9 +29,9 @@ export class SceneManager {
 		this.sceneStack = [];
 	}
 
-	public update(dt: number): void {
+	public update(dt: number, ctx: CanvasRenderingContext2D): void {
 		const current = this.getCurrent();
-		if (current) current.update(dt);
+		if (current) current.update(dt, ctx);
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {

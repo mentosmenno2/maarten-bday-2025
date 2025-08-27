@@ -57,8 +57,9 @@ export class Game {
 		}
 
 		// Process and draw
-		this.update(Math.max(deltaTimeMillis, minDeltaTimeMillis));
-		this.render(this.canvas.getContext());
+		const context = this.canvas.getContext();
+		this.update(Math.max(deltaTimeMillis, minDeltaTimeMillis), context);
+		this.render(context);
 		this.loopTimeAccumulator = 0;
 
 		// Reset just pressed
@@ -68,8 +69,8 @@ export class Game {
 		window.requestAnimationFrame(this.loop.bind(this));
 	}
 
-	private update(deltaTimeMillis: number): void {
-		this.sceneManager.update(deltaTimeMillis);
+	private update(deltaTimeMillis: number, ctx: CanvasRenderingContext2D): void {
+		this.sceneManager.update(deltaTimeMillis, ctx);
 		this.fpsCounter.update(deltaTimeMillis);
 	}
 
