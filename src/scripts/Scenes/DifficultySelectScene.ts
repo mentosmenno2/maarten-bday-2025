@@ -15,14 +15,16 @@ export class DifficultySelectScene extends AbstractScene {
 	public render(ctx: CanvasRenderingContext2D): void {
 		const { width, height } = ctx.canvas;
 
-		// 1. Background image (70% darker overlay)
+		// 1. Background image (blurred, 70% darker overlay)
 		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		if (backgroundImageBase64) {
 			const bgImg = new window.Image();
 			bgImg.src = backgroundImageBase64;
 			ctx.save();
+			ctx.filter = 'blur(10px)';
 			ctx.globalAlpha = 1;
 			ctx.drawImage(bgImg, 0, 0, width, height);
+			ctx.filter = 'none';
 			ctx.globalAlpha = 0.7;
 			ctx.fillStyle = '#000';
 			ctx.fillRect(0, 0, width, height);
@@ -49,18 +51,32 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.restore();
 		}
 
-		// 3. Song title
+		// 3. Song title (autoscale font)
 		ctx.save();
-		ctx.font = `${Math.round(height*0.06)}px Arial`;
+		let titleFontSize = Math.round(height*0.06);
+		ctx.font = `${titleFontSize}px Arial`;
+		let titleWidth = ctx.measureText(this.song.title).width;
+		while (titleWidth > width * 0.92 && titleFontSize > 10) {
+			titleFontSize--;
+			ctx.font = `${titleFontSize}px Arial`;
+			titleWidth = ctx.measureText(this.song.title).width;
+		}
 		ctx.fillStyle = '#fff';
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
 		ctx.fillText(this.song.title, width/2, height*0.42);
 		ctx.restore();
 
-		// 4. Song artist
+		// 4. Song artist (autoscale font)
 		ctx.save();
-		ctx.font = `${Math.round(height*0.04)}px Arial`;
+		let artistFontSize = Math.round(height*0.04);
+		ctx.font = `${artistFontSize}px Arial`;
+		let artistWidth = ctx.measureText(this.song.artist).width;
+		while (artistWidth > width * 0.92 && artistFontSize > 8) {
+			artistFontSize--;
+			ctx.font = `${artistFontSize}px Arial`;
+			artistWidth = ctx.measureText(this.song.artist).width;
+		}
 		ctx.fillStyle = '#fff';
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
