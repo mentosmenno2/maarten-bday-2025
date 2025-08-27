@@ -35,9 +35,9 @@ class Song extends AbstractSong
 		return $this->metadata['Artist'];
 	}
 
-	public function getBuilder(): string
+	public function getBuilder(): ?string
 	{
-		return $this->metadata['Creator'];
+		return $this->metadata['Creator'] ?? null;
 	}
 
 	public function getFileName(): string

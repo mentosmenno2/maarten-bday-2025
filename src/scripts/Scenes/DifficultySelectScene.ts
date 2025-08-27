@@ -4,8 +4,24 @@ import { AbstractScene } from './AbstractScene.js';
 
 export class DifficultySelectScene extends AbstractScene {
 
+	private backgroundImage: HTMLImageElement|null;
+	private coverImage: HTMLImageElement|null;
+
 	constructor(game: Game, private song: SongInterface) {
 		super(game);
+
+		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
+		this.backgroundImage = null;
+		if (backgroundImageBase64) {
+			this.backgroundImage = new window.Image();
+			this.backgroundImage.src = backgroundImageBase64;
+		}
+
+		const coverImageBase64 = this.song.coverImageBase64 || this.song.backgroundImageBase64;
+		if (coverImageBase64) {
+			this.coverImage = new window.Image();
+			this.coverImage.src = coverImageBase64;
+		}
 	}
 
 	public update(): void {
@@ -16,40 +32,36 @@ export class DifficultySelectScene extends AbstractScene {
 		const { width, height } = ctx.canvas;
 
 		// 1. Background image (blurred, 70% darker overlay)
-		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
-		if (backgroundImageBase64) {
-			const bgImg = new window.Image();
-			bgImg.src = backgroundImageBase64;
+		ctx.save();
+		if (this.backgroundImage) {
 			ctx.save();
 			ctx.filter = 'blur(10px)';
 			ctx.globalAlpha = 1;
-			ctx.drawImage(bgImg, 0, 0, width, height);
+			ctx.drawImage(this.backgroundImage, 0, 0, width, height);
 			ctx.filter = 'none';
-			ctx.globalAlpha = 0.7;
+			ctx.globalAlpha = 0.5;
 			ctx.fillStyle = '#000';
 			ctx.fillRect(0, 0, width, height);
-			ctx.restore();
 		} else {
 			ctx.fillStyle = '#222';
 			ctx.fillRect(0, 0, width, height);
 		}
+		ctx.restore();
 
 		// 2. Albumart (cover)
-		const coverImageBase64 = this.song.coverImageBase64 || this.song.backgroundImageBase64;
-		if (coverImageBase64) {
-			const artImg = new window.Image();
-			artImg.src = coverImageBase64;
+		ctx.save();
+		if (this.coverImage) {
 			const artSize = Math.round(Math.min(width, height) * 0.25);
 			const artX = width / 2 - artSize / 2;
 			const artY = Math.round(height * 0.12);
-			ctx.save();
 			ctx.beginPath();
 			ctx.arc(width/2, artY + artSize/2, artSize/2, 0, Math.PI*2);
 			ctx.closePath();
 			ctx.clip();
-			ctx.drawImage(artImg, artX, artY, artSize, artSize);
+			ctx.drawImage(this.coverImage, artX, artY, artSize, artSize);
 			ctx.restore();
 		}
+		ctx.restore();
 
 		// 3. Song title (autoscale font)
 		ctx.save();
@@ -84,15 +96,15 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.restore();
 
 		// 5. Builder (smaller)
+		ctx.save();
 		if (this.song.builder) {
-			ctx.save();
 			ctx.font = `${Math.round(height*0.025)}px Arial`;
 			ctx.fillStyle = '#ccc';
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'top';
 			ctx.fillText(`Mapper: ${this.song.builder}`, width/2, height*0.55);
-			ctx.restore();
 		}
+		ctx.restore();
 
 		// 6. Start button
 		const btnW = Math.round(width * 0.28);

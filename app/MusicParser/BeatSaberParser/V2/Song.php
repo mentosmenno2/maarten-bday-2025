@@ -30,9 +30,9 @@ class Song extends AbstractSong
 		return $this->infoFileData['_songAuthorName'];
 	}
 
-	public function getBuilder(): string
+	public function getBuilder(): ?string
 	{
-		return $this->infoFileData['_levelAuthorName'];
+		return $this->infoFileData['_levelAuthorName'] ?? null;
 	}
 
 	public function getFileName(): string

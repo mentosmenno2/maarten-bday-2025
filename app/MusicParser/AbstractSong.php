@@ -24,7 +24,7 @@ abstract class AbstractSong implements JsonSerializable
 	/**
 	 * Get the builder/mapper of the beatmap
 	 */
-	abstract public function getBuilder(): string;
+	abstract public function getBuilder(): ?string;
 
 	/**
 	 * Get the file name of the audio file
