@@ -14,12 +14,14 @@ export class LevelScene extends AbstractScene {
 		y: number,
 		w: number,
 		h: number,
+		pressedDown: boolean
 	}
 	private hitzoneRight: {
 		x: number,
 		y: number,
 		w: number,
-		h: number
+		h: number,
+		pressedDown: boolean
 	}
 	private targets: {
 		x: number,
@@ -53,13 +55,15 @@ export class LevelScene extends AbstractScene {
 			x: 0,
 			y: 0,
 			w: 0,
-			h: 0
+			h: 0,
+			pressedDown: false
 		};
 		this.hitzoneRight = {
 			x: 0,
 			y: 0,
 			w: 0,
-			h: 0
+			h: 0,
+			pressedDown: false
 		};
 
 		// Load targets
@@ -102,6 +106,8 @@ export class LevelScene extends AbstractScene {
 
 		this.updateHitzone(ctx);
 		this.updateTargets(ctx);
+
+		console.log(this.score);
 	}
 
 	private updateHitzone( ctx: CanvasRenderingContext2D ): void {
@@ -118,6 +124,9 @@ export class LevelScene extends AbstractScene {
 		this.hitzoneRight.h = 2 * hitzoneMargin;
 		this.hitzoneRight.x = width * 0.5;
 		this.hitzoneRight.y = hitzoneCenterY - this.hitzoneRight.h / 2;
+
+		this.hitzoneLeft.pressedDown = this.getCurrentActiveUserAction(ctx).has('LEFT');
+		this.hitzoneRight.pressedDown = this.getCurrentActiveUserAction(ctx).has('RIGHT');
 	}
 
 	private updateTargets( ctx: CanvasRenderingContext2D ): void {
@@ -148,21 +157,33 @@ export class LevelScene extends AbstractScene {
 			}
 		}
 
-		// Check for hits
+		// Check for hits on left side
 		const closestLeftTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('LEFT');
 		const closestLeftTarget = closestLeftTargetIndex !== null ? this.targets[closestLeftTargetIndex] : null;
-		if (closestLeftTarget && this.getCurrentUserAction(ctx).has('LEFT')) {
-			closestLeftTarget.hit = true;
-			closestLeftTarget.hittable = false;
-			this.score += 100;
+		if ( closestLeftTarget && this.getCurrentJustPressedUserAction(ctx).has('LEFT') ) {
+			if ( CollisionHelper.boxBoxCollide(closestLeftTarget, this.hitzoneLeft) ) {
+				closestLeftTarget.hit = true;
+				closestLeftTarget.hittable = false;
+				this.score += 100;
+			} else {
+				this.score = Math.max(0, this.score - 50);
+			}
 		}
 
+		// Check for hits on right side
 		const closestRightTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('RIGHT');
 		const closestRightTarget = closestRightTargetIndex !== null ? this.targets[closestRightTargetIndex] : null;
-		if (closestRightTarget && this.getCurrentUserAction(ctx).has('RIGHT')) {
-			closestRightTarget.hit = true;
-			closestRightTarget.hittable = false;
-			this.score += 100;
+		if (
+			closestRightTarget
+			&& this.getCurrentJustPressedUserAction(ctx).has('RIGHT')
+		) {
+			if ( CollisionHelper.boxBoxCollide(closestRightTarget, this.hitzoneRight) ) {
+				closestRightTarget.hit = true;
+				closestRightTarget.hittable = false;
+				this.score += 100;
+			} else {
+				this.score = Math.max(0, this.score - 50);
+			}
 		}
 	}
 
@@ -187,7 +208,7 @@ export class LevelScene extends AbstractScene {
 		return closestTargetIndex;
 	}
 
-	private getCurrentUserAction( ctx: CanvasRenderingContext2D ): Set<'LEFT'|'RIGHT'> {
+	private getCurrentJustPressedUserAction( ctx: CanvasRenderingContext2D ): Set<'LEFT'|'RIGHT'> {
 		const inputManager = this.game.getInputManager();
 		const { width, height } = ctx.canvas;
 
@@ -220,6 +241,39 @@ export class LevelScene extends AbstractScene {
 		return inputs;
 	}
 
+	private getCurrentActiveUserAction(ctx: CanvasRenderingContext2D): Set<'LEFT' | 'RIGHT'> {
+		const inputManager = this.game.getInputManager();
+		const { width, height } = ctx.canvas;
+
+		const inputs = new Set<'LEFT' | 'RIGHT'>();
+
+		// Check touch or click
+		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
+		if (inputManager.isMouseOrFingerDown() && clickOrFingerPos) {
+			if (CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
+				inputs.add('LEFT');
+			} if (CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
+				inputs.add('RIGHT');
+			}
+		}
+
+		// Check keyboard arrows
+		if (inputManager.isKeyDown('ArrowLeft')) {
+			inputs.add('LEFT');
+		} else if (inputManager.isKeyDown('ArrowRight')) {
+			inputs.add('RIGHT');
+		}
+
+		// Check keyboard AD
+		if (inputManager.isKeyDown('KeyA')) {
+			inputs.add('LEFT');
+		} else if (inputManager.isKeyDown('KeyD')) {
+			inputs.add('RIGHT');
+		}
+
+		return inputs;
+	}
+
 	public render(ctx: CanvasRenderingContext2D): void {
 		const { width, height } = ctx.canvas;
 
@@ -231,9 +285,10 @@ export class LevelScene extends AbstractScene {
 
 		// Draw hit zones
 		ctx.save();
-		ctx.globalAlpha = 0.12;
+		ctx.globalAlpha = this.hitzoneLeft.pressedDown ? 1 : 0.5;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
 		ctx.fillRect(this.hitzoneLeft.x, this.hitzoneLeft.y, this.hitzoneLeft.w, this.hitzoneLeft.h);
+		ctx.globalAlpha = this.hitzoneRight.pressedDown ? 1 : 0.5;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 		ctx.fillRect(this.hitzoneRight.x, this.hitzoneRight.y, this.hitzoneRight.w, this.hitzoneRight.h);
 		ctx.restore();
@@ -242,9 +297,7 @@ export class LevelScene extends AbstractScene {
 		for (const target of this.targets) {
 			ctx.save();
 			ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
-			if (target.hittable) {
-				ctx.globalAlpha = 0.5;
-			}
+			ctx.globalAlpha = target.hittable ? 1 : 0.5;
 			ctx.fillRect(target.x, target.y, target.w, target.h);
 			ctx.restore();
 		}

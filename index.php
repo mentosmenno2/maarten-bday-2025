@@ -21,7 +21,11 @@ require_once __DIR__ . '/bootstrap.php';
 			<h1>Maarten Bday 2025</h1>
 		</header>
 		<main>
-			<canvas id="game"></canvas>
+			<canvas
+				id="game"
+				tabindex="1"
+			>
+			</canvas>
 		</main>
 		<script type="module" src="dist/scripts/main.js"></script>
 	</body>

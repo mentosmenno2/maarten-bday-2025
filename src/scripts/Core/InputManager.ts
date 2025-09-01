@@ -24,6 +24,8 @@ export class InputManager {
                 this.keysJustPressed.add(e.key);
             }
             this.keysDown.add(e.key);
+
+			console.log(`Key down: ${e.key}`);
         });
         this.game.getCanvas().getElement().addEventListener('keyup', (e: KeyboardEvent) => {
             this.keysDown.delete(e.key);
