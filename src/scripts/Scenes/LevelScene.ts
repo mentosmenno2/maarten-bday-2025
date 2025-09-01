@@ -4,6 +4,7 @@ import { AbstractScene } from './AbstractScene.js';
 import { StartScene } from './StartScene.js';
 import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
+import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 
 export class LevelScene extends AbstractScene {
 
@@ -12,7 +13,7 @@ export class LevelScene extends AbstractScene {
 		x: number,
 		y: number,
 		w: number,
-		h: number
+		h: number,
 	}
 	private hitzoneRight: {
 		x: number,
@@ -27,7 +28,8 @@ export class LevelScene extends AbstractScene {
 		h: number,
 		position: 'LEFT'|'RIGHT',
 		time: number,
-		hit?: boolean
+		hit: boolean,
+		hittable: boolean
 	}[] = [];
 	private score: number = 0;
 
@@ -69,7 +71,8 @@ export class LevelScene extends AbstractScene {
 				h: 0,
 				position: target.position,
 				time: target.time,
-				hit: false
+				hit: false,
+				hittable: true
 			});
 		}
 
@@ -86,8 +89,6 @@ export class LevelScene extends AbstractScene {
 	}
 
 	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
-		const { width, height } = ctx.canvas;
-
 		// Play audio when ready
 		if ( this.audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.audio.paused ) {
 			this.audio.play();
@@ -99,7 +100,12 @@ export class LevelScene extends AbstractScene {
 			this.game.getSceneManager().replace( new StartScene(this.game) );
 		}
 
-		// Determine width, height, x and y for hitzones
+		this.updateHitzone(ctx);
+		this.updateTargets(ctx);
+	}
+
+	private updateHitzone( ctx: CanvasRenderingContext2D ): void {
+		const { width, height } = ctx.canvas;
 		const hitzoneCenterY = height * 0.7;
 		const hitzoneMargin = height * 0.05;
 
@@ -112,24 +118,106 @@ export class LevelScene extends AbstractScene {
 		this.hitzoneRight.h = 2 * hitzoneMargin;
 		this.hitzoneRight.x = width * 0.5;
 		this.hitzoneRight.y = hitzoneCenterY - this.hitzoneRight.h / 2;
+	}
 
+	private updateTargets( ctx: CanvasRenderingContext2D ): void {
+		const { height } = ctx.canvas;
+		const hitzoneCenterY = this.hitzoneLeft.y + this.hitzoneLeft.h / 2;
 		const audioCurrentTimeInMilliseconds = this.audio.currentTime * 1000;
-		const appearWindow = 2000; // 2 seconds
+		const appearWindowMillis = 2000;
 
 		for (let i = 0; i < this.targets.length; i++) {
+			// Set size and position
 			const target = this.targets[i];
 			target.h = height * 0.05;
 			target.w = target.h;
-
 			target.x = target.position === 'LEFT' ? ( ( this.hitzoneLeft.x + this.hitzoneLeft.w / 2 ) - target.w / 2 ) : ( ( this.hitzoneRight.x + this.hitzoneRight.w / 2 ) - target.w / 2 );
-
-			// Calculate target.y so that it moves from top to hitzone over 2 seconds window
 			const startY = 0 - target.h / 2;
 			const endY = hitzoneCenterY - target.h / 2;
 			const timeUntilTarget = target.time - audioCurrentTimeInMilliseconds;
-			const progress = timeUntilTarget / appearWindow * -1;
+			const progress = timeUntilTarget / appearWindowMillis * -1;
 			target.y = startY + ( hitzoneCenterY ) + (endY - startY) * progress;
+
+			// If target passes hitzone, mark as not hittable
+			if (
+				!target.hit
+				&& target.hittable
+				&& target.y > this.hitzoneLeft.y + this.hitzoneLeft.h
+			) {
+				target.hittable = false;
+			}
 		}
+
+		// Check for hits
+		const closestLeftTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('LEFT');
+		const closestLeftTarget = closestLeftTargetIndex !== null ? this.targets[closestLeftTargetIndex] : null;
+		if (closestLeftTarget && this.getCurrentUserAction(ctx).has('LEFT')) {
+			closestLeftTarget.hit = true;
+			closestLeftTarget.hittable = false;
+			this.score += 100;
+		}
+
+		const closestRightTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('RIGHT');
+		const closestRightTarget = closestRightTargetIndex !== null ? this.targets[closestRightTargetIndex] : null;
+		if (closestRightTarget && this.getCurrentUserAction(ctx).has('RIGHT')) {
+			closestRightTarget.hit = true;
+			closestRightTarget.hittable = false;
+			this.score += 100;
+		}
+	}
+
+	private getClosestTargetIndexToCurrentAudioTime(position: 'LEFT' | 'RIGHT'): number | null {
+		const audioCurrentTimeInMilliseconds = this.audio.currentTime * 1000;
+
+		let closestTargetIndex = null;
+		let closestTargetTimeDiff = Infinity;
+		for (let i = 0; i < this.targets.length; i++) {
+			const target = this.targets[i];
+			if (target.position !== position || !target.hittable) continue;
+
+			const targetTime = target.time;
+			const timeDiff = Math.abs(targetTime - audioCurrentTimeInMilliseconds);
+
+			if (timeDiff < closestTargetTimeDiff) {
+				closestTargetTimeDiff = timeDiff;
+				closestTargetIndex = i;
+			}
+		}
+
+		return closestTargetIndex;
+	}
+
+	private getCurrentUserAction( ctx: CanvasRenderingContext2D ): Set<'LEFT'|'RIGHT'> {
+		const inputManager = this.game.getInputManager();
+		const { width, height } = ctx.canvas;
+
+		const inputs = new Set<'LEFT'|'RIGHT'>();
+
+		// Check touch or click
+		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
+		if ( inputManager.isMouseOrFingerJustPressed() && clickOrFingerPos ) {
+			if ( CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
+				inputs.add('LEFT');
+			} if ( CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
+				inputs.add('RIGHT');
+			}
+		}
+
+		// Check keyboard arrows
+		if (inputManager.isKeyJustPressed('ArrowLeft')) {
+			inputs.add('LEFT');
+		} else if (inputManager.isKeyJustPressed('ArrowRight')) {
+			inputs.add('RIGHT');
+		}
+
+		// Check keyboard AD
+		if (inputManager.isKeyJustPressed('KeyA')) {
+			inputs.add('LEFT');
+		} else if (inputManager.isKeyJustPressed('KeyD')) {
+			inputs.add('RIGHT');
+		}
+
+		return inputs;
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
@@ -154,6 +242,9 @@ export class LevelScene extends AbstractScene {
 		for (const target of this.targets) {
 			ctx.save();
 			ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+			if (target.hittable) {
+				ctx.globalAlpha = 0.5;
+			}
 			ctx.fillRect(target.x, target.y, target.w, target.h);
 			ctx.restore();
 		}
