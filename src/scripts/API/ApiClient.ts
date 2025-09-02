@@ -10,8 +10,6 @@ export class ApiClient {
             body: formData
         });
 
-		console.log(response);
-
         if (!response.ok) {
 
 			const json = await response.json();

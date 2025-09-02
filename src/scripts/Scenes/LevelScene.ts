@@ -1,10 +1,10 @@
 import { SongInterface } from '../API/SongInterface.js';
 import { Game } from '../Game.js';
 import { AbstractScene } from './AbstractScene.js';
-import { StartScene } from './StartScene.js';
 import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
+import { ResultScene } from './ResultScene.js';
 
 export class LevelScene extends AbstractScene {
 
@@ -93,21 +93,19 @@ export class LevelScene extends AbstractScene {
 	}
 
 	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
+		// End when audio finished
+		if ( this.audio.ended ) {
+			this.game.getInputManager().reset();
+			this.game.getSceneManager().replace( new ResultScene(this.game, this.song, this.score) );
+		}
+
 		// Play audio when ready
 		if ( this.audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.audio.paused ) {
 			this.audio.play();
 		}
 
-		// End when audio finished
-		if ( this.audio.ended ) {
-			this.game.getInputManager().reset();
-			this.game.getSceneManager().replace( new StartScene(this.game) );
-		}
-
 		this.updateHitzone(ctx);
 		this.updateTargets(ctx);
-
-		console.log(this.score);
 	}
 
 	private updateHitzone( ctx: CanvasRenderingContext2D ): void {
