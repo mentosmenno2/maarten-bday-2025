@@ -3,6 +3,7 @@
 namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V4;
 
 use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
+use Mentosmenno2\MaartenBday2025\Tools\Toolbox;
 
 class Song extends AbstractSong
 {
@@ -80,10 +81,6 @@ class Song extends AbstractSong
 			);
 		}
 
-		// Order by difficultyRating low to high
-		usort($difficulties, function (Difficulty $a, Difficulty $b) {
-			return $a->getDifficultyRating() <=> $b->getDifficultyRating();
-		});
-		return $difficulties;
+		return ( new Toolbox() )->sortDifficulties($difficulties);
 	}
 }

@@ -3,7 +3,8 @@
 namespace Mentosmenno2\MaartenBday2025\Tools;
 
 use getID3;
-use resoruce;
+use Mentosmenno2\MaartenBday2025\MusicParser\AbstractDifficulty;
+use Mentosmenno2\MaartenBday2025\MusicParser\AbstractTarget;
 
 class Toolbox
 {
@@ -98,5 +99,36 @@ class Toolbox
 			unlink($fileLocation);
 		}
 		return $data;
+	}
+
+	/**
+	 * Removes targets with the same name and position
+	 *
+	 * @param array<AbstractTarget> $targets
+	 * @return array<AbstractTarget>
+	 */
+	public function removeDuplicateTargets(array $targets): array
+	{
+		$uniqueTargets = [];
+		foreach ($targets as $target) {
+			$key = $target->getTime() . ':' . $target->getPosition()->value;
+			if (!isset($uniqueTargets[$key])) {
+				$uniqueTargets[$key] = $target;
+			}
+		}
+
+		return array_values($uniqueTargets);
+	}
+
+	/**
+	 * Sorts difficulties by their difficulty rating ascending
+	 *
+	 * @param array<AbstractDifficulty> $difficulties
+	 * @return array<AbstractDifficulty>
+	 */
+	public function sortDifficulties(array $difficulties): array
+	{
+		usort($difficulties, fn($a, $b) => $a->getDifficultyRating() <=> $b->getDifficultyRating());
+		return $difficulties;
 	}
 }

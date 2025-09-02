@@ -4,6 +4,7 @@ namespace Mentosmenno2\MaartenBday2025\MusicParser\OSUParser;
 
 use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractDifficulty;
 use \Mentosmenno2\MaartenBday2025\MusicParser\AbstractTarget;
+use Mentosmenno2\MaartenBday2025\Tools\Toolbox;
 
 class Difficulty extends AbstractDifficulty
 {
@@ -31,8 +32,10 @@ class Difficulty extends AbstractDifficulty
 	 */
 	public function getTargets(): array
 	{
-		return array_map(function (array $hitObjectData): AbstractTarget {
+		$targets = array_map(function (array $hitObjectData): AbstractTarget {
 			return new Target($hitObjectData);
 		}, $this->difficultyFileData['HitObjects']);
+
+		return (new Toolbox())->removeDuplicateTargets($targets);
 	}
 }
