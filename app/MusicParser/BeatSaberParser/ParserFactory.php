@@ -6,6 +6,9 @@ use \Exception;
 
 use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V2\InfoFileParser as InfoFileParserV2;
 use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V2\DifficultyFileParser as DifficultyFileParserV2;
+use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V3\InfoFileParser as InfoFileParserV3;
+use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V3\DifficultyFileParser as DifficultyFileParserV3;
+
 use ZipArchive;
 
 class ParserFactory
@@ -16,13 +19,16 @@ class ParserFactory
 	 */
 	public function getInfoFileParser(ZipArchive $zip, array $infoFileData): AbstractInfoFileParser
 	{
-		$version = $infoFileData['_version'];
+		$version = $infoFileData['_version'] ?? $infoFileData['version'];
 		$versionParts = explode('.', $version);
 		$parserVersion = $versionParts[0];
 
 		switch ($parserVersion) {
 			case '2':
 				$parser = new InfoFileParserV2($zip, $infoFileData);
+				break;
+			case '3':
+				$parser = new InfoFileParserV3($zip, $infoFileData);
 				break;
 			default:
 				$parser = null;
@@ -42,13 +48,16 @@ class ParserFactory
 	 */
 	public function getDifficultyFileParser(array $infoFileData, array $dataFileData): AbstractDifficultyFileParser
 	{
-		$version = $dataFileData['_version'];
+		$version = $dataFileData['_version'] ?? $dataFileData['version'];
 		$versionParts = explode('.', $version);
 		$parserVersion = $versionParts[0];
 
 		switch ($parserVersion) {
 			case '2':
 				$parser = new DifficultyFileParserV2($infoFileData, $dataFileData);
+				break;
+			case '3':
+				$parser = new DifficultyFileParserV3($infoFileData, $dataFileData);
 				break;
 			default:
 				$parser = null;
