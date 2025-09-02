@@ -166,9 +166,12 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.font = `${titleFontSize}px Arial`;
 			titleWidth = ctx.measureText(this.song.title).width;
 		}
-	ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
+		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+		ctx.lineWidth = 5;
+		ctx.strokeText(this.song.title, width/2, height*0.42);
 		ctx.fillText(this.song.title, width/2, height*0.42);
 		ctx.restore();
 	}
@@ -185,9 +188,12 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.font = `${artistFontSize}px Arial`;
 			artistWidth = ctx.measureText(this.song.artist).width;
 		}
-	ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
+		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+		ctx.lineWidth = 5;
+		ctx.strokeText(this.song.artist, width/2, height*0.50);
 		ctx.fillText(this.song.artist, width/2, height*0.50);
 		ctx.restore();
 	}
@@ -198,9 +204,12 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.save();
 		if (this.song.builder) {
 			ctx.font = `${Math.round(height*0.025)}px Arial`;
-		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
+			ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'top';
+			ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+			ctx.lineWidth = 5;
+			ctx.strokeText(`Maker: ${this.song.builder}`, width/2, height*0.55);
 			ctx.fillText(`Maker: ${this.song.builder}`, width/2, height*0.55);
 		}
 		ctx.restore();
