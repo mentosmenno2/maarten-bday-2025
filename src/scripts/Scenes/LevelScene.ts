@@ -377,9 +377,9 @@ export class LevelScene extends AbstractScene {
 		ctx.save();
 		ctx.font = `${Math.round(height*0.045)}px Arial`;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
-		ctx.textAlign = 'right';
+		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
-		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, width - 24, 18);
+		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, 24, 18 + Math.round(height * 0.045));
 		ctx.restore();
 
 		// Render progress bar

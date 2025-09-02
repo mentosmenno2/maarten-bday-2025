@@ -81,7 +81,6 @@ export class InputManager {
     }
 
     isKeyJustPressed(key: string): boolean {
-		console.log(this.keysJustPressed);
         return this.keysJustPressed.has(key);
     }
 
