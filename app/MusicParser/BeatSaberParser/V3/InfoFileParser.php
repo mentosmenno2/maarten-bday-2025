@@ -3,16 +3,14 @@
 namespace Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\V3;
 
 use Exception;
+use Mentosmenno2\MaartenBday2025\MusicParser\AbstractSong;
 use \Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\AbstractInfoFileParser;
 use Mentosmenno2\MaartenBday2025\MusicParser\BeatSaberParser\ParserFactory;
 use Mentosmenno2\MaartenBday2025\Tools\Toolbox;
 
 class InfoFileParser extends AbstractInfoFileParser
 {
-	/**
-	 * @return array<string,mixed>
-	 */
-	public function parse(): array
+	public function parse(): AbstractSong
 	{
 		$data = $this->infoFileData;
 
@@ -38,7 +36,7 @@ class InfoFileParser extends AbstractInfoFileParser
 		if ($coverImageResource) {
 			fclose($coverImageResource);
 		}
-		return $data;
+		return new Song($data);
 	}
 
 	/**

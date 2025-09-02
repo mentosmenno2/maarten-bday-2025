@@ -16,8 +16,5 @@ abstract class AbstractInfoFileParser
 	) {
 	}
 
-	/**
-	 * @return array<string,mixed>
-	 */
-	abstract public function parse(): array;
+	abstract public function parse(): AbstractSong;
 }

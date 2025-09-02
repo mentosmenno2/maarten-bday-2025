@@ -23,7 +23,7 @@ class SongParser implements SongParserInterface
 			return false;
 		}
 
-		$hasInfoFile = $zip->locateName('info.dat') !== false;
+		$hasInfoFile = $zip->locateName('info.dat') !== false || $zip->locateName('Info.dat') !== false;
 		if (! $hasInfoFile) {
 			$zip->close();
 			return false;
@@ -49,8 +49,16 @@ class SongParser implements SongParserInterface
 
 	private function getSongFromInfoFileData(ZipArchive $zip): AbstractSong
 	{
-		$infoFile = 'info.dat';
-		$infoFileContents = $zip->getFromName($infoFile);
+		$infoFileOptions = array( 'info.dat', 'Info.dat' );
+		$infoFile = null;
+		foreach ($infoFileOptions as $infoFileOption) {
+			if ($zip->locateName($infoFileOption) !== false) {
+				$infoFile = $infoFileOption;
+				break;
+			}
+		}
+
+		$infoFileContents = $infoFile ? $zip->getFromName($infoFile) : null;
 		if (! $infoFileContents) {
 			throw new Exception(sprintf('Cannot open info file %s', $infoFile));
 		}
@@ -61,7 +69,7 @@ class SongParser implements SongParserInterface
 		}
 
 		$infoFileParser = ( new ParserFactory() )->getInfoFileParser($zip, $infoFileJSON);
-		$infoFileData = $infoFileParser->parse();
-		return new Song($infoFileData);
+		$song = $infoFileParser->parse();
+		return $song;
 	}
 }
