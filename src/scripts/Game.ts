@@ -21,8 +21,8 @@ export class Game {
 	private constructor() {
 		this.lastLoopTimestampMillis = 0;
 		this.loopTimeAccumulator = 0;
-		this.inputManager = new InputManager(this);
 		this.assetManager = new AssetManager();
+		this.inputManager = new InputManager(this);
 		this.canvas = new Canvas();
 		this.canvas.updateSize();
 		this.fpsCounter = new FPSCounter();

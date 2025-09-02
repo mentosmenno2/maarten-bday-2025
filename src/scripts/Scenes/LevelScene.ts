@@ -5,6 +5,7 @@ import { ColorEnum } from '../Core/Style/ColorEnum.js';
 import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 import { ResultScene } from './ResultScene.js';
+import { Duck } from '../Core/Assets/Images/Duck.js';
 
 export class LevelScene extends AbstractScene {
 
@@ -36,6 +37,15 @@ export class LevelScene extends AbstractScene {
 	private score: number = 0;
 	private combo: number = 0;
 	private scoreMultiplier: number = 1;
+
+	private progressBar: {
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		progress: number,
+		duck: Duck
+	};
 
 	constructor(game: Game, private song: SongInterface, private difficultyIndex: number) {
 		super(game);
@@ -92,6 +102,16 @@ export class LevelScene extends AbstractScene {
 		this.audio.volume = 1;
 		this.audio.preload = 'auto';
 		this.audio.load();
+
+		// Create progress bar
+		this.progressBar = {
+			x: 0,
+			y: 0,
+			w: 0,
+			h: 0,
+			progress: 0,
+			duck: this.game.getAssetManager().duck
+		};
 	}
 
 	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
@@ -109,6 +129,7 @@ export class LevelScene extends AbstractScene {
 
 		this.updateHitzone(ctx);
 		this.updateTargets(ctx);
+		this.updateProgressBar(ctx);
 	}
 
 	private updateScoreMultiplier(hit: boolean): void {
@@ -210,6 +231,16 @@ export class LevelScene extends AbstractScene {
 			}
 			this.updateScoreMultiplier(rightTargetHit);
 		}
+	}
+
+	private updateProgressBar(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
+		this.progressBar.x = 24;
+		this.progressBar.y = height - 24;
+		this.progressBar.w = width - 48;
+		this.progressBar.h = 12;
+
+		this.progressBar.progress = this.audio.currentTime / this.audio.duration;
 	}
 
 	private getClosestTargetIndexToCurrentAudioTime(position: 'LEFT' | 'RIGHT'): number | null {
@@ -351,12 +382,20 @@ export class LevelScene extends AbstractScene {
 		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, width - 24, 18);
 		ctx.restore();
 
-		// Render progress bar on bottom of screen, 5% of screen height, 100% of screen width.
+		// Render progress bar
 		ctx.save();
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
-		ctx.fillRect(24, height - 24, width - 48, 12);
-		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Green);
-		ctx.fillRect(24, height - 24, (width - 48) * this.audio.currentTime / this.audio.duration, 12);
+		ctx.fillRect(this.progressBar.x, this.progressBar.y, this.progressBar.w, this.progressBar.h);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
+		ctx.fillRect(this.progressBar.x, this.progressBar.y, this.progressBar.w * this.progressBar.progress, this.progressBar.h);
 		ctx.restore();
+		if ( this.progressBar.duck.isLoaded() ) {
+			ctx.save();
+			const duckX = this.progressBar.x + (this.progressBar.w * this.progressBar.progress) - 12;
+			const duckY = this.progressBar.y + (this.progressBar.h / 2) - 12;
+			ctx.scale(-1, 1);
+			ctx.drawImage(this.progressBar.duck.getElement(), -duckX - 24, duckY, 24, 24);
+			ctx.restore();
+		}
 	}
 }
