@@ -201,7 +201,7 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'top';
-			ctx.fillText(`Mapper: ${this.song.builder}`, width/2, height*0.55);
+			ctx.fillText(`Maker: ${this.song.builder}`, width/2, height*0.55);
 		}
 		ctx.restore();
 	}
