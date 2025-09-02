@@ -17,6 +17,8 @@ export class SongSelectScene extends AbstractScene {
 		w: number;
 		h: number;
 		text: string;
+		textLoading: string;
+		loading: boolean;
 		fontSize: number;
 		fontFamily: string;
 		padding: number;
@@ -43,6 +45,8 @@ export class SongSelectScene extends AbstractScene {
 			w: 0,
 			h: 0,
 			text: "Bestand uploaden",
+			textLoading: "Laden...",
+			loading: false,
 			fontSize: 0,
 			fontFamily: 'Arial',
 			padding: 10
@@ -95,7 +99,7 @@ export class SongSelectScene extends AbstractScene {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
 		const clickpos = inputManager.getMouseOrFingerPosition();
-		if ( ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.selectSongButton, clickpos) ) {
+		if ( this.selectSongButton.loading || ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.selectSongButton, clickpos) ) {
 			return;
 		}
 
@@ -117,7 +121,9 @@ export class SongSelectScene extends AbstractScene {
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
-		ctx.fillText(this.selectSongButton.text, this.selectSongButton.x + this.selectSongButton.w / 2, this.selectSongButton.y + this.selectSongButton.h / 2);
+		const text = this.selectSongButton.loading ? this.selectSongButton.textLoading : this.selectSongButton.text;
+		ctx.globalAlpha = this.selectSongButton.loading ? 0.5 : 1;
+		ctx.fillText(text, this.selectSongButton.x + this.selectSongButton.w / 2, this.selectSongButton.y + this.selectSongButton.h / 2);
 		ctx.restore();
 	}
 
@@ -148,14 +154,17 @@ export class SongSelectScene extends AbstractScene {
 	}
 
 	private async uploadSongFile(file: File): Promise<void> {
+		this.selectSongButton.loading = true;
 		const apiClient = new ApiClient();
 		let response = null;
 		try {
 			response = await apiClient.parseSong(file);
 		} catch (error) {
-			window.alert(`Error uploading file: ${error}`);
+			window.alert(`Fout bij uploaden bestand: ${error}`);
 			return;
 		}
+
+		this.selectSongButton.loading = false;
 
 		this.game.getInputManager().reset();
 		this.game.getSceneManager().push(new DifficultySelectScene(this.game, response.song));
