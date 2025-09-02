@@ -244,7 +244,8 @@ export class LevelScene extends AbstractScene {
 		if ( inputManager.isMouseOrFingerJustPressed() && clickOrFingerPos ) {
 			if ( CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
 				inputs.add('LEFT');
-			} if ( CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
+			}
+			if ( CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
 				inputs.add('RIGHT');
 			}
 		}
@@ -252,14 +253,16 @@ export class LevelScene extends AbstractScene {
 		// Check keyboard arrows
 		if (inputManager.isKeyJustPressed('ArrowLeft')) {
 			inputs.add('LEFT');
-		} else if (inputManager.isKeyJustPressed('ArrowRight')) {
+		}
+		if (inputManager.isKeyJustPressed('ArrowRight')) {
 			inputs.add('RIGHT');
 		}
 
 		// Check keyboard AD
 		if (inputManager.isKeyJustPressed('KeyA')) {
 			inputs.add('LEFT');
-		} else if (inputManager.isKeyJustPressed('KeyD')) {
+		}
+		if (inputManager.isKeyJustPressed('KeyD')) {
 			inputs.add('RIGHT');
 		}
 
@@ -277,7 +280,8 @@ export class LevelScene extends AbstractScene {
 		if (inputManager.isMouseOrFingerDown() && clickOrFingerPos) {
 			if (CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
 				inputs.add('LEFT');
-			} if (CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
+			}
+			if (CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
 				inputs.add('RIGHT');
 			}
 		}
@@ -285,14 +289,16 @@ export class LevelScene extends AbstractScene {
 		// Check keyboard arrows
 		if (inputManager.isKeyDown('ArrowLeft')) {
 			inputs.add('LEFT');
-		} else if (inputManager.isKeyDown('ArrowRight')) {
+		}
+		if (inputManager.isKeyDown('ArrowRight')) {
 			inputs.add('RIGHT');
 		}
 
 		// Check keyboard AD
 		if (inputManager.isKeyDown('KeyA')) {
 			inputs.add('LEFT');
-		} else if (inputManager.isKeyDown('KeyD')) {
+		}
+		if (inputManager.isKeyDown('KeyD')) {
 			inputs.add('RIGHT');
 		}
 

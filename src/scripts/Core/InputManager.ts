@@ -20,7 +20,7 @@ export class InputManager {
     addEventListeners() {
         // Keyboard
         this.game.getCanvas().getElement().addEventListener('keydown', (e: KeyboardEvent) => {
-            if (!this.keysDown.has(e.key)) {
+			if (!this.keysDown.has(e.key)) {
                 this.keysJustPressed.add(e.key);
             }
             this.keysDown.add(e.key);
@@ -81,6 +81,7 @@ export class InputManager {
     }
 
     isKeyJustPressed(key: string): boolean {
+		console.log(this.keysJustPressed);
         return this.keysJustPressed.has(key);
     }
 
