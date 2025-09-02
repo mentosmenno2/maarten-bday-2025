@@ -344,5 +344,13 @@ export class LevelScene extends AbstractScene {
 		ctx.textBaseline = 'top';
 		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, width - 24, 18);
 		ctx.restore();
+
+		// Render progress bar on bottom of screen, 5% of screen height, 100% of screen width.
+		ctx.save();
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+		ctx.fillRect(24, height - 24, width - 48, 12);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Green);
+		ctx.fillRect(24, height - 24, (width - 48) * this.audio.currentTime / this.audio.duration, 12);
+		ctx.restore();
 	}
 }
