@@ -87,11 +87,11 @@ export class SongSelectScene extends AbstractScene {
 
 	private updateStatusText(ctx: CanvasRenderingContext2D): void {
 		ctx.save();
-		this.statusText.fontSize = ctx.canvas.height * 0.03;
+		this.statusText.fontSize = ctx.canvas.height * 0.02;
 		ctx.font = `${this.statusText.fontSize}px ${this.statusText.fontFamily}`;
 		const textMetrics = ctx.measureText(this.statusText.text);
 		this.statusText.x = (ctx.canvas.width - textMetrics.width) / 2;
-		this.statusText.y = (ctx.canvas.height * 0.5 - this.statusText.fontSize) / 2;
+		this.statusText.y = (ctx.canvas.height - this.selectSongButton.h) / 2 - ( ctx.canvas.height * 0.05 );
 		ctx.restore();
 	}
 
