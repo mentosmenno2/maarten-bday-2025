@@ -97,6 +97,7 @@ export class LevelScene extends AbstractScene {
 		if ( this.audio.ended ) {
 			this.game.getInputManager().reset();
 			this.game.getSceneManager().replace( new ResultScene(this.game, this.song, this.score) );
+			return;
 		}
 
 		// Play audio when ready
@@ -295,7 +296,7 @@ export class LevelScene extends AbstractScene {
 		// Draw targets
 		for (const target of this.targets) {
 			ctx.save();
-			ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+			ctx.fillStyle = ColorUtils.getHex(target.hit ? ColorEnum.Green : ColorEnum.White);
 			ctx.globalAlpha = target.hittable ? 1 : 0.5;
 			ctx.fillRect(target.x, target.y, target.w, target.h);
 			ctx.restore();

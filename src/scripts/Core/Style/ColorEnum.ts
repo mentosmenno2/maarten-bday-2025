@@ -6,4 +6,5 @@ export enum ColorEnum {
 	Purple = '#9933ff',
 	Pink = '#ff66cc',
 	Yellow = '#ffff66',
+	Green = '#66ff66',
 }
