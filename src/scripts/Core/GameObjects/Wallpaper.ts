@@ -12,7 +12,7 @@ export class Wallpaper extends AbstractGameObject {
 
 	public constructor(game: Game) {
 		super(game);
-		this.asset = game.getAssetManager().wallpaper;
+		this.asset = game.getAssetManager().images.wallpaper;
 		this.x = 0;
 		this.y = 0;
 		this.w = 0;

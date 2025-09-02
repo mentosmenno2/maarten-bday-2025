@@ -110,7 +110,7 @@ export class LevelScene extends AbstractScene {
 			w: 0,
 			h: 0,
 			progress: 0,
-			duck: this.game.getAssetManager().duck
+			duck: this.game.getAssetManager().images.duck
 		};
 	}
 
