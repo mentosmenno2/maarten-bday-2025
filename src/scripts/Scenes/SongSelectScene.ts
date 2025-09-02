@@ -57,7 +57,7 @@ export class SongSelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			fontFamily: 'Arial',
-			text: "Selecteer een OSU bestand"
+			text: "Upload OSU of BeatSaber beatmap"
 		};
 
 		this.fileInput = document.createElement('input');

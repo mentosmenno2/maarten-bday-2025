@@ -33,7 +33,7 @@ export class StartScene extends AbstractScene {
 
 		ctx.save();
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
-		ctx.font = `${ctx.canvas.height * 0.08}px Arial`;
+		ctx.font = `${ctx.canvas.height * 0.06}px Arial`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.shadowColor = ColorUtils.getHex(ColorEnum.White);
