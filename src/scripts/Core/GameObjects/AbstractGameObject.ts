@@ -1,6 +1,6 @@
-import { Game } from '../Game.js';
+import { Game } from "../../Game.js";
 
-export abstract class AbstractScene {
+export abstract class AbstractGameObject {
 	protected game: Game;
 
 	constructor(game: Game) {
