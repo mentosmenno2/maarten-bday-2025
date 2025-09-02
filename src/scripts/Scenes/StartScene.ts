@@ -36,9 +36,14 @@ export class StartScene extends AbstractScene {
 		ctx.font = `${ctx.canvas.height * 0.06}px Arial`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
-		ctx.shadowColor = ColorUtils.getHex(ColorEnum.White);
+		ctx.shadowColor = ColorUtils.getHex(ColorEnum.Black);
 		const time = performance.now() / 1000;
 		ctx.shadowBlur = 15 + Math.sin(time * 3) * 10;
+		ctx.shadowOffsetX = 0;
+		ctx.shadowOffsetY = 0;
+		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.Black);
+		ctx.lineWidth = 10;
+		ctx.strokeText('Klik om te starten', ctx.canvas.width / 2, ctx.canvas.height / 2);
 		ctx.fillText('Klik om te starten', ctx.canvas.width / 2, ctx.canvas.height / 2);
 		ctx.restore();
 	}

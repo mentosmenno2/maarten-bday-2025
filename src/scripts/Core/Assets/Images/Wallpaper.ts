@@ -4,7 +4,7 @@ export class Wallpaper {
 
 	public constructor() {
 		this.element = new Image();
-		this.element.src = `${window.location.href}dist/images/background-game.png`;
+		this.element.src = `${window.location.href}dist/images/wallpaper.png`;
 	}
 
 	public getElement(): HTMLImageElement {

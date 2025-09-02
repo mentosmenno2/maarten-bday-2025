@@ -133,6 +133,9 @@ export class SongSelectScene extends AbstractScene {
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
+		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.lineWidth = 10;
+		ctx.strokeText(this.statusText.text, this.statusText.x, this.statusText.y);
 		ctx.fillText(this.statusText.text, this.statusText.x, this.statusText.y);
 		ctx.restore();
 	}
