@@ -34,6 +34,8 @@ export class LevelScene extends AbstractScene {
 		hittable: boolean
 	}[] = [];
 	private score: number = 0;
+	private combo: number = 0;
+	private scoreMultiplier: number = 1;
 
 	constructor(game: Game, private song: SongInterface, private difficultyIndex: number) {
 		super(game);
@@ -109,6 +111,24 @@ export class LevelScene extends AbstractScene {
 		this.updateTargets(ctx);
 	}
 
+	private updateScoreMultiplier(hit: boolean): void {
+		if (!hit) {
+			this.combo = 0; // Reset combo on miss
+			this.scoreMultiplier = 1; // Reset multiplier on miss
+			return;
+		}
+
+		this.combo++;
+		if (this.combo >= 30) {
+			this.scoreMultiplier = 8;
+		} else if (this.combo >= 20) {
+			this.scoreMultiplier = 4;
+		} else if (this.combo >= 10) {
+			this.scoreMultiplier = 2;
+		} else {
+			this.scoreMultiplier = 1;
+		}
+	}
 	private updateHitzone( ctx: CanvasRenderingContext2D ): void {
 		const { width, height } = ctx.canvas;
 		const hitzoneCenterY = height * 0.7;
@@ -146,7 +166,7 @@ export class LevelScene extends AbstractScene {
 			const progress = timeUntilTarget / appearWindowMillis * -1;
 			target.y = startY + ( hitzoneCenterY ) + (endY - startY) * progress;
 
-			// If target passes hitzone, mark as not hittable
+			// If target passes hitzone, treat as missed
 			if (
 				!target.hit
 				&& target.hittable
@@ -154,6 +174,7 @@ export class LevelScene extends AbstractScene {
 			) {
 				target.hittable = false;
 				this.score = Math.max(0, this.score - 100);
+				this.updateScoreMultiplier(false);
 			}
 		}
 
@@ -161,13 +182,15 @@ export class LevelScene extends AbstractScene {
 		const closestLeftTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('LEFT');
 		const closestLeftTarget = closestLeftTargetIndex !== null ? this.targets[closestLeftTargetIndex] : null;
 		if ( closestLeftTarget && this.getCurrentJustPressedUserAction(ctx).has('LEFT') ) {
-			if ( CollisionHelper.boxBoxCollide(closestLeftTarget, this.hitzoneLeft) ) {
+			const leftTargetHit = CollisionHelper.boxBoxCollide(closestLeftTarget, this.hitzoneLeft);
+			if ( leftTargetHit ) {
 				closestLeftTarget.hit = true;
 				closestLeftTarget.hittable = false;
-				this.score += 100;
+				this.score += 100 * this.scoreMultiplier;
 			} else {
 				this.score = Math.max(0, this.score - 100);
 			}
+			this.updateScoreMultiplier(leftTargetHit);
 		}
 
 		// Check for hits on right side
@@ -177,13 +200,15 @@ export class LevelScene extends AbstractScene {
 			closestRightTarget
 			&& this.getCurrentJustPressedUserAction(ctx).has('RIGHT')
 		) {
-			if ( CollisionHelper.boxBoxCollide(closestRightTarget, this.hitzoneRight) ) {
+			const rightTargetHit = CollisionHelper.boxBoxCollide(closestRightTarget, this.hitzoneRight);
+			if (rightTargetHit) {
 				closestRightTarget.hit = true;
 				closestRightTarget.hittable = false;
-				this.score += 100;
+				this.score += 100 * this.scoreMultiplier;
 			} else {
 				this.score = Math.max(0, this.score - 100);
 			}
+			this.updateScoreMultiplier(rightTargetHit);
 		}
 	}
 
@@ -309,6 +334,15 @@ export class LevelScene extends AbstractScene {
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
 		ctx.fillText(`Score: ${this.score}`, 24, 18);
+		ctx.restore();
+
+		// Draw multiplier in right corner
+		ctx.save();
+		ctx.font = `${Math.round(height*0.045)}px Arial`;
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.textAlign = 'right';
+		ctx.textBaseline = 'top';
+		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, width - 24, 18);
 		ctx.restore();
 	}
 }
