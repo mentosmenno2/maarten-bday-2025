@@ -157,7 +157,7 @@ export class LevelScene extends AbstractScene {
 		for (let i = 0; i < this.targets.length; i++) {
 			// Set size and position
 			const target = this.targets[i];
-			target.h = height * 0.05;
+			target.h = height * 0.02;
 			target.w = this.hitzoneLeft.w - width * 0.1;
 			target.x = target.position === 'LEFT' ? ( ( this.hitzoneLeft.x + this.hitzoneLeft.w / 2 ) - target.w / 2 ) : ( ( this.hitzoneRight.x + this.hitzoneRight.w / 2 ) - target.w / 2 );
 			const startY = 0 - target.h / 2;
