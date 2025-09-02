@@ -11,6 +11,7 @@ export class StartScene extends AbstractScene {
 
 	constructor(game: Game) {
 		super(game);
+
 		this.wallpaper = new Wallpaper(game);
 	}
 

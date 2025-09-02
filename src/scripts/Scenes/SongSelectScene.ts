@@ -5,8 +5,11 @@ import { ColorUtils } from '../Core/Style/ColorUtils.js';
 import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 import { ApiClient } from '../API/ApiClient.js';
 import { DifficultySelectScene } from './DifficultySelectScene.js';
+import { Wallpaper } from '../Core/GameObjects/Wallpaper.js';
 
 export class SongSelectScene extends AbstractScene {
+
+	private wallpaper: Wallpaper;
 
 	private selectSongButton: {
 		x: number;
@@ -31,6 +34,9 @@ export class SongSelectScene extends AbstractScene {
 
 	constructor(game: Game) {
 		super(game);
+
+		this.wallpaper = new Wallpaper(game);
+
 		this.selectSongButton = {
 			x: 0,
 			y: 0,
@@ -56,7 +62,8 @@ export class SongSelectScene extends AbstractScene {
 	}
 
 
-	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
+	public update(deltaTime: number, ctx: CanvasRenderingContext2D): void {
+		this.wallpaper.update(deltaTime, ctx);
 		this.updateSongSelectButton(ctx);
 		this.updateStatusText(ctx);
 		this.handleSongSelectButtonClick();
@@ -97,6 +104,7 @@ export class SongSelectScene extends AbstractScene {
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
+		this.wallpaper.render(ctx);
 		this.renderSongSelectButton(ctx);
 		this.renderStatusText(ctx);
 	}

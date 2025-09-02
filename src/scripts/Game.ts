@@ -1,3 +1,4 @@
+import { AssetManager } from './Core/Assets/AssetManager.js';
 import { Canvas } from './Core/Canvas.js';
 import { FPSCounter } from './Core/Debug/FPSCounter.js';
 import { GlobalEventHandler } from './Core/GlobalEventHandler.js';
@@ -10,21 +11,24 @@ export class Game {
 
 	private lastLoopTimestampMillis: number;
 	private loopTimeAccumulator: number;
+	private assetManager: AssetManager;
+	private inputManager: InputManager;
 	private canvas: Canvas;
 	private fpsCounter: FPSCounter;
 	private sceneManager: SceneManager;
 	private globalEventHandler: GlobalEventHandler;
-	private inputManager: InputManager;
 
 	private constructor() {
 		this.lastLoopTimestampMillis = 0;
 		this.loopTimeAccumulator = 0;
+		this.inputManager = new InputManager(this);
+		this.assetManager = new AssetManager();
 		this.canvas = new Canvas();
 		this.canvas.updateSize();
 		this.fpsCounter = new FPSCounter();
 		this.sceneManager = new SceneManager(new StartScene(this));
 		this.globalEventHandler = new GlobalEventHandler(this);
-		this.inputManager = new InputManager(this);
+		return;
 	}
 
 	public static getInstance(): Game {
@@ -90,6 +94,10 @@ export class Game {
 
 	public getInputManager(): InputManager {
 		return this.inputManager;
+	}
+
+	public getAssetManager(): AssetManager {
+		return this.assetManager;
 	}
 
 	public getCanvas(): Canvas {

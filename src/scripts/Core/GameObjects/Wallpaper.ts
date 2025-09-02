@@ -1,8 +1,9 @@
 import { Game } from "../../Game.js";
+import { Wallpaper as WallpaperAsset } from "../Assets/Images/Wallpaper.js";
 import { AbstractGameObject } from "./AbstractGameObject.js";
 
 export class Wallpaper extends AbstractGameObject {
-	private element: HTMLImageElement;
+	private asset: WallpaperAsset;
 
 	private x: number;
 	private y: number;
@@ -11,8 +12,7 @@ export class Wallpaper extends AbstractGameObject {
 
 	public constructor(game: Game) {
 		super(game);
-		this.element = new Image();
-		this.element.src = `${window.location.href}dist/images/background-game.png`;
+		this.asset = game.getAssetManager().wallpaper;
 		this.x = 0;
 		this.y = 0;
 		this.w = 0;
@@ -20,7 +20,7 @@ export class Wallpaper extends AbstractGameObject {
 	}
 
 	public update(_deltaTime: number, _ctx: CanvasRenderingContext2D): void {
-		const imageAspectRatio = this.element.width / this.element.height;
+		const imageAspectRatio = this.asset.getElement().width / this.asset.getElement().height;
 		const canvasAspectRatio = _ctx.canvas.width / _ctx.canvas.height;
 
 		if (imageAspectRatio > canvasAspectRatio) {
@@ -35,11 +35,11 @@ export class Wallpaper extends AbstractGameObject {
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
-		if ( ! this.element.complete ) {
+		if ( ! this.asset.isLoaded() ) {
 			return;
 		}
 		ctx.save();
-		ctx.drawImage(this.element, this.x, this.y, this.w, this.h);
+		ctx.drawImage(this.asset.getElement(), this.x, this.y, this.w, this.h);
 		ctx.restore();
 	}
 }
