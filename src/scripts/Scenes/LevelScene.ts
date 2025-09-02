@@ -130,7 +130,7 @@ export class LevelScene extends AbstractScene {
 	}
 
 	private updateTargets( ctx: CanvasRenderingContext2D ): void {
-		const { height } = ctx.canvas;
+		const { width, height } = ctx.canvas;
 		const hitzoneCenterY = this.hitzoneLeft.y + this.hitzoneLeft.h / 2;
 		const audioCurrentTimeInMilliseconds = this.audio.currentTime * 1000;
 		const appearWindowMillis = 2000;
@@ -139,7 +139,7 @@ export class LevelScene extends AbstractScene {
 			// Set size and position
 			const target = this.targets[i];
 			target.h = height * 0.05;
-			target.w = target.h;
+			target.w = this.hitzoneLeft.w - width * 0.1;
 			target.x = target.position === 'LEFT' ? ( ( this.hitzoneLeft.x + this.hitzoneLeft.w / 2 ) - target.w / 2 ) : ( ( this.hitzoneRight.x + this.hitzoneRight.w / 2 ) - target.w / 2 );
 			const startY = 0 - target.h / 2;
 			const endY = hitzoneCenterY - target.h / 2;
@@ -154,6 +154,7 @@ export class LevelScene extends AbstractScene {
 				&& target.y > this.hitzoneLeft.y + this.hitzoneLeft.h
 			) {
 				target.hittable = false;
+				this.score = Math.max(0, this.score - 100);
 			}
 		}
 
@@ -166,7 +167,7 @@ export class LevelScene extends AbstractScene {
 				closestLeftTarget.hittable = false;
 				this.score += 100;
 			} else {
-				this.score = Math.max(0, this.score - 50);
+				this.score = Math.max(0, this.score - 100);
 			}
 		}
 
@@ -182,7 +183,7 @@ export class LevelScene extends AbstractScene {
 				closestRightTarget.hittable = false;
 				this.score += 100;
 			} else {
-				this.score = Math.max(0, this.score - 50);
+				this.score = Math.max(0, this.score - 100);
 			}
 		}
 	}
