@@ -1,0 +1,149 @@
+{
+  "version": "4.0.1",
+  "song": {
+    "title": "HONK",
+    "subTitle": "v4",
+    "author": "TheFatRat"
+  },
+  "audio": {
+    "songFilename": "01. TheFatRat - HONK.egg",
+    "songDuration": 95.172,
+    "audioDataFilename": "AudioData.dat",
+    "bpm": 145.0,
+    "lufs": 0.0,
+    "previewStartTime": 66.2,
+    "previewDuration": 10.0
+  },
+  "songPreviewFilename": "01. TheFatRat - HONK.egg",
+  "coverImageFilename": "folder.png",
+  "environmentNames": [
+    "InterscopeEnvironment"
+  ],
+  "colorSchemes": [],
+  "difficultyBeatmaps": [
+    {
+      "characteristic": "Lawless",
+      "difficulty": "ExpertPlus",
+      "beatmapAuthors": {
+        "mappers": [
+          "dotGet"
+        ],
+        "lighters": []
+      },
+      "environmentNameIdx": 0,
+      "beatmapColorSchemeIdx": 0,
+      "noteJumpMovementSpeed": 18.0,
+      "noteJumpStartBeatOffset": 0.0,
+      "beatmapDataFilename": "ExpertPlusLawless.dat",
+      "lightshowDataFilename": "LightsFor-ExpertPlusStandard.dat",
+      "customData": {
+        "difficultyLabel": "Or Else I Honk [VNJS Craziness]",
+        "colorLeft": {
+          "r": 0.969,
+          "g": 0.969,
+          "b": 0.278
+        },
+        "colorRight": {
+          "r": 0.984,
+          "g": 0.149,
+          "b": 0.376
+        }
+      }
+    },
+    {
+      "characteristic": "Standard",
+      "difficulty": "Normal",
+      "beatmapAuthors": {
+        "mappers": [
+          "dotGet"
+        ],
+        "lighters": []
+      },
+      "environmentNameIdx": 0,
+      "beatmapColorSchemeIdx": 0,
+      "noteJumpMovementSpeed": 18.0,
+      "noteJumpStartBeatOffset": 0.0,
+      "beatmapDataFilename": "NormalStandard.dat",
+      "lightshowDataFilename": "LightsFor-ExpertStandard.dat",
+      "customData": {
+        "difficultyLabel": "Expert",
+        "colorLeft": {
+          "r": 0.969,
+          "g": 0.969,
+          "b": 0.278
+        },
+        "colorRight": {
+          "r": 0.984,
+          "g": 0.149,
+          "b": 0.376
+        }
+      }
+    },
+    {
+      "characteristic": "Standard",
+      "difficulty": "Hard",
+      "beatmapAuthors": {
+        "mappers": [
+          "dotGet"
+        ],
+        "lighters": []
+      },
+      "environmentNameIdx": 0,
+      "beatmapColorSchemeIdx": 0,
+      "noteJumpMovementSpeed": 18.0,
+      "noteJumpStartBeatOffset": 0.0,
+      "beatmapDataFilename": "HardStandard.dat",
+      "lightshowDataFilename": "LightsFor-ExpertPlusStandard.dat",
+      "customData": {
+        "difficultyLabel": "Get Out of My Way [VNJS Craziness]",
+        "colorLeft": {
+          "r": 0.969,
+          "g": 0.969,
+          "b": 0.278
+        },
+        "colorRight": {
+          "r": 0.984,
+          "g": 0.149,
+          "b": 0.376
+        }
+      }
+    },
+    {
+      "characteristic": "Standard",
+      "difficulty": "Expert",
+      "beatmapAuthors": {
+        "mappers": [
+          "dotGet"
+        ],
+        "lighters": []
+      },
+      "environmentNameIdx": 0,
+      "beatmapColorSchemeIdx": 0,
+      "noteJumpMovementSpeed": 18.0,
+      "noteJumpStartBeatOffset": 0.0,
+      "beatmapDataFilename": "ExpertStandard.dat",
+      "lightshowDataFilename": "LightsFor-ExpertStandard.dat",
+      "customData": {
+        "difficultyLabel": "Expert+",
+        "colorLeft": {
+          "r": 0.969,
+          "g": 0.969,
+          "b": 0.278
+        },
+        "colorRight": {
+          "r": 0.984,
+          "g": 0.149,
+          "b": 0.376
+        }
+      }
+    }
+  ],
+  "customData": {
+    "editors": {
+      "lastEditedBy": "ChroMapper",
+      "ChroMapper": {
+        "version": "0.12.858"
+      }
+    }
+  }
+}
