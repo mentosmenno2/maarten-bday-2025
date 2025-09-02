@@ -79,6 +79,11 @@ class Song extends AbstractSong
 				$difficultyBeatmap,
 			);
 		}
+
+		// Order by difficultyRating low to high
+		usort($difficulties, function (Difficulty $a, Difficulty $b) {
+			return $a->getDifficultyRating() <=> $b->getDifficultyRating();
+		});
 		return $difficulties;
 	}
 }
