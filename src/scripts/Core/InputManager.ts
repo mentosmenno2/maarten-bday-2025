@@ -33,27 +33,33 @@ export class InputManager {
         this.game.getCanvas().getElement().addEventListener('mousedown', (e: MouseEvent) => {
             if (!this.mouseDown) {
                 this.mouseJustPressed = true;
+				this.touchJustPressed = false;
             }
             this.mouseDown = true;
+			this.touchActive = false;
             this.lastMousePos = {
 				x: e.clientX * window.devicePixelRatio,
 				y: e.clientY * window.devicePixelRatio
 			};
+			this.lastTouchPos = null;
         });
         this.game.getCanvas().getElement().addEventListener('mouseup', () => {
             this.mouseDown = false;
+			this.touchActive = false;
         });
         this.game.getCanvas().getElement().addEventListener('mousemove', (e: MouseEvent) => {
            this.lastMousePos = {
 				x: e.clientX * window.devicePixelRatio,
 				y: e.clientY * window.devicePixelRatio
 			};
+			this.lastTouchPos = null;
         });
 
         // Touch
         this.game.getCanvas().getElement().addEventListener('touchstart', (e: TouchEvent) => {
             if (!this.touchActive) {
                 this.touchJustPressed = true;
+				this.mouseJustPressed = false;
             }
             this.touchActive = true;
             if (e.touches.length > 0) {
@@ -61,10 +67,12 @@ export class InputManager {
                     x: e.touches[0].clientX * window.devicePixelRatio,
                     y: e.touches[0].clientY * window.devicePixelRatio
                 };
+				this.lastMousePos = null;
             }
         });
         this.game.getCanvas().getElement().addEventListener('touchend', () => {
             this.touchActive = false;
+			this.lastTouchPos = null;
         });
         this.game.getCanvas().getElement().addEventListener('touchmove', (e: TouchEvent) => {
             if (e.touches.length > 0) {
@@ -72,6 +80,7 @@ export class InputManager {
                     x: e.touches[0].clientX * window.devicePixelRatio,
                     y: e.touches[0].clientY * window.devicePixelRatio
                 };
+				this.lastMousePos = null;
             }
         });
     }
