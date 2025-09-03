@@ -53,12 +53,6 @@ export class LevelScene extends AbstractScene {
 	) {
 		super(game);
 
-		const apples = [{ seeds: false }];
-		for (let i = 0; i < apples.length; i++) {
-			let apple = apples[i];
-			apple.seeds = true;
-		}
-
 		// Load difficulty
 		const chosenDifficulty = this.song.difficulties[this.difficultyIndex];
 		if (!chosenDifficulty) {

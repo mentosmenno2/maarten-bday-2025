@@ -128,7 +128,7 @@ export class ResultScene extends AbstractScene {
 			'birthday',
 		];
 
-		let isHappyBirthday = words.some((word) =>
+		const isHappyBirthday = words.some((word) =>
 			this.song.title.toLowerCase().includes(word),
 		);
 		if (!isHappyBirthday) {

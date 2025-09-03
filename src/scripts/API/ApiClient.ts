@@ -13,6 +13,7 @@ export class ApiClient {
 		if (!response.ok) {
 			const json = await response.json();
 			if (json.error) {
+				// eslint-disable-next-line no-console
 				console.error('Error uploading file:', json.error);
 			}
 

@@ -16,7 +16,7 @@ export class InputManager {
 		this.game = game;
 	}
 
-	addEventListeners() {
+	addEventListeners(): void {
 		// Keyboard
 		this.game
 			.getCanvas()
@@ -164,13 +164,13 @@ export class InputManager {
 		);
 	}
 
-	resetJustPressed() {
+	resetJustPressed(): void {
 		this.keysJustPressed.clear();
 		this.mouseJustPressed = false;
 		this.touchJustPressed = false;
 	}
 
-	reset() {
+	reset(): void {
 		this.resetJustPressed();
 		this.keysDown.clear();
 		this.mouseDown = false;
