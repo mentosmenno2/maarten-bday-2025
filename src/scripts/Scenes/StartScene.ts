@@ -22,7 +22,6 @@ export class StartScene extends AbstractScene {
 			this.game.getInputManager().reset();
 			this.game.getSceneManager().push(new SongSelectScene(this.game));
 		}
-
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
