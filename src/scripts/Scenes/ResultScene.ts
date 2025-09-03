@@ -64,6 +64,7 @@ export class ResultScene extends AbstractScene {
 
 	public render(ctx: CanvasRenderingContext2D): void {
 		this.renderBackgroundImage(ctx);
+		this.renderHappyBirthdayText(ctx);
 		this.renderScoreText(ctx);
 		this.renderScore(ctx);
 		this.renderBackButton(ctx);
@@ -95,6 +96,37 @@ export class ResultScene extends AbstractScene {
 			ctx.fillStyle = ColorUtils.getHex(ColorEnum.Black);
 			ctx.fillRect(0, 0, width, height);
 		}
+		ctx.restore();
+	}
+
+	private renderHappyBirthdayText(ctx: CanvasRenderingContext2D): void {
+		const words = [
+			'gefeliciteerd',
+			'congratulations',
+			'verjaardag',
+			'birthday',
+		];
+
+		let isHappyBirthday = words.some(word => this.song.title.toLowerCase().includes(word));
+		if ( ! isHappyBirthday ) {
+			return;
+		}
+
+		const { width, height } = ctx.canvas;
+
+		ctx.save();
+		let titleFontSize = Math.round(height*0.08);
+		ctx.font = `${titleFontSize}px Arial`;
+		let titleWidth = ctx.measureText(this.song.title).width;
+		while (titleWidth > width * 0.92 && titleFontSize > 10) {
+			titleFontSize--;
+			ctx.font = `${titleFontSize}px Arial`;
+			titleWidth = ctx.measureText(this.song.title).width;
+		}
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'top';
+		ctx.fillText('Gefeliciteerd!', width/2, height*0.20);
 		ctx.restore();
 	}
 
