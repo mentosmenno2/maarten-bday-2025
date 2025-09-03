@@ -61,6 +61,7 @@ export class SongSelectScene extends AbstractScene {
 
 		this.fileInput = document.createElement('input');
 		this.fileInput.type = 'file';
+		this.fileInput.accept = '.osz,.zip';
 		this.fileInput.onchange = this.handleFileInputChange.bind(this);
 	}
 
