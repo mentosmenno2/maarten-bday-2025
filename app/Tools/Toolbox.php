@@ -130,8 +130,7 @@ class Toolbox
 	public function sortDifficulties(array $difficulties): array
 	{
 		usort($difficulties, fn($a, $b) =>
-			$a->getDifficultyRating() <=> $b->getDifficultyRating() ?: $a->getName() <=> $b->getName()
-		);
+			$a->getDifficultyRating() <=> $b->getDifficultyRating() ?: $a->getName() <=> $b->getName());
 		return $difficulties;
 	}
 }
