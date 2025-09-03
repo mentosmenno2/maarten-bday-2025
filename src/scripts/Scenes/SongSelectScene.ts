@@ -8,7 +8,6 @@ import { DifficultySelectScene } from './DifficultySelectScene.js';
 import { Wallpaper } from '../Core/GameObjects/Wallpaper.js';
 
 export class SongSelectScene extends AbstractScene {
-
 	private wallpaper: Wallpaper;
 
 	private selectSongButton: {
@@ -44,12 +43,12 @@ export class SongSelectScene extends AbstractScene {
 			y: 0,
 			w: 0,
 			h: 0,
-			text: "Bestand uploaden",
-			textLoading: "Laden...",
+			text: 'Bestand uploaden',
+			textLoading: 'Laden...',
 			loading: false,
 			fontSize: 0,
 			fontFamily: 'Arial',
-			padding: 10
+			padding: 10,
 		};
 
 		this.statusText = {
@@ -57,14 +56,13 @@ export class SongSelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			fontFamily: 'Arial',
-			text: "Upload OSU of BeatSaber beatmap"
+			text: 'Upload OSU of BeatSaber beatmap',
 		};
 
 		this.fileInput = document.createElement('input');
 		this.fileInput.type = 'file';
 		this.fileInput.onchange = this.handleFileInputChange.bind(this);
 	}
-
 
 	public update(deltaTime: number, ctx: CanvasRenderingContext2D): void {
 		this.wallpaper.update(deltaTime, ctx);
@@ -78,8 +76,10 @@ export class SongSelectScene extends AbstractScene {
 		this.selectSongButton.fontSize = ctx.canvas.height * 0.05;
 		ctx.font = `${this.selectSongButton.fontSize}px ${this.selectSongButton.fontFamily}`;
 		const textMetrics = ctx.measureText(this.selectSongButton.text);
-		this.selectSongButton.w = textMetrics.width + this.selectSongButton.padding * 2;
-		this.selectSongButton.h = this.selectSongButton.fontSize + this.selectSongButton.padding * 2;
+		this.selectSongButton.w =
+			textMetrics.width + this.selectSongButton.padding * 2;
+		this.selectSongButton.h =
+			this.selectSongButton.fontSize + this.selectSongButton.padding * 2;
 		this.selectSongButton.x = (ctx.canvas.width - this.selectSongButton.w) / 2;
 		this.selectSongButton.y = (ctx.canvas.height - this.selectSongButton.h) / 2;
 		ctx.restore();
@@ -91,7 +91,9 @@ export class SongSelectScene extends AbstractScene {
 		ctx.font = `${this.statusText.fontSize}px ${this.statusText.fontFamily}`;
 		const textMetrics = ctx.measureText(this.statusText.text);
 		this.statusText.x = (ctx.canvas.width - textMetrics.width) / 2;
-		this.statusText.y = (ctx.canvas.height - this.selectSongButton.h) / 2 - ( ctx.canvas.height * 0.05 );
+		this.statusText.y =
+			(ctx.canvas.height - this.selectSongButton.h) / 2 -
+			ctx.canvas.height * 0.05;
 		ctx.restore();
 	}
 
@@ -99,7 +101,12 @@ export class SongSelectScene extends AbstractScene {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
 		const clickpos = inputManager.getMouseOrFingerPosition();
-		if ( this.selectSongButton.loading || ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.selectSongButton, clickpos) ) {
+		if (
+			this.selectSongButton.loading ||
+			!clicked ||
+			!clickpos ||
+			!CollisionHelper.boxPosCollide(this.selectSongButton, clickpos)
+		) {
 			return;
 		}
 
@@ -116,14 +123,25 @@ export class SongSelectScene extends AbstractScene {
 	private renderSongSelectButton(ctx: CanvasRenderingContext2D): void {
 		ctx.save();
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
-		ctx.fillRect(this.selectSongButton.x, this.selectSongButton.y, this.selectSongButton.w, this.selectSongButton.h);
+		ctx.fillRect(
+			this.selectSongButton.x,
+			this.selectSongButton.y,
+			this.selectSongButton.w,
+			this.selectSongButton.h,
+		);
 		ctx.font = `${this.selectSongButton.fontSize}px ${this.selectSongButton.fontFamily}`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
-		const text = this.selectSongButton.loading ? this.selectSongButton.textLoading : this.selectSongButton.text;
+		const text = this.selectSongButton.loading
+			? this.selectSongButton.textLoading
+			: this.selectSongButton.text;
 		ctx.globalAlpha = this.selectSongButton.loading ? 0.5 : 1;
-		ctx.fillText(text, this.selectSongButton.x + this.selectSongButton.w / 2, this.selectSongButton.y + this.selectSongButton.h / 2);
+		ctx.fillText(
+			text,
+			this.selectSongButton.x + this.selectSongButton.w / 2,
+			this.selectSongButton.y + this.selectSongButton.h / 2,
+		);
 		ctx.restore();
 	}
 
@@ -170,6 +188,8 @@ export class SongSelectScene extends AbstractScene {
 		this.selectSongButton.loading = false;
 
 		this.game.getInputManager().reset();
-		this.game.getSceneManager().push(new DifficultySelectScene(this.game, response.song));
+		this.game
+			.getSceneManager()
+			.push(new DifficultySelectScene(this.game, response.song));
 	}
 }

@@ -1,4 +1,4 @@
-import { TargetInterface } from "./TargetInterface.js";
+import { TargetInterface } from './TargetInterface.js';
 
 export interface DifficultyInterface {
 	name: string;

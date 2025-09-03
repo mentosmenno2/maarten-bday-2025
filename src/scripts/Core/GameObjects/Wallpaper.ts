@@ -1,6 +1,6 @@
-import { Game } from "../../Game.js";
-import { Wallpaper as WallpaperAsset } from "../Assets/Images/Wallpaper.js";
-import { AbstractGameObject } from "./AbstractGameObject.js";
+import { Game } from '../../Game.js';
+import { Wallpaper as WallpaperAsset } from '../Assets/Images/Wallpaper.js';
+import { AbstractGameObject } from './AbstractGameObject.js';
 
 export class Wallpaper extends AbstractGameObject {
 	private asset: WallpaperAsset;
@@ -20,7 +20,8 @@ export class Wallpaper extends AbstractGameObject {
 	}
 
 	public update(_deltaTime: number, _ctx: CanvasRenderingContext2D): void {
-		const imageAspectRatio = this.asset.getElement().width / this.asset.getElement().height;
+		const imageAspectRatio =
+			this.asset.getElement().width / this.asset.getElement().height;
 		const canvasAspectRatio = _ctx.canvas.width / _ctx.canvas.height;
 
 		if (imageAspectRatio > canvasAspectRatio) {
@@ -35,7 +36,7 @@ export class Wallpaper extends AbstractGameObject {
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
-		if ( ! this.asset.isLoaded() ) {
+		if (!this.asset.isLoaded()) {
 			return;
 		}
 		ctx.save();

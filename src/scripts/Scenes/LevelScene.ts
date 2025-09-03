@@ -8,49 +8,52 @@ import { ResultScene } from './ResultScene.js';
 import { Duck } from '../Core/Assets/Images/Duck.js';
 
 export class LevelScene extends AbstractScene {
-
 	private audio: HTMLAudioElement;
 	private hitzoneLeft: {
-		x: number,
-		y: number,
-		w: number,
-		h: number,
-		pressedDown: boolean
-	}
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		pressedDown: boolean;
+	};
 	private hitzoneRight: {
-		x: number,
-		y: number,
-		w: number,
-		h: number,
-		pressedDown: boolean
-	}
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		pressedDown: boolean;
+	};
 	private targets: {
-		x: number,
-		y: number,
-		w: number,
-		h: number,
-		position: 'LEFT'|'RIGHT',
-		time: number,
-		hit: boolean,
-		hittable: boolean
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		position: 'LEFT' | 'RIGHT';
+		time: number;
+		hit: boolean;
+		hittable: boolean;
 	}[] = [];
 	private score: number = 0;
 	private combo: number = 0;
 	private scoreMultiplier: number = 1;
 
 	private progressBar: {
-		x: number,
-		y: number,
-		w: number,
-		h: number,
-		progress: number,
-		duck: Duck
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		progress: number;
+		duck: Duck;
 	};
 
-	constructor(game: Game, private song: SongInterface, private difficultyIndex: number) {
+	constructor(
+		game: Game,
+		private song: SongInterface,
+		private difficultyIndex: number,
+	) {
 		super(game);
 
-		const apples = [{seeds:false}];
+		const apples = [{ seeds: false }];
 		for (let i = 0; i < apples.length; i++) {
 			let apple = apples[i];
 			apple.seeds = true;
@@ -58,7 +61,7 @@ export class LevelScene extends AbstractScene {
 
 		// Load difficulty
 		const chosenDifficulty = this.song.difficulties[this.difficultyIndex];
-		if (! chosenDifficulty) {
+		if (!chosenDifficulty) {
 			return; // Defuq, hackerman
 		}
 
@@ -68,14 +71,14 @@ export class LevelScene extends AbstractScene {
 			y: 0,
 			w: 0,
 			h: 0,
-			pressedDown: false
+			pressedDown: false,
 		};
 		this.hitzoneRight = {
 			x: 0,
 			y: 0,
 			w: 0,
 			h: 0,
-			pressedDown: false
+			pressedDown: false,
 		};
 
 		// Load targets
@@ -88,7 +91,7 @@ export class LevelScene extends AbstractScene {
 				position: target.position,
 				time: target.time,
 				hit: false,
-				hittable: true
+				hittable: true,
 			});
 		}
 
@@ -110,20 +113,25 @@ export class LevelScene extends AbstractScene {
 			w: 0,
 			h: 0,
 			progress: 0,
-			duck: this.game.getAssetManager().images.duck
+			duck: this.game.getAssetManager().images.duck,
 		};
 	}
 
 	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
 		// End when audio finished
-		if ( this.audio.ended ) {
+		if (this.audio.ended) {
 			this.game.getInputManager().reset();
-			this.game.getSceneManager().replace( new ResultScene(this.game, this.song, this.score) );
+			this.game
+				.getSceneManager()
+				.replace(new ResultScene(this.game, this.song, this.score));
 			return;
 		}
 
 		// Play audio when ready
-		if ( this.audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && this.audio.paused ) {
+		if (
+			this.audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA &&
+			this.audio.paused
+		) {
 			this.audio.play();
 		}
 
@@ -150,7 +158,7 @@ export class LevelScene extends AbstractScene {
 			this.scoreMultiplier = 1;
 		}
 	}
-	private updateHitzone( ctx: CanvasRenderingContext2D ): void {
+	private updateHitzone(ctx: CanvasRenderingContext2D): void {
 		const { width, height } = ctx.canvas;
 		const hitzoneCenterY = height * 0.7;
 		const hitzoneMargin = height * 0.05;
@@ -165,11 +173,13 @@ export class LevelScene extends AbstractScene {
 		this.hitzoneRight.x = width * 0.5;
 		this.hitzoneRight.y = hitzoneCenterY - this.hitzoneRight.h / 2;
 
-		this.hitzoneLeft.pressedDown = this.getCurrentActiveUserAction(ctx).has('LEFT');
-		this.hitzoneRight.pressedDown = this.getCurrentActiveUserAction(ctx).has('RIGHT');
+		this.hitzoneLeft.pressedDown =
+			this.getCurrentActiveUserAction(ctx).has('LEFT');
+		this.hitzoneRight.pressedDown =
+			this.getCurrentActiveUserAction(ctx).has('RIGHT');
 	}
 
-	private updateTargets( ctx: CanvasRenderingContext2D ): void {
+	private updateTargets(ctx: CanvasRenderingContext2D): void {
 		const { width, height } = ctx.canvas;
 		const hitzoneCenterY = this.hitzoneLeft.y + this.hitzoneLeft.h / 2;
 		const audioCurrentTimeInMilliseconds = this.audio.currentTime * 1000;
@@ -180,18 +190,21 @@ export class LevelScene extends AbstractScene {
 			const target = this.targets[i];
 			target.h = height * 0.02;
 			target.w = this.hitzoneLeft.w - width * 0.1;
-			target.x = target.position === 'LEFT' ? ( ( this.hitzoneLeft.x + this.hitzoneLeft.w / 2 ) - target.w / 2 ) : ( ( this.hitzoneRight.x + this.hitzoneRight.w / 2 ) - target.w / 2 );
+			target.x =
+				target.position === 'LEFT'
+					? this.hitzoneLeft.x + this.hitzoneLeft.w / 2 - target.w / 2
+					: this.hitzoneRight.x + this.hitzoneRight.w / 2 - target.w / 2;
 			const startY = 0 - target.h / 2;
 			const endY = hitzoneCenterY - target.h / 2;
 			const timeUntilTarget = target.time - audioCurrentTimeInMilliseconds;
-			const progress = timeUntilTarget / appearWindowMillis * -1;
-			target.y = startY + ( hitzoneCenterY ) + (endY - startY) * progress;
+			const progress = (timeUntilTarget / appearWindowMillis) * -1;
+			target.y = startY + hitzoneCenterY + (endY - startY) * progress;
 
 			// If target passes hitzone, treat as missed
 			if (
-				!target.hit
-				&& target.hittable
-				&& target.y > this.hitzoneLeft.y + this.hitzoneLeft.h
+				!target.hit &&
+				target.hittable &&
+				target.y > this.hitzoneLeft.y + this.hitzoneLeft.h
 			) {
 				target.hittable = false;
 				this.score = Math.max(0, this.score - 100);
@@ -200,11 +213,21 @@ export class LevelScene extends AbstractScene {
 		}
 
 		// Check for hits on left side
-		const closestLeftTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('LEFT');
-		const closestLeftTarget = closestLeftTargetIndex !== null ? this.targets[closestLeftTargetIndex] : null;
-		if ( closestLeftTarget && this.getCurrentJustPressedUserAction(ctx).has('LEFT') ) {
-			const leftTargetHit = CollisionHelper.boxBoxCollide(closestLeftTarget, this.hitzoneLeft);
-			if ( leftTargetHit ) {
+		const closestLeftTargetIndex =
+			this.getClosestTargetIndexToCurrentAudioTime('LEFT');
+		const closestLeftTarget =
+			closestLeftTargetIndex !== null
+				? this.targets[closestLeftTargetIndex]
+				: null;
+		if (
+			closestLeftTarget &&
+			this.getCurrentJustPressedUserAction(ctx).has('LEFT')
+		) {
+			const leftTargetHit = CollisionHelper.boxBoxCollide(
+				closestLeftTarget,
+				this.hitzoneLeft,
+			);
+			if (leftTargetHit) {
 				closestLeftTarget.hit = true;
 				closestLeftTarget.hittable = false;
 				this.score += 100 * this.scoreMultiplier;
@@ -215,13 +238,20 @@ export class LevelScene extends AbstractScene {
 		}
 
 		// Check for hits on right side
-		const closestRightTargetIndex = this.getClosestTargetIndexToCurrentAudioTime('RIGHT');
-		const closestRightTarget = closestRightTargetIndex !== null ? this.targets[closestRightTargetIndex] : null;
+		const closestRightTargetIndex =
+			this.getClosestTargetIndexToCurrentAudioTime('RIGHT');
+		const closestRightTarget =
+			closestRightTargetIndex !== null
+				? this.targets[closestRightTargetIndex]
+				: null;
 		if (
-			closestRightTarget
-			&& this.getCurrentJustPressedUserAction(ctx).has('RIGHT')
+			closestRightTarget &&
+			this.getCurrentJustPressedUserAction(ctx).has('RIGHT')
 		) {
-			const rightTargetHit = CollisionHelper.boxBoxCollide(closestRightTarget, this.hitzoneRight);
+			const rightTargetHit = CollisionHelper.boxBoxCollide(
+				closestRightTarget,
+				this.hitzoneRight,
+			);
 			if (rightTargetHit) {
 				closestRightTarget.hit = true;
 				closestRightTarget.hittable = false;
@@ -243,7 +273,9 @@ export class LevelScene extends AbstractScene {
 		this.progressBar.progress = this.audio.currentTime / this.audio.duration;
 	}
 
-	private getClosestTargetIndexToCurrentAudioTime(position: 'LEFT' | 'RIGHT'): number | null {
+	private getClosestTargetIndexToCurrentAudioTime(
+		position: 'LEFT' | 'RIGHT',
+	): number | null {
 		const audioCurrentTimeInMilliseconds = this.audio.currentTime * 1000;
 
 		let closestTargetIndex = null;
@@ -264,19 +296,31 @@ export class LevelScene extends AbstractScene {
 		return closestTargetIndex;
 	}
 
-	private getCurrentJustPressedUserAction( ctx: CanvasRenderingContext2D ): Set<'LEFT'|'RIGHT'> {
+	private getCurrentJustPressedUserAction(
+		ctx: CanvasRenderingContext2D,
+	): Set<'LEFT' | 'RIGHT'> {
 		const inputManager = this.game.getInputManager();
 		const { width, height } = ctx.canvas;
 
-		const inputs = new Set<'LEFT'|'RIGHT'>();
+		const inputs = new Set<'LEFT' | 'RIGHT'>();
 
 		// Check touch or click
 		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
-		if ( inputManager.isMouseOrFingerJustPressed() && clickOrFingerPos ) {
-			if ( CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
+		if (inputManager.isMouseOrFingerJustPressed() && clickOrFingerPos) {
+			if (
+				CollisionHelper.boxPosCollide(
+					{ x: 0, y: 0, w: width / 2, h: height },
+					clickOrFingerPos,
+				)
+			) {
 				inputs.add('LEFT');
 			}
-			if ( CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos) ) {
+			if (
+				CollisionHelper.boxPosCollide(
+					{ x: width / 2, y: 0, w: width / 2, h: height },
+					clickOrFingerPos,
+				)
+			) {
 				inputs.add('RIGHT');
 			}
 		}
@@ -300,7 +344,9 @@ export class LevelScene extends AbstractScene {
 		return inputs;
 	}
 
-	private getCurrentActiveUserAction(ctx: CanvasRenderingContext2D): Set<'LEFT' | 'RIGHT'> {
+	private getCurrentActiveUserAction(
+		ctx: CanvasRenderingContext2D,
+	): Set<'LEFT' | 'RIGHT'> {
 		const inputManager = this.game.getInputManager();
 		const { width, height } = ctx.canvas;
 
@@ -309,10 +355,20 @@ export class LevelScene extends AbstractScene {
 		// Check touch or click
 		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
 		if (inputManager.isMouseOrFingerDown() && clickOrFingerPos) {
-			if (CollisionHelper.boxPosCollide({ x: 0, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
+			if (
+				CollisionHelper.boxPosCollide(
+					{ x: 0, y: 0, w: width / 2, h: height },
+					clickOrFingerPos,
+				)
+			) {
 				inputs.add('LEFT');
 			}
-			if (CollisionHelper.boxPosCollide({ x: width / 2, y: 0, w: width / 2, h: height }, clickOrFingerPos)) {
+			if (
+				CollisionHelper.boxPosCollide(
+					{ x: width / 2, y: 0, w: width / 2, h: height },
+					clickOrFingerPos,
+				)
+			) {
 				inputs.add('RIGHT');
 			}
 		}
@@ -349,16 +405,28 @@ export class LevelScene extends AbstractScene {
 		ctx.save();
 		ctx.globalAlpha = this.hitzoneLeft.pressedDown ? 1 : 0.5;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.Pink);
-		ctx.fillRect(this.hitzoneLeft.x, this.hitzoneLeft.y, this.hitzoneLeft.w, this.hitzoneLeft.h);
+		ctx.fillRect(
+			this.hitzoneLeft.x,
+			this.hitzoneLeft.y,
+			this.hitzoneLeft.w,
+			this.hitzoneLeft.h,
+		);
 		ctx.globalAlpha = this.hitzoneRight.pressedDown ? 1 : 0.5;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
-		ctx.fillRect(this.hitzoneRight.x, this.hitzoneRight.y, this.hitzoneRight.w, this.hitzoneRight.h);
+		ctx.fillRect(
+			this.hitzoneRight.x,
+			this.hitzoneRight.y,
+			this.hitzoneRight.w,
+			this.hitzoneRight.h,
+		);
 		ctx.restore();
 
 		// Draw targets
 		for (const target of this.targets) {
 			ctx.save();
-			ctx.fillStyle = ColorUtils.getHex(target.hit ? ColorEnum.Green : ColorEnum.White);
+			ctx.fillStyle = ColorUtils.getHex(
+				target.hit ? ColorEnum.Green : ColorEnum.White,
+			);
 			ctx.globalAlpha = target.hittable ? 1 : 0.5;
 			ctx.fillRect(target.x, target.y, target.w, target.h);
 			ctx.restore();
@@ -366,7 +434,7 @@ export class LevelScene extends AbstractScene {
 
 		// Draw score
 		ctx.save();
-		ctx.font = `${Math.round(height*0.045)}px Arial`;
+		ctx.font = `${Math.round(height * 0.045)}px Arial`;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
@@ -375,26 +443,49 @@ export class LevelScene extends AbstractScene {
 
 		// Draw multiplier in right corner
 		ctx.save();
-		ctx.font = `${Math.round(height*0.045)}px Arial`;
+		ctx.font = `${Math.round(height * 0.045)}px Arial`;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
-		ctx.fillText(`Bonus: ${this.scoreMultiplier}x`, 24, 18 + Math.round(height * 0.045));
+		ctx.fillText(
+			`Bonus: ${this.scoreMultiplier}x`,
+			24,
+			18 + Math.round(height * 0.045),
+		);
 		ctx.restore();
 
 		// Render progress bar
 		ctx.save();
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
-		ctx.fillRect(this.progressBar.x, this.progressBar.y, this.progressBar.w, this.progressBar.h);
+		ctx.fillRect(
+			this.progressBar.x,
+			this.progressBar.y,
+			this.progressBar.w,
+			this.progressBar.h,
+		);
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
-		ctx.fillRect(this.progressBar.x, this.progressBar.y, this.progressBar.w * this.progressBar.progress, this.progressBar.h);
+		ctx.fillRect(
+			this.progressBar.x,
+			this.progressBar.y,
+			this.progressBar.w * this.progressBar.progress,
+			this.progressBar.h,
+		);
 		ctx.restore();
-		if ( this.progressBar.duck.isLoaded() ) {
+		if (this.progressBar.duck.isLoaded()) {
 			ctx.save();
-			const duckX = this.progressBar.x + (this.progressBar.w * this.progressBar.progress) - 12;
-			const duckY = this.progressBar.y + (this.progressBar.h / 2) - 12;
+			const duckX =
+				this.progressBar.x +
+				this.progressBar.w * this.progressBar.progress -
+				12;
+			const duckY = this.progressBar.y + this.progressBar.h / 2 - 12;
 			ctx.scale(-1, 1);
-			ctx.drawImage(this.progressBar.duck.getElement(), -duckX - 24, duckY, 24, 24);
+			ctx.drawImage(
+				this.progressBar.duck.getElement(),
+				-duckX - 24,
+				duckY,
+				24,
+				24,
+			);
 			ctx.restore();
 		}
 	}

@@ -1,4 +1,3 @@
-
 export class Duck {
 	private element: HTMLImageElement;
 

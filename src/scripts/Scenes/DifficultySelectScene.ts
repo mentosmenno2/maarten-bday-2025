@@ -7,14 +7,13 @@ import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 import { LevelScene } from './LevelScene.js';
 
 export class DifficultySelectScene extends AbstractScene {
-
-	private backgroundImage: HTMLImageElement|null;
+	private backgroundImage: HTMLImageElement | null;
 	private coverImage: {
 		x: number;
 		y: number;
 		w: number;
 		h: number;
-		image: HTMLImageElement|null;
+		image: HTMLImageElement | null;
 	};
 
 	private songTitle: {
@@ -37,7 +36,7 @@ export class DifficultySelectScene extends AbstractScene {
 		x: number;
 		y: number;
 		fontSize: number;
-		text: string|null;
+		text: string | null;
 		maxWidth: number;
 	};
 
@@ -50,12 +49,20 @@ export class DifficultySelectScene extends AbstractScene {
 	};
 
 	private difficultyButtons: Array<{
-		x: number; y: number; w: number; h: number; difficultyIndex: number, text: string
+		x: number;
+		y: number;
+		w: number;
+		h: number;
+		difficultyIndex: number;
+		text: string;
 	}>;
 
 	private previewAudio: HTMLAudioElement;
 
-	constructor(game: Game, private song: SongInterface) {
+	constructor(
+		game: Game,
+		private song: SongInterface,
+	) {
 		super(game);
 
 		this.songTitle = {
@@ -63,7 +70,7 @@ export class DifficultySelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			text: this.song.title,
-			maxWidth: 0
+			maxWidth: 0,
 		};
 
 		this.songArtist = {
@@ -71,7 +78,7 @@ export class DifficultySelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			text: this.song.artist,
-			maxWidth: 0
+			maxWidth: 0,
 		};
 
 		this.mapper = {
@@ -79,7 +86,7 @@ export class DifficultySelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			text: `Maker: ${this.song.builder || 'Onbekend'}`,
-			maxWidth: 0
+			maxWidth: 0,
 		};
 
 		this.chooseText = {
@@ -87,22 +94,27 @@ export class DifficultySelectScene extends AbstractScene {
 			y: 0,
 			fontSize: 0,
 			text: 'Kies moeilijkheidsgraad',
-			maxWidth: 0
+			maxWidth: 0,
 		};
 
 		this.difficultyButtons = [];
-		for (let difficultyIndex = 0; difficultyIndex < this.song.difficulties.length; difficultyIndex++) {
+		for (
+			let difficultyIndex = 0;
+			difficultyIndex < this.song.difficulties.length;
+			difficultyIndex++
+		) {
 			this.difficultyButtons.push({
 				x: 0,
 				y: 0,
 				w: 0,
 				h: 0,
 				difficultyIndex: difficultyIndex,
-				text: this.song.difficulties[difficultyIndex].name
+				text: this.song.difficulties[difficultyIndex].name,
 			});
 		}
 
-		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
+		const backgroundImageBase64 =
+			this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		this.backgroundImage = null;
 		if (backgroundImageBase64) {
 			this.backgroundImage = new Image();
@@ -114,9 +126,10 @@ export class DifficultySelectScene extends AbstractScene {
 			y: 0,
 			w: 0,
 			h: 0,
-			image: null
+			image: null,
 		};
-		const coverImageBase64 = this.song.coverImageBase64 || this.song.backgroundImageBase64;
+		const coverImageBase64 =
+			this.song.coverImageBase64 || this.song.backgroundImageBase64;
 		if (coverImageBase64) {
 			this.coverImage.image = new Image();
 			this.coverImage.image.src = coverImageBase64;
@@ -162,7 +175,7 @@ export class DifficultySelectScene extends AbstractScene {
 		this.songTitle.x = this.coverImage.x + this.coverImage.w + 20;
 		this.songTitle.y = this.coverImage.y;
 		this.songTitle.fontSize = this.coverImage.h * 0.3;
-		this.songTitle.maxWidth = Math.round( width - this.songTitle.x - 20 );
+		this.songTitle.maxWidth = Math.round(width - this.songTitle.x - 20);
 	}
 
 	private updateSongArtist(): void {
@@ -171,7 +184,7 @@ export class DifficultySelectScene extends AbstractScene {
 		this.songArtist.x = this.coverImage.x + this.coverImage.w + 20;
 		this.songArtist.y = this.coverImage.y + this.coverImage.h * 0.35;
 		this.songArtist.fontSize = this.coverImage.h * 0.3;
-		this.songArtist.maxWidth = Math.round( width - this.songArtist.x - 20 );
+		this.songArtist.maxWidth = Math.round(width - this.songArtist.x - 20);
 	}
 
 	private updateMapper(): void {
@@ -180,7 +193,7 @@ export class DifficultySelectScene extends AbstractScene {
 		this.mapper.x = this.coverImage.x + this.coverImage.w + 20;
 		this.mapper.y = this.coverImage.y + this.coverImage.h * 0.7;
 		this.mapper.fontSize = this.coverImage.h * 0.25;
-		this.mapper.maxWidth = Math.round( width - this.mapper.x - 20 );
+		this.mapper.maxWidth = Math.round(width - this.mapper.x - 20);
 	}
 
 	private updateChooseText(): void {
@@ -189,7 +202,7 @@ export class DifficultySelectScene extends AbstractScene {
 		this.chooseText.x = width / 2;
 		this.chooseText.y = this.coverImage.y + this.coverImage.h + 20;
 		this.chooseText.fontSize = Math.min(width, height) * 0.05;
-		this.chooseText.maxWidth = Math.round( width - 40 );
+		this.chooseText.maxWidth = Math.round(width - 40);
 	}
 
 	private updateDifficultyButtons(): void {
@@ -198,7 +211,7 @@ export class DifficultySelectScene extends AbstractScene {
 		const topY = this.chooseText.y + this.chooseText.fontSize + 20;
 		this.difficultyButtons.forEach((button, index) => {
 			button.x = 20;
-			button.y = topY + ( index * ( height * 0.05 + 20 ) );
+			button.y = topY + index * (height * 0.05 + 20);
 			button.w = width - 40;
 			button.h = height * 0.05;
 		});
@@ -208,20 +221,26 @@ export class DifficultySelectScene extends AbstractScene {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
 		const clickpos = inputManager.getMouseOrFingerPosition();
-		if ( ! clicked || ! clickpos ) {
+		if (!clicked || !clickpos) {
 			return;
 		}
 
-		const collidedButton = this.difficultyButtons.find(button => CollisionHelper.boxPosCollide(button, clickpos));
-		if ( ! collidedButton ) {
+		const collidedButton = this.difficultyButtons.find((button) =>
+			CollisionHelper.boxPosCollide(button, clickpos),
+		);
+		if (!collidedButton) {
 			return;
 		}
 
-		if ( ! this.previewAudio.paused ) {
+		if (!this.previewAudio.paused) {
 			this.previewAudio.pause();
 		}
 		this.game.getInputManager().reset();
-		this.game.getSceneManager().push(new LevelScene(this.game, this.song, collidedButton.difficultyIndex));
+		this.game
+			.getSceneManager()
+			.push(
+				new LevelScene(this.game, this.song, collidedButton.difficultyIndex),
+			);
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
@@ -241,16 +260,29 @@ export class DifficultySelectScene extends AbstractScene {
 		if (this.backgroundImage) {
 			ctx.filter = 'blur(10px)';
 			ctx.globalAlpha = 1;
-			const imageAspectRatio = this.backgroundImage.width / this.backgroundImage.height;
+			const imageAspectRatio =
+				this.backgroundImage.width / this.backgroundImage.height;
 			const canvasAspectRatio = width / height;
 			if (imageAspectRatio > canvasAspectRatio) {
 				const scaledHeight = height;
 				const scaledWidth = scaledHeight * imageAspectRatio;
-				ctx.drawImage(this.backgroundImage, (width - scaledWidth) / 2, 0, scaledWidth, scaledHeight);
+				ctx.drawImage(
+					this.backgroundImage,
+					(width - scaledWidth) / 2,
+					0,
+					scaledWidth,
+					scaledHeight,
+				);
 			} else {
 				const scaledWidth = width;
 				const scaledHeight = scaledWidth / imageAspectRatio;
-				ctx.drawImage(this.backgroundImage, 0, (height - scaledHeight) / 2, scaledWidth, scaledHeight);
+				ctx.drawImage(
+					this.backgroundImage,
+					0,
+					(height - scaledHeight) / 2,
+					scaledWidth,
+					scaledHeight,
+				);
 			}
 			ctx.filter = 'none';
 			ctx.globalAlpha = 0.7;
@@ -264,7 +296,7 @@ export class DifficultySelectScene extends AbstractScene {
 	}
 
 	private renderCoverImage(ctx: CanvasRenderingContext2D): void {
-		if (! this.coverImage.image) {
+		if (!this.coverImage.image) {
 			return;
 		}
 
@@ -275,21 +307,34 @@ export class DifficultySelectScene extends AbstractScene {
 			this.coverImage.y + this.coverImage.h / 2,
 			this.coverImage.h / 2,
 			0,
-			Math.PI * 2
+			Math.PI * 2,
 		);
 		ctx.closePath();
 		ctx.clip();
 
-		const imageAspectRatio = this.coverImage.image.width / this.coverImage.image.height;
+		const imageAspectRatio =
+			this.coverImage.image.width / this.coverImage.image.height;
 		const artAspectRatio = this.coverImage.w / this.coverImage.h;
 		if (imageAspectRatio > artAspectRatio) {
 			const scaledHeight = this.coverImage.h;
 			const scaledWidth = scaledHeight * imageAspectRatio;
-			ctx.drawImage(this.coverImage.image, this.coverImage.x + (this.coverImage.w - scaledWidth) / 2, this.coverImage.y, scaledWidth, scaledHeight);
+			ctx.drawImage(
+				this.coverImage.image,
+				this.coverImage.x + (this.coverImage.w - scaledWidth) / 2,
+				this.coverImage.y,
+				scaledWidth,
+				scaledHeight,
+			);
 		} else {
 			const scaledWidth = this.coverImage.w;
 			const scaledHeight = scaledWidth / imageAspectRatio;
-			ctx.drawImage(this.coverImage.image, this.coverImage.x, this.coverImage.y + (this.coverImage.h - scaledHeight) / 2, scaledWidth, scaledHeight);
+			ctx.drawImage(
+				this.coverImage.image,
+				this.coverImage.x,
+				this.coverImage.y + (this.coverImage.h - scaledHeight) / 2,
+				scaledWidth,
+				scaledHeight,
+			);
 		}
 		ctx.restore();
 	}
@@ -303,8 +348,18 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
 		ctx.lineWidth = 5;
 
-		ctx.strokeText(this.songTitle.text, this.songTitle.x, this.songTitle.y, this.songTitle.maxWidth);
-		ctx.fillText(this.songTitle.text, this.songTitle.x, this.songTitle.y, this.songTitle.maxWidth);
+		ctx.strokeText(
+			this.songTitle.text,
+			this.songTitle.x,
+			this.songTitle.y,
+			this.songTitle.maxWidth,
+		);
+		ctx.fillText(
+			this.songTitle.text,
+			this.songTitle.x,
+			this.songTitle.y,
+			this.songTitle.maxWidth,
+		);
 		ctx.restore();
 	}
 
@@ -317,13 +372,23 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
 		ctx.lineWidth = 5;
 
-		ctx.strokeText(this.songArtist.text, this.songArtist.x, this.songArtist.y, this.songArtist.maxWidth);
-		ctx.fillText(this.songArtist.text, this.songArtist.x, this.songArtist.y, this.songArtist.maxWidth);
+		ctx.strokeText(
+			this.songArtist.text,
+			this.songArtist.x,
+			this.songArtist.y,
+			this.songArtist.maxWidth,
+		);
+		ctx.fillText(
+			this.songArtist.text,
+			this.songArtist.x,
+			this.songArtist.y,
+			this.songArtist.maxWidth,
+		);
 		ctx.restore();
 	}
 
 	private renderMapper(ctx: CanvasRenderingContext2D): void {
-		if (! this.mapper.text) {
+		if (!this.mapper.text) {
 			return;
 		}
 
@@ -335,8 +400,18 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
 		ctx.lineWidth = 5;
 
-		ctx.strokeText(this.mapper.text, this.mapper.x, this.mapper.y, this.mapper.maxWidth);
-		ctx.fillText(this.mapper.text, this.mapper.x, this.mapper.y, this.mapper.maxWidth);
+		ctx.strokeText(
+			this.mapper.text,
+			this.mapper.x,
+			this.mapper.y,
+			this.mapper.maxWidth,
+		);
+		ctx.fillText(
+			this.mapper.text,
+			this.mapper.x,
+			this.mapper.y,
+			this.mapper.maxWidth,
+		);
 		ctx.restore();
 	}
 
@@ -349,8 +424,18 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.DarkBlue);
 		ctx.lineWidth = 5;
 
-		ctx.strokeText(this.chooseText.text, this.chooseText.x, this.chooseText.y, this.chooseText.maxWidth);
-		ctx.fillText(this.chooseText.text, this.chooseText.x, this.chooseText.y, this.chooseText.maxWidth);
+		ctx.strokeText(
+			this.chooseText.text,
+			this.chooseText.x,
+			this.chooseText.y,
+			this.chooseText.maxWidth,
+		);
+		ctx.fillText(
+			this.chooseText.text,
+			this.chooseText.x,
+			this.chooseText.y,
+			this.chooseText.maxWidth,
+		);
 		ctx.restore();
 	}
 
@@ -363,14 +448,25 @@ export class DifficultySelectScene extends AbstractScene {
 			ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
 			ctx.lineWidth = 2;
 			ctx.beginPath();
-			ctx.roundRect(difficultyButton.x, difficultyButton.y, difficultyButton.w, difficultyButton.h, difficultyButton.h * 0.3);
+			ctx.roundRect(
+				difficultyButton.x,
+				difficultyButton.y,
+				difficultyButton.w,
+				difficultyButton.h,
+				difficultyButton.h * 0.3,
+			);
 			ctx.fill();
 			ctx.stroke();
 			ctx.font = `${Math.round(difficultyButton.h * 0.45)}px Arial`;
 			ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'middle';
-			ctx.fillText(difficultyButton.text, difficultyButton.x + difficultyButton.w / 2, difficultyButton.y + difficultyButton.h / 2, difficultyButton.w);
+			ctx.fillText(
+				difficultyButton.text,
+				difficultyButton.x + difficultyButton.w / 2,
+				difficultyButton.y + difficultyButton.h / 2,
+				difficultyButton.w,
+			);
 		}
 		ctx.restore();
 	}

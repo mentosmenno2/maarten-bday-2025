@@ -22,7 +22,7 @@ jobs:
           php-version: 8.3
           extensions: mbstring, dom, simplexml
       - name: Install NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: 'maarten-bday-2025/.nvmrc'
       - name: Debugging

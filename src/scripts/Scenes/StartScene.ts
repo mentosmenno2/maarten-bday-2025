@@ -6,7 +6,6 @@ import { AbstractScene } from './AbstractScene.js';
 import { SongSelectScene } from './SongSelectScene.js';
 
 export class StartScene extends AbstractScene {
-
 	private wallpaper: Wallpaper;
 
 	constructor(game: Game) {
@@ -18,7 +17,7 @@ export class StartScene extends AbstractScene {
 	public update(deltaTime: number, ctx: CanvasRenderingContext2D): void {
 		this.wallpaper.update(deltaTime, ctx);
 
-		if ( this.game.getInputManager().isAnyInput() ) {
+		if (this.game.getInputManager().isAnyInput()) {
 			this.game.getInputManager().reset();
 			this.game.getSceneManager().push(new SongSelectScene(this.game));
 		}
@@ -39,8 +38,16 @@ export class StartScene extends AbstractScene {
 		ctx.shadowOffsetY = 0;
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.Black);
 		ctx.lineWidth = 10;
-		ctx.strokeText('Klik om te starten', ctx.canvas.width / 2, ctx.canvas.height / 2);
-		ctx.fillText('Klik om te starten', ctx.canvas.width / 2, ctx.canvas.height / 2);
+		ctx.strokeText(
+			'Klik om te starten',
+			ctx.canvas.width / 2,
+			ctx.canvas.height / 2,
+		);
+		ctx.fillText(
+			'Klik om te starten',
+			ctx.canvas.width / 2,
+			ctx.canvas.height / 2,
+		);
 		ctx.restore();
 	}
 }

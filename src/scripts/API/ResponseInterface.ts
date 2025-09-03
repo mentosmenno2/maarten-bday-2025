@@ -1,3 +1,3 @@
 export interface ResponseInterface {
-	success: boolean
+	success: boolean;
 }

@@ -1,4 +1,4 @@
-import { Game } from "../../Game.js";
+import { Game } from '../../Game.js';
 
 export abstract class AbstractGameObject {
 	protected game: Game;
@@ -7,7 +7,10 @@ export abstract class AbstractGameObject {
 		this.game = game;
 	}
 
-	public abstract update(deltaTime: number, ctx: CanvasRenderingContext2D): void;
+	public abstract update(
+		deltaTime: number,
+		ctx: CanvasRenderingContext2D,
+	): void;
 
 	public abstract render(ctx: CanvasRenderingContext2D): void;
 }

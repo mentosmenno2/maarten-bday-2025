@@ -7,8 +7,7 @@ import { CollisionHelper } from '../Core/Helpers/CollisionHelper.js';
 import { SongSelectScene } from './SongSelectScene.js';
 
 export class ResultScene extends AbstractScene {
-
-	private backgroundImage: HTMLImageElement|null;
+	private backgroundImage: HTMLImageElement | null;
 	private backButton: {
 		x: number;
 		y: number;
@@ -16,7 +15,11 @@ export class ResultScene extends AbstractScene {
 		h: number;
 	};
 
-	constructor(game: Game, private song: SongInterface, private score: number) {
+	constructor(
+		game: Game,
+		private song: SongInterface,
+		private score: number,
+	) {
 		super(game);
 
 		this.backButton = {
@@ -26,7 +29,8 @@ export class ResultScene extends AbstractScene {
 			h: 0,
 		};
 
-		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
+		const backgroundImageBase64 =
+			this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		this.backgroundImage = null;
 		if (backgroundImageBase64) {
 			this.backgroundImage = new Image();
@@ -54,7 +58,11 @@ export class ResultScene extends AbstractScene {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
 		const clickpos = inputManager.getMouseOrFingerPosition();
-		if ( ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.backButton, clickpos) ) {
+		if (
+			!clicked ||
+			!clickpos ||
+			!CollisionHelper.boxPosCollide(this.backButton, clickpos)
+		) {
 			return;
 		}
 
@@ -77,16 +85,29 @@ export class ResultScene extends AbstractScene {
 		if (this.backgroundImage) {
 			ctx.filter = 'blur(10px)';
 			ctx.globalAlpha = 1;
-			const imageAspectRatio = this.backgroundImage.width / this.backgroundImage.height;
+			const imageAspectRatio =
+				this.backgroundImage.width / this.backgroundImage.height;
 			const canvasAspectRatio = width / height;
 			if (imageAspectRatio > canvasAspectRatio) {
 				const scaledHeight = height;
 				const scaledWidth = scaledHeight * imageAspectRatio;
-				ctx.drawImage(this.backgroundImage, (width - scaledWidth) / 2, 0, scaledWidth, scaledHeight);
+				ctx.drawImage(
+					this.backgroundImage,
+					(width - scaledWidth) / 2,
+					0,
+					scaledWidth,
+					scaledHeight,
+				);
 			} else {
 				const scaledWidth = width;
 				const scaledHeight = scaledWidth / imageAspectRatio;
-				ctx.drawImage(this.backgroundImage, 0, (height - scaledHeight) / 2, scaledWidth, scaledHeight);
+				ctx.drawImage(
+					this.backgroundImage,
+					0,
+					(height - scaledHeight) / 2,
+					scaledWidth,
+					scaledHeight,
+				);
 			}
 			ctx.filter = 'none';
 			ctx.globalAlpha = 0.7;
@@ -107,15 +128,17 @@ export class ResultScene extends AbstractScene {
 			'birthday',
 		];
 
-		let isHappyBirthday = words.some(word => this.song.title.toLowerCase().includes(word));
-		if ( ! isHappyBirthday ) {
+		let isHappyBirthday = words.some((word) =>
+			this.song.title.toLowerCase().includes(word),
+		);
+		if (!isHappyBirthday) {
 			return;
 		}
 
 		const { width, height } = ctx.canvas;
 
 		ctx.save();
-		let titleFontSize = Math.round(height*0.08);
+		let titleFontSize = Math.round(height * 0.08);
 		ctx.font = `${titleFontSize}px Arial`;
 		let titleWidth = ctx.measureText(this.song.title).width;
 		while (titleWidth > width * 0.92 && titleFontSize > 10) {
@@ -126,7 +149,7 @@ export class ResultScene extends AbstractScene {
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
-		ctx.fillText('Gefeliciteerd!', width/2, height*0.20);
+		ctx.fillText('Gefeliciteerd!', width / 2, height * 0.2);
 		ctx.restore();
 	}
 
@@ -134,7 +157,7 @@ export class ResultScene extends AbstractScene {
 		const { width, height } = ctx.canvas;
 
 		ctx.save();
-		let titleFontSize = Math.round(height*0.06);
+		let titleFontSize = Math.round(height * 0.06);
 		ctx.font = `${titleFontSize}px Arial`;
 		let titleWidth = ctx.measureText(this.song.title).width;
 		while (titleWidth > width * 0.92 && titleFontSize > 10) {
@@ -142,10 +165,10 @@ export class ResultScene extends AbstractScene {
 			ctx.font = `${titleFontSize}px Arial`;
 			titleWidth = ctx.measureText(this.song.title).width;
 		}
-	ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
-		ctx.fillText('Score', width/2, height*0.42);
+		ctx.fillText('Score', width / 2, height * 0.42);
 		ctx.restore();
 	}
 
@@ -153,7 +176,7 @@ export class ResultScene extends AbstractScene {
 		const { width, height } = ctx.canvas;
 
 		ctx.save();
-		let artistFontSize = Math.round(height*0.04);
+		let artistFontSize = Math.round(height * 0.04);
 		ctx.font = `${artistFontSize}px Arial`;
 		let artistWidth = ctx.measureText(this.song.artist).width;
 		while (artistWidth > width * 0.92 && artistFontSize > 8) {
@@ -164,7 +187,7 @@ export class ResultScene extends AbstractScene {
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
-		ctx.fillText(this.score.toFixed(0), width/2, height*0.50);
+		ctx.fillText(this.score.toFixed(0), width / 2, height * 0.5);
 		ctx.restore();
 	}
 
@@ -174,14 +197,24 @@ export class ResultScene extends AbstractScene {
 		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.lineWidth = 2;
 		ctx.beginPath();
-		ctx.roundRect(this.backButton.x, this.backButton.y, this.backButton.w, this.backButton.h, this.backButton.h * 0.3);
+		ctx.roundRect(
+			this.backButton.x,
+			this.backButton.y,
+			this.backButton.w,
+			this.backButton.h,
+			this.backButton.h * 0.3,
+		);
 		ctx.fill();
 		ctx.stroke();
 		ctx.font = `${Math.round(this.backButton.h * 0.45)}px Arial`;
 		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
-		ctx.fillText('Nieuw nummer kiezen', this.backButton.x + this.backButton.w / 2, this.backButton.y + this.backButton.h / 2);
+		ctx.fillText(
+			'Nieuw nummer kiezen',
+			this.backButton.x + this.backButton.w / 2,
+			this.backButton.y + this.backButton.h / 2,
+		);
 		ctx.restore();
 	}
 }

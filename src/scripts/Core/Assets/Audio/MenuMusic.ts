@@ -1,4 +1,3 @@
-
 export class MenuMusic {
 	private element: HTMLAudioElement;
 

@@ -1,4 +1,4 @@
 export interface TargetInterface {
-	position: 'LEFT'|'RIGHT';
+	position: 'LEFT' | 'RIGHT';
 	time: number;
 }
