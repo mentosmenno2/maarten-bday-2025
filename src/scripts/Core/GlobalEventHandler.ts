@@ -13,5 +13,6 @@ export class GlobalEventHandler {
 
 	private onResize(): void {
 		this.game.getCanvas().updateSize();
+		this.game.getPreRenderCanvas().updateSize();
 	}
 }

@@ -148,18 +148,18 @@ export class DifficultySelectScene extends AbstractScene {
 		this.previewAudio.load();
 	}
 
-	public update(): void {
-		this.updateCoverImage();
-		this.updateSongTitle();
-		this.updateSongArtist();
-		this.updateMapper();
-		this.updateChooseText();
-		this.updateDifficultyButtons();
+	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
+		this.updateCoverImage(ctx);
+		this.updateSongTitle(ctx);
+		this.updateSongArtist(ctx);
+		this.updateMapper(ctx);
+		this.updateChooseText(ctx);
+		this.updateDifficultyButtons(ctx);
 		this.handleDifficultyButtonsClick();
 	}
 
-	private updateCoverImage(): void {
-		const { width, height } = this.game.getCanvas().getElement();
+	private updateCoverImage(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
 
 		const size = Math.round(Math.min(width, height) * 0.15);
 
@@ -169,8 +169,8 @@ export class DifficultySelectScene extends AbstractScene {
 		this.coverImage.h = size;
 	}
 
-	private updateSongTitle(): void {
-		const { width } = this.game.getCanvas().getElement();
+	private updateSongTitle(ctx: CanvasRenderingContext2D): void {
+		const { width } = ctx.canvas;
 
 		this.songTitle.x = this.coverImage.x + this.coverImage.w + 20;
 		this.songTitle.y = this.coverImage.y;
@@ -178,8 +178,8 @@ export class DifficultySelectScene extends AbstractScene {
 		this.songTitle.maxWidth = Math.round(width - this.songTitle.x - 20);
 	}
 
-	private updateSongArtist(): void {
-		const { width } = this.game.getCanvas().getElement();
+	private updateSongArtist(ctx: CanvasRenderingContext2D): void {
+		const { width } = ctx.canvas;
 
 		this.songArtist.x = this.coverImage.x + this.coverImage.w + 20;
 		this.songArtist.y = this.coverImage.y + this.coverImage.h * 0.35;
@@ -187,8 +187,8 @@ export class DifficultySelectScene extends AbstractScene {
 		this.songArtist.maxWidth = Math.round(width - this.songArtist.x - 20);
 	}
 
-	private updateMapper(): void {
-		const { width } = this.game.getCanvas().getElement();
+	private updateMapper(ctx: CanvasRenderingContext2D): void {
+		const { width } = ctx.canvas;
 
 		this.mapper.x = this.coverImage.x + this.coverImage.w + 20;
 		this.mapper.y = this.coverImage.y + this.coverImage.h * 0.7;
@@ -196,8 +196,8 @@ export class DifficultySelectScene extends AbstractScene {
 		this.mapper.maxWidth = Math.round(width - this.mapper.x - 20);
 	}
 
-	private updateChooseText(): void {
-		const { width, height } = this.game.getCanvas().getElement();
+	private updateChooseText(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
 
 		this.chooseText.x = width / 2;
 		this.chooseText.y = this.coverImage.y + this.coverImage.h + 20;
@@ -205,8 +205,8 @@ export class DifficultySelectScene extends AbstractScene {
 		this.chooseText.maxWidth = Math.round(width - 40);
 	}
 
-	private updateDifficultyButtons(): void {
-		const { width, height } = this.game.getCanvas().getElement();
+	private updateDifficultyButtons(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
 
 		const topY = this.chooseText.y + this.chooseText.fontSize + 20;
 		this.difficultyButtons.forEach((button, index) => {

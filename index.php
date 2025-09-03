@@ -26,6 +26,11 @@ require_once __DIR__ . '/bootstrap.php';
 				tabindex="1"
 			>
 			</canvas>
+			<canvas
+				id="pre-render"
+				tabindex="1"
+			>
+			</canvas>
 		</main>
 		<script type="module" src="dist/scripts/main.js"></script>
 	</body>

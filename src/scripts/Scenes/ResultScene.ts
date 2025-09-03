@@ -38,13 +38,13 @@ export class ResultScene extends AbstractScene {
 		}
 	}
 
-	public update(): void {
-		this.updateBackButton();
+	public update(_deltaTime: number, ctx: CanvasRenderingContext2D): void {
+		this.updateBackButton(ctx);
 		this.handleBackButtonClick();
 	}
 
-	private updateBackButton(): void {
-		const { width, height } = this.game.getCanvas().getElement();
+	private updateBackButton(ctx: CanvasRenderingContext2D): void {
+		const { width, height } = ctx.canvas;
 
 		this.backButton = {
 			x: Math.round((width - this.backButton.w) / 2),
