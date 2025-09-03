@@ -10,24 +10,27 @@ export class DifficultySelectScene extends AbstractScene {
 
 	private backgroundImage: HTMLImageElement|null;
 	private coverImage: HTMLImageElement|null;
-	private startButton: {
-		x: number;
-		y: number;
-		w: number;
-		h: number;
-	};
+
+	private difficultyButtons: Array<{
+		x: number; y: number; w: number; h: number; difficultyIndex: number, difficultyName: string
+	}>;
 
 	private previewAudio: HTMLAudioElement;
 
 	constructor(game: Game, private song: SongInterface) {
 		super(game);
 
-		this.startButton = {
-			x: 0,
-			y: 0,
-			w: 0,
-			h: 0,
-		};
+		this.difficultyButtons = [];
+		for (let difficultyIndex = 0; difficultyIndex < this.song.difficulties.length; difficultyIndex++) {
+			this.difficultyButtons.push({
+				x: 0,
+				y: 0,
+				w: 0,
+				h: 0,
+				difficultyIndex: difficultyIndex,
+				difficultyName: this.song.difficulties[difficultyIndex].name
+			});
+		}
 
 		const backgroundImageBase64 = this.song.backgroundImageBase64 || this.song.coverImageBase64;
 		this.backgroundImage = null;
@@ -56,26 +59,31 @@ export class DifficultySelectScene extends AbstractScene {
 	}
 
 	public update(): void {
-		this.updateStartButton();
-		this.handleStartButtonClick();
+		this.updateDifficultyButtons();
+		this.handleDifficultyButtonsClick();
 	}
 
-	private updateStartButton(): void {
+	private updateDifficultyButtons(): void {
 		const { width, height } = this.game.getCanvas().getElement();
 
-		this.startButton = {
-			x: Math.round((width - this.startButton.w) / 2),
-			y: Math.round(height * 0.7),
-			w: Math.round(width * 0.28),
-			h: Math.round(height * 0.08),
-		};
+		this.difficultyButtons.forEach((button, index) => {
+			button.x = Math.round((width - button.w) / 2);
+			button.y = Math.round(height * (0.3 + index * 0.1));
+			button.w = Math.round(width * 0.28);
+			button.h = Math.round(height * 0.08);
+		});
 	}
 
-	private handleStartButtonClick(): void {
+	private handleDifficultyButtonsClick(): void {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
 		const clickpos = inputManager.getMouseOrFingerPosition();
-		if ( ! clicked || ! clickpos || ! CollisionHelper.boxPosCollide(this.startButton, clickpos) ) {
+		if ( ! clicked || ! clickpos ) {
+			return;
+		}
+
+		const collidedButton = this.difficultyButtons.find(button => CollisionHelper.boxPosCollide(button, clickpos));
+		if ( ! collidedButton ) {
 			return;
 		}
 
@@ -83,7 +91,7 @@ export class DifficultySelectScene extends AbstractScene {
 			this.previewAudio.pause();
 		}
 		this.game.getInputManager().reset();
-		this.game.getSceneManager().push(new LevelScene(this.game, this.song, 0));
+		this.game.getSceneManager().push(new LevelScene(this.game, this.song, collidedButton.difficultyIndex));
 	}
 
 	public render(ctx: CanvasRenderingContext2D): void {
@@ -92,7 +100,7 @@ export class DifficultySelectScene extends AbstractScene {
 		this.renderSongTitle(ctx);
 		this.renderSongArtist(ctx);
 		this.renderMapper(ctx);
-		this.renderStartButton(ctx);
+		this.renderDifficultyButtons(ctx);
 	}
 
 	private renderBackgroundImage(ctx: CanvasRenderingContext2D): void {
@@ -215,20 +223,24 @@ export class DifficultySelectScene extends AbstractScene {
 		ctx.restore();
 	}
 
-	private renderStartButton(ctx: CanvasRenderingContext2D): void {
+	private renderDifficultyButtons(ctx: CanvasRenderingContext2D): void {
 		ctx.save();
-		ctx.fillStyle = ColorUtils.getRgba(ColorEnum.Black, 0.8);
-		ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
-		ctx.lineWidth = 2;
-		ctx.beginPath();
-		ctx.roundRect(this.startButton.x, this.startButton.y, this.startButton.w, this.startButton.h, this.startButton.h * 0.3);
-		ctx.fill();
-		ctx.stroke();
-		ctx.font = `${Math.round(this.startButton.h * 0.45)}px Arial`;
-		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.fillText('Start', this.startButton.x + this.startButton.w / 2, this.startButton.y + this.startButton.h / 2);
+
+		// Loop this.difficultyButtons
+		for (const difficultyButton of this.difficultyButtons) {
+			ctx.fillStyle = ColorUtils.getRgba(ColorEnum.Black, 0.8);
+			ctx.strokeStyle = ColorUtils.getHex(ColorEnum.White);
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			ctx.roundRect(difficultyButton.x, difficultyButton.y, difficultyButton.w, difficultyButton.h, difficultyButton.h * 0.3);
+			ctx.fill();
+			ctx.stroke();
+			ctx.font = `${Math.round(difficultyButton.h * 0.45)}px Arial`;
+			ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+			ctx.fillText(difficultyButton.difficultyName, difficultyButton.x + difficultyButton.w / 2, difficultyButton.y + difficultyButton.h / 2);
+		}
 		ctx.restore();
 	}
 }
