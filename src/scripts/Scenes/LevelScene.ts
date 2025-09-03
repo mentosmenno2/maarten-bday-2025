@@ -299,24 +299,29 @@ export class LevelScene extends AbstractScene {
 		const inputs = new Set<'LEFT' | 'RIGHT'>();
 
 		// Check touch or click
-		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
-		if (inputManager.isMouseOrFingerJustPressed() && clickOrFingerPos) {
-			if (
-				CollisionHelper.boxPosCollide(
-					{ x: 0, y: 0, w: width / 2, h: height },
-					clickOrFingerPos,
-				)
-			) {
-				inputs.add('LEFT');
-			}
-			if (
-				CollisionHelper.boxPosCollide(
-					{ x: width / 2, y: 0, w: width / 2, h: height },
-					clickOrFingerPos,
-				)
-			) {
-				inputs.add('RIGHT');
-			}
+		const clickOrFingerPos = inputManager.getMouseOrFingerPositions();
+		if (
+			inputManager.isMouseOrFingerJustPressed() &&
+			clickOrFingerPos.length !== 0
+		) {
+			clickOrFingerPos.forEach((fingerPos: { x: number; y: number }) => {
+				if (
+					CollisionHelper.boxPosCollide(
+						{ x: 0, y: 0, w: width / 2, h: height },
+						fingerPos,
+					)
+				) {
+					inputs.add('LEFT');
+				}
+				if (
+					CollisionHelper.boxPosCollide(
+						{ x: width / 2, y: 0, w: width / 2, h: height },
+						fingerPos,
+					)
+				) {
+					inputs.add('RIGHT');
+				}
+			});
 		}
 
 		// Check keyboard arrows
@@ -347,24 +352,26 @@ export class LevelScene extends AbstractScene {
 		const inputs = new Set<'LEFT' | 'RIGHT'>();
 
 		// Check touch or click
-		const clickOrFingerPos = inputManager.getMouseOrFingerPosition();
-		if (inputManager.isMouseOrFingerDown() && clickOrFingerPos) {
-			if (
-				CollisionHelper.boxPosCollide(
-					{ x: 0, y: 0, w: width / 2, h: height },
-					clickOrFingerPos,
-				)
-			) {
-				inputs.add('LEFT');
-			}
-			if (
-				CollisionHelper.boxPosCollide(
-					{ x: width / 2, y: 0, w: width / 2, h: height },
-					clickOrFingerPos,
-				)
-			) {
-				inputs.add('RIGHT');
-			}
+		const clickOrFingerPos = inputManager.getMouseOrFingerPositions();
+		if (inputManager.isMouseOrFingerDown() && clickOrFingerPos.length !== 0) {
+			clickOrFingerPos.forEach((fingerPos: { x: number; y: number }) => {
+				if (
+					CollisionHelper.boxPosCollide(
+						{ x: 0, y: 0, w: width / 2, h: height },
+						fingerPos,
+					)
+				) {
+					inputs.add('LEFT');
+				}
+				if (
+					CollisionHelper.boxPosCollide(
+						{ x: width / 2, y: 0, w: width / 2, h: height },
+						fingerPos,
+					)
+				) {
+					inputs.add('RIGHT');
+				}
+			});
 		}
 
 		// Check keyboard arrows

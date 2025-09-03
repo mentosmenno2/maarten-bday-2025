@@ -220,13 +220,13 @@ export class DifficultySelectScene extends AbstractScene {
 	private handleDifficultyButtonsClick(): void {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
-		const clickpos = inputManager.getMouseOrFingerPosition();
-		if (!clicked || !clickpos) {
+		const clickpos = inputManager.getMouseOrFingerPositions();
+		if (!clicked || clickpos.length === 0) {
 			return;
 		}
 
 		const collidedButton = this.difficultyButtons.find((button) =>
-			CollisionHelper.boxPosCollide(button, clickpos),
+			CollisionHelper.boxPosCollide(button, clickpos[0]),
 		);
 		if (!collidedButton) {
 			return;

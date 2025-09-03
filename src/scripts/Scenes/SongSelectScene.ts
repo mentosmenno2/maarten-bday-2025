@@ -101,12 +101,12 @@ export class SongSelectScene extends AbstractScene {
 	private handleSongSelectButtonClick(): void {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
-		const clickpos = inputManager.getMouseOrFingerPosition();
+		const clickpos = inputManager.getMouseOrFingerPositions();
 		if (
 			this.selectSongButton.loading ||
 			!clicked ||
-			!clickpos ||
-			!CollisionHelper.boxPosCollide(this.selectSongButton, clickpos)
+			clickpos.length === 0 ||
+			!CollisionHelper.boxPosCollide(this.selectSongButton, clickpos[0])
 		) {
 			return;
 		}

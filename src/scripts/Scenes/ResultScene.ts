@@ -57,11 +57,11 @@ export class ResultScene extends AbstractScene {
 	private handleBackButtonClick(): void {
 		const inputManager = this.game.getInputManager();
 		const clicked = inputManager.isMouseOrFingerJustPressed();
-		const clickpos = inputManager.getMouseOrFingerPosition();
+		const clickpos = inputManager.getMouseOrFingerPositions();
 		if (
 			!clicked ||
-			!clickpos ||
-			!CollisionHelper.boxPosCollide(this.backButton, clickpos)
+			clickpos.length === 0 ||
+			!CollisionHelper.boxPosCollide(this.backButton, clickpos[0])
 		) {
 			return;
 		}

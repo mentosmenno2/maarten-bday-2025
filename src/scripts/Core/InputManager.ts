@@ -10,7 +10,7 @@ export class InputManager {
 	private touchActive: boolean = false;
 	private touchJustPressed: boolean = false;
 	private lastMousePos: { x: number; y: number } | null = null;
-	private lastTouchPos: { x: number; y: number } | null = null;
+	private lastTouchPos: Array<{ x: number; y: number }>;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -49,7 +49,7 @@ export class InputManager {
 					x: e.clientX * window.devicePixelRatio,
 					y: e.clientY * window.devicePixelRatio,
 				};
-				this.lastTouchPos = null;
+				this.lastTouchPos = [];
 			});
 		this.game
 			.getCanvas()
@@ -66,7 +66,7 @@ export class InputManager {
 					x: e.clientX * window.devicePixelRatio,
 					y: e.clientY * window.devicePixelRatio,
 				};
-				this.lastTouchPos = null;
+				this.lastTouchPos = [];
 			});
 
 		// Touch
@@ -78,31 +78,47 @@ export class InputManager {
 					this.touchJustPressed = true;
 					this.mouseJustPressed = false;
 				}
-				this.touchActive = true;
+				this.touchActive = e.touches.length > 0;
+				this.lastTouchPos = [];
+				Array.from(e.touches).forEach((touch) => {
+					this.lastTouchPos.push({
+						x: touch.clientX * window.devicePixelRatio,
+						y: touch.clientY * window.devicePixelRatio,
+					});
+				});
 				if (e.touches.length > 0) {
-					this.lastTouchPos = {
-						x: e.touches[0].clientX * window.devicePixelRatio,
-						y: e.touches[0].clientY * window.devicePixelRatio,
-					};
 					this.lastMousePos = null;
 				}
 			});
 		this.game
 			.getCanvas()
 			.getElement()
-			.addEventListener('touchend', () => {
-				this.touchActive = false;
-				this.lastTouchPos = null;
+			.addEventListener('touchend', (e: TouchEvent) => {
+				this.touchActive = e.touches.length > 0;
+				this.lastTouchPos = [];
+				Array.from(e.touches).forEach((touch) => {
+					this.lastTouchPos.push({
+						x: touch.clientX * window.devicePixelRatio,
+						y: touch.clientY * window.devicePixelRatio,
+					});
+				});
+				if (e.touches.length > 0) {
+					this.lastMousePos = null;
+				}
 			});
 		this.game
 			.getCanvas()
 			.getElement()
 			.addEventListener('touchmove', (e: TouchEvent) => {
+				this.touchActive = e.touches.length > 0;
+				this.lastTouchPos = [];
+				Array.from(e.touches).forEach((touch) => {
+					this.lastTouchPos.push({
+						x: touch.clientX * window.devicePixelRatio,
+						y: touch.clientY * window.devicePixelRatio,
+					});
+				});
 				if (e.touches.length > 0) {
-					this.lastTouchPos = {
-						x: e.touches[0].clientX * window.devicePixelRatio,
-						y: e.touches[0].clientY * window.devicePixelRatio,
-					};
 					this.lastMousePos = null;
 				}
 			});
@@ -144,12 +160,15 @@ export class InputManager {
 		return this.lastMousePos;
 	}
 
-	getTouchPosition(): { x: number; y: number } | null {
+	getTouchPositions(): Array<{ x: number; y: number }> {
 		return this.lastTouchPos;
 	}
 
-	getMouseOrFingerPosition(): { x: number; y: number } | null {
-		return this.lastMousePos || this.lastTouchPos;
+	getMouseOrFingerPositions(): Array<{ x: number; y: number }> {
+		if (this.lastMousePos) {
+			return [this.lastMousePos];
+		}
+		return this.lastTouchPos;
 	}
 
 	isAnyInput(): boolean {
@@ -176,6 +195,6 @@ export class InputManager {
 		this.mouseDown = false;
 		this.touchActive = false;
 		this.lastMousePos = null;
-		this.lastTouchPos = null;
+		this.lastTouchPos = [];
 	}
 }
