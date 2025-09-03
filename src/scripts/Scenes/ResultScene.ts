@@ -45,7 +45,7 @@ export class ResultScene extends AbstractScene {
 		this.backButton = {
 			x: Math.round((width - this.backButton.w) / 2),
 			y: Math.round(height * 0.7),
-			w: Math.round(width * 0.28),
+			w: Math.round(width - 40),
 			h: Math.round(height * 0.08),
 		};
 	}
@@ -123,7 +123,7 @@ export class ResultScene extends AbstractScene {
 			ctx.font = `${titleFontSize}px Arial`;
 			titleWidth = ctx.measureText(this.song.title).width;
 		}
-		ctx.fillStyle = ColorUtils.getHex(ColorEnum.White);
+		ctx.fillStyle = ColorUtils.getHex(ColorEnum.LightBlue);
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'top';
 		ctx.fillText('Gefeliciteerd!', width/2, height*0.20);
