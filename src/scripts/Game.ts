@@ -80,8 +80,7 @@ export class Game {
 
 	private render(ctx: CanvasRenderingContext2D): void {
 		// Reset
-		ctx.fillStyle = '#ffffff';
-		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 		// Render
 		this.sceneManager.render(ctx);
