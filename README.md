@@ -6,3 +6,7 @@
 🦆 Quack
 
 This project has been made for Maarten because it's his birthday.
+
+## Requirements
+- PHP 8.3
+- Node.js 22
